@@ -15,4 +15,8 @@ class HomeController
         $listSanPham = $this-> modelSanPham->getAllSanPham();
         var_dump($listSanPham);die();
     }
+
+    //test
 }
+git config --global user.email "trinhquangluc2005@gmail.com"    
+  git config --global user.name "Trinh Quang Luc"
