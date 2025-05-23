@@ -18,6 +18,3 @@ class HomeController
 
     //test
 }
-
-// git config --global user.email "trinhquangluc2005@gmail.com"    
-//   git config --global user.name "Trinh Quang Luc"
