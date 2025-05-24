@@ -1,5 +1,5 @@
 <?php 
-
+session_start();
 // Require file Common
 require_once '../commons/env.php'; // Khai báo biến môi trường
 require_once '../commons/function.php'; // Hàm hỗ trợ
@@ -7,6 +7,8 @@ require_once '../commons/function.php'; // Hàm hỗ trợ
 // Require toàn bộ file Controllers
 require_once './controllers/AdminDanhMucController.php';
 require_once './controllers/AdminSanPhamController.php';
+require_once './controllers/AdminDashboardController.php';
+
 
 // Require toàn bộ file Models
 require_once './models/AdminDanhMuc.php';
@@ -19,7 +21,7 @@ $act = $_GET['act'] ?? '/';
 
 match ($act) {
     // Dashboards
-    '/' => (new DashboardController())->trangChu(), 
+    '/' => (new AdminDashboardController())->trangChu(), 
     // Route quản lí danh mục
     'danh-muc' => (new AdminDanhMucController())->danhSachDanhMuc(),
     'form-them-danh-muc' => (new AdminDanhMucController())->formAddDanhMuc(),
@@ -28,8 +30,15 @@ match ($act) {
     'sua-danh-muc' => (new AdminDanhMucController())->suaDanhMuc(),
     'xoa-danh-muc' => (new AdminDanhMucController())->xoaDanhMuc(),
 
-    // Route quản lí san pham
+    
+  // Route quản lí sản phẩm
     'san-pham' => (new AdminSanPhamController())->danhSachSanPham(),
-
+    'form-them-san-pham' => (new AdminSanPhamController())->formAddSanPham(),
+    'them-san-pham' => (new AdminSanPhamController())->themSanPham(),
+    'form-sua-san-pham' => (new AdminSanPhamController())->formEditSanPham(),
+    'sua-album-anh-san-pham' => (new AdminSanPhamController())->postEditAnhSanPham(),
+    'sua-san-pham' => (new AdminSanPhamController())->suaSanPham(),
+    'xoa-san-pham' => (new AdminSanPhamController())->xoaSanPham(),
+    'chi-tiet-san-pham' => (new AdminSanPhamController())->detailSanPham(),
 
 };

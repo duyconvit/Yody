@@ -21,3 +21,53 @@ function connectDB() {
         echo ("Connection failed: " . $e->getMessage());
     }
 }
+// Thêm file 
+function uploadFile($file, $folderUpload){
+    $pathStorage = $folderUpload . time() . $file['name'];
+
+    $from = $file['tmp_name'];
+    $to = PATH_ROOT . $pathStorage;
+
+    if (move_uploaded_file($from, $to)) {
+        return $pathStorage;
+    }
+    return null;
+}
+
+// Xóa file 
+function deleteFile($file){
+    $pathDelete = PATH_ROOT . $file;
+    if (file_exists($pathDelete)) {
+        unlink($pathDelete);
+    }
+}
+
+// Xóa session sau khi load trang 
+function deleteSessionError(){
+    if (isset($_SESSION['flash'])) {
+        // Hủy session sau khi đã tải trang 
+        unset($_SESSION['flash']);
+        unset($_SESSION['error']);
+        // session_unset();
+    }
+}
+
+// Upload - update album ảnh
+
+function uploadFileAlbum($file, $folderUpload, $key){
+    $pathStorage = $folderUpload . time() . $file['name'][$key];
+
+    $from = $file['tmp_name'][$key];
+    $to = PATH_ROOT . $pathStorage;
+
+    if (move_uploaded_file($from, $to)) {
+        return $pathStorage;
+    }
+    return null;
+}
+
+// format date
+function formatDate($date){
+    return date('d-m-Y', strtotime($date));
+}
+
