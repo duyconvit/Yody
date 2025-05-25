@@ -8,11 +8,13 @@ require_once '../commons/function.php'; // Hàm hỗ trợ
 require_once './controllers/AdminDanhMucController.php';
 require_once './controllers/AdminSanPhamController.php';
 require_once './controllers/AdminDashboardController.php';
+require_once './controllers/AdminTaiKhoanController.php';
 
 
 // Require toàn bộ file Models
 require_once './models/AdminDanhMuc.php';
 require_once './models/AdminSanPham.php';
+require_once './models/AdminTaiKhoan.php';
 
 // Route
 $act = $_GET['act'] ?? '/';
@@ -31,7 +33,7 @@ match ($act) {
     'xoa-danh-muc' => (new AdminDanhMucController())->xoaDanhMuc(),
 
     // Route quản lí san pham
-  //  'san-pham' => (new AdminSanPhamController())->danhSachSanPham(),
+    'list-tai-khoan-quan-tri' => (new AdminTaiKhoanController())->danhSachQuanTri(),
 
 
 };

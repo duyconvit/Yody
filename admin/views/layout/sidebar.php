@@ -2,7 +2,7 @@
 <div class="navbar-brand-box" style="display: flex; justify-content: center; align-items: center; width: 100%; margin-top:7px;">
     <a href="#"class="logo logo-light">
         <span class="logo-lg mt-4">
-            <h1 class="display-7 mt-4" style="color: #fffff; display: inline; font-size: 33px;">Yody</h1>
+            <h1 class="display-7 mt-4" style="color: #ffff; display: inline; font-size: 33px;">Yody</h1>
             <h1 class="display-7 mt-4" style="color: #ffff; display: inline; font-size: 33px;">shop</h1>
         </span>
     </a>
@@ -84,7 +84,7 @@
             </a>
           </li>
 
-          <li class="nav-item">
+          <li class="nav-item menu-open">
           <a href="#" class="nav-link">
             <i class="nav-icon fas fa-user"></i>
             <p style="color: white;">Quản Lý Người Dùng</p>
