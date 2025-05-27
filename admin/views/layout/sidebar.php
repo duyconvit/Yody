@@ -2,7 +2,7 @@
 <div class="navbar-brand-box" style="display: flex; justify-content: center; align-items: center; width: 100%; margin-top:7px;">
     <a href="#"class="logo logo-light">
         <span class="logo-lg mt-4">
-            <h1 class="display-7 mt-4" style="color: #fffff; display: inline; font-size: 33px;">Yody</h1>
+            <h1 class="display-7 mt-4" style="color: #ff8c00; display: inline; font-size: 33px;">yody</h1>
             <h1 class="display-7 mt-4" style="color: #ffff; display: inline; font-size: 33px;">shop</h1>
         </span>
     </a>
@@ -13,7 +13,7 @@
       <!-- Sidebar user (optional) -->
       <div class="user-panel mt-3 pb-3 mb-3 d-flex align-items-center">
         <div class="image me-3">
-          <img src="./assets/dist/img/phone.png" class="rounded-circle border border-white" width="60" height="60" alt="User Image">
+          <img src="./assets/dist/img/AdminLTELogo.png" class="rounded-circle border border-white" width="60" height="60" alt="User Image">
         </div>
         <div class="info">
           <a href="<?= BASE_URL_ADMIN ?>" class="d-block fs-4 fw-bold text-white">ADMIN</a>
