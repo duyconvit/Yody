@@ -9,9 +9,10 @@ class HomeController
     }
 
     public function index() {
-        echo "Xin chao ban";
+        require_once './views/home.php';
     }
-        public function danhSachSanPham() {
+
+    public function danhSachSanPham() {
         $listSanPham = $this-> modelSanPham->getAllSanPham();
         var_dump($listSanPham);die();
     }
