@@ -1,1479 +1,740 @@
-<?php require_once './views/layout/header.php';?>
+<?php require_once './views/layout/header.php'; ?>
+
+<style>
+    body {
+        font-family: 'Roboto', sans-serif !important;
+    }
+    
+    .section-title .title,
+    .product-name a,
+    .blog-title a,
+    .price-box,
+    .btn-cart,
+    .swipe-nav button,
+    .swipe-dot {
+        font-family: 'Roboto', sans-serif !important;
+        font-weight: 400 !important;
+    }
+    
+    .section-title .title {
+        font-weight: 500 !important;
+    }
+
+    .section-title .title {
+        animation: none !important;
+        transition: none !important;
+        transform: none !important;
+    }
+
+    /* Collection section styling */
+    .feature-product .product-item {
+        margin-bottom: 30px;
+    }
+
+    .feature-product .product-thumb {
+        position: relative;
+        overflow: hidden;
+    }
+
+    .feature-product .product-thumb img {
+        width: 100%;
+        height: 400px;
+        object-fit: cover;
+        transition: transform 0.3s ease;
+    }
+
+    .feature-product .product-thumb:hover img {
+        transform: scale(1.05);
+    }
+
+    .feature-product .cart-hover {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background: rgba(0, 0, 0, 0.7);
+        padding: 10px;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+    }
+
+    .feature-product .product-thumb:hover .cart-hover {
+        opacity: 1;
+    }
+
+    .feature-product .btn-cart {
+        width: 100%;
+        background: #fff;
+        color: #333;
+        border: none;
+        padding: 8px 15px;
+        transition: all 0.3s ease;
+    }
+
+    .feature-product .btn-cart:hover {
+        background: #333;
+        color: #fff;
+    }
+
+    .feature-product .product-name {
+        margin-top: 15px;
+        font-size: 16px;
+    }
+
+    .feature-product .product-name a {
+        color: #333;
+        text-decoration: none;
+        transition: color 0.3s ease;
+    }
+
+    .feature-product .product-name a:hover {
+        color: #666;
+    }
+
+    /* Section title styling */
+    .section-title {
+        margin-bottom: 30px;
+        text-align: left;
+    }
+
+    .section-title .title {
+        font-size: 32px;
+        font-weight: 700;
+        color: black !important;
+        position: relative;
+        padding-bottom: 15px;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        font-family: 'Roboto', sans-serif;
+        line-height: 1.2;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+    }
+
+    .section-title .title:after {
+        display: none;
+    }
+
+    /* Điều chỉnh layout cho đồng nhất */
+    .product-carousel-4_2 {
+        display: flex;
+        flex-wrap: wrap;
+        margin: 0 -15px;
+    }
+
+    .product-carousel-4_2 .product-item {
+        padding: 0 15px;
+        width: 25%;
+    }
+
+    @media (max-width: 1199px) {
+        .product-carousel-4_2 .product-item {
+            width: 33.33%;
+        }
+    }
+
+    @media (max-width: 991px) {
+        .product-carousel-4_2 .product-item {
+            width: 50%;
+        }
+        
+        .feature-product .product-thumb img {
+            height: 350px;
+        }
+    }
+
+    @media (max-width: 767px) {
+        .product-carousel-4_2 .product-item {
+            width: 100%;
+        }
+        
+        .feature-product .product-thumb img {
+            height: 300px;
+        }
+    }
+
+    /* Swipe slider styling */
+    .swipe-slider {
+        position: relative;
+        overflow: hidden;
+        height: 600px;
+        padding: 0 50px;
+    }
+
+    .swipe-slider-container {
+        display: flex;
+        transition: transform 0.5s ease;
+        height: 100%;
+        align-items: center;
+    }
+
+    .swipe-slide {
+        min-width: 100%;
+        height: 100%;
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        transition: all 0.5s ease;
+        flex-shrink: 0;
+    }
+
+    .swipe-nav {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        padding: 0 20px;
+        z-index: 10;
+        left: 0;
+    }
+
+    .swipe-nav button {
+        background: rgba(255, 255, 255, 0.5);
+        border: none;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.3s ease;
+    }
+
+    .swipe-nav button:hover {
+        background: rgba(255, 255, 255, 0.8);
+    }
+
+    .swipe-dots {
+        position: absolute;
+        bottom: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        display: flex;
+        gap: 10px;
+    }
+
+    .swipe-dot {
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.5);
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+    .swipe-dot.active {
+        background: #fff;
+    }
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const slider = document.querySelector('.swipe-slider-container');
+    const slides = document.querySelectorAll('.swipe-slide');
+    const dots = document.querySelectorAll('.swipe-dot');
+    let currentSlide = 0;
+    let startX = 0;
+    let isDragging = false;
+    let isTransitioning = false;
+
+    // Touch events
+    slider.addEventListener('touchstart', (e) => {
+        if (isTransitioning) return;
+        startX = e.touches[0].clientX;
+        isDragging = true;
+    });
+
+    slider.addEventListener('touchmove', (e) => {
+        if (!isDragging || isTransitioning) return;
+        const currentX = e.touches[0].clientX;
+        const diff = startX - currentX;
+        slider.style.transform = `translateX(${-currentSlide * 100 - (diff / slider.offsetWidth) * 100}%)`;
+    });
+
+    slider.addEventListener('touchend', (e) => {
+        if (!isDragging || isTransitioning) return;
+        isDragging = false;
+        const endX = e.changedTouches[0].clientX;
+        const diff = startX - endX;
+        
+        if (Math.abs(diff) > 50) {
+            if (diff > 0) {
+                currentSlide++;
+            } else {
+                currentSlide--;
+            }
+        }
+        
+        updateSlider();
+    });
+
+    // Navigation buttons
+    document.querySelector('.swipe-prev').addEventListener('click', () => {
+        if (isTransitioning) return;
+        currentSlide--;
+        updateSlider();
+    });
+
+    document.querySelector('.swipe-next').addEventListener('click', () => {
+        if (isTransitioning) return;
+        currentSlide++;
+        updateSlider();
+    });
+
+    // Dots navigation
+    dots.forEach((dot, index) => {
+        dot.addEventListener('click', () => {
+            if (isTransitioning) return;
+            currentSlide = index;
+            updateSlider();
+        });
+    });
+
+    function updateSlider() {
+        isTransitioning = true;
+        
+        // Handle infinite loop
+        if (currentSlide >= slides.length) {
+            currentSlide = 0;
+        } else if (currentSlide < 0) {
+            currentSlide = slides.length - 1;
+        }
+
+        slider.style.transform = `translateX(-${currentSlide * 100}%)`;
+        
+        // Update dots
+        dots.forEach((dot, index) => {
+            dot.classList.toggle('active', index === currentSlide);
+        });
+
+        // Reset transition flag after animation completes
+        setTimeout(() => {
+            isTransitioning = false;
+        }, 500); // Match this with CSS transition duration
+    }
+
+    // Initialize first slide
+    currentSlide = 0;
+    updateSlider();
+});
+</script>
 
 <?php require_once './views/layout/menu.php'; ?>
 
-    <main>
-        <!-- hero slider area start -->
-        <section class="slider-area" style="height: 600px; overflow: hidden;">
-            <div class="hero-slider-active slick-arrow-style slick-arrow-style_hero slick-dot-style">
-                <div class="hero-single-slide hero-overlay">
-                    <div class="hero-slider-item bg-img" data-bg="uploads/baner4.jpg" style="height: 600px; background-size: cover; background-position: center; background-repeat: no-repeat;">
-                    </div>
-                </div>
-
-                <div class="hero-single-slide hero-overlay">
-                    <div class="hero-slider-item bg-img" data-bg="uploads/baner5.jpg" style="height: 600px; background-size: cover; background-position: center; background-repeat: no-repeat;">
-                    </div>
-                </div>
-
-                <div class="hero-single-slide hero-overlay">
-                    <div class="hero-slider-item bg-img" data-bg="uploads/baner3.webp" style="height: 600px; background-size: cover; background-position: center; background-repeat: no-repeat;">
-                    </div>
+<main>
+    <!-- hero slider area start -->
+    <section class="slider-area" style="height: 600px; overflow: hidden;">
+        <div class="hero-slider-active slick-arrow-style slick-arrow-style_hero slick-dot-style">
+            <div class="hero-single-slide hero-overlay">
+                <div class="hero-slider-item bg-img" data-bg="uploads/baner12.jpg" style="height: 600px; background-size: cover; background-position: center; background-repeat: no-repeat;">
                 </div>
             </div>
-        </section>
-        <!-- hero slider area end -->
 
-        <!-- hot deals area start -->
-        <section class="hot-deals section-padding">
-            <div class="container">
-                <div class="row">
-                    <div class="col-12">
-                        <!-- section title start -->
-                        <div class="section-title text-center">
-                            <h2 class="title">Sản phẩm mới</h2>
-                        </div>
-                        <!-- section title start -->
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-12">
-                        <div class="deals-carousel-active slick-row-10 slick-arrow-style">
-                            <!-- hot deals item start -->
-                            <div class="hot-deals-item product-item">
-                                <figure class="product-thumb">
-                                    <a href="product-details.html">
-                                        <img src="assets/img/product/product-details-img1.jpg" alt="product">
-                                    </a>
-                                    <div class="product-badge">
-                                        <div class="product-label new">
-                                            <span>sale</span>
-                                        </div>
-                                        <div class="product-label discount">
-                                            <span>new</span>
-                                        </div>
-                                    </div>
-                                    <div class="button-group">
-                                        <a href="wishlist.html" data-bs-toggle="tooltip" data-bs-placement="left" title="Add to wishlist"><i class="pe-7s-like"></i></a>
-                                        <a href="compare.html" data-bs-toggle="tooltip" data-bs-placement="left" title="Add to Compare"><i class="pe-7s-refresh-2"></i></a>
-                                        <a href="#" data-bs-toggle="modal" data-bs-target="#quick_view"><span data-bs-toggle="tooltip" data-bs-placement="left" title="Quick View"><i class="pe-7s-search"></i></span></a>
-                                    </div>
-                                    <div class="cart-hover">
-                                        <button class="btn btn-cart">add to cart</button>
-                                    </div>
-                                </figure>
-                                <div class="product-caption text-center">
-                                    <div class="product-identity">
-                                        <p class="manufacturer-name"><a href="product-details.html">Gold</a></p>
-                                    </div>
-                                    <h6 class="product-name">
-                                        <a href="product-details.html">Perfect Diamond Jewellery for full family members</a>
-                                    </h6>
-                                    <div class="price-box">
-                                        <span class="price-regular">$60.00</span>
-                                        <span class="price-old"><del>$70.00</del></span>
-                                    </div>
-                                    <div class="progress-quantity">
-                                        <div class="progress-title">
-                                            <p class="product-sold">Sold: <span>40</span></p>
-                                            <p class="product-available">Availabe: <span>300</span></p>
-                                        </div>
-                                        <div class="progress">
-                                            <div class="progress-bar" role="progressbar" style="width: 25%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
-                                        </div>
-                                    </div>
-                                    <div class="product-countdown" data-countdown="2022/11/25"></div>
-                                </div>
-                            </div>
-                            <!-- hot deals item end -->
-
-                            <!-- hot deals item start -->
-                            <div class="hot-deals-item product-item">
-                                <figure class="product-thumb">
-                                    <a href="product-details.html">
-                                        <img src="assets/img/product/product-details-img2.jpg" alt="product">
-                                    </a>
-                                    <div class="product-badge">
-                                        <div class="product-label new">
-                                            <span>sale</span>
-                                        </div>
-                                        <div class="product-label discount">
-                                            <span>new</span>
-                                        </div>
-                                    </div>
-                                    <div class="button-group">
-                                        <a href="wishlist.html" data-bs-toggle="tooltip" data-bs-placement="left" title="Add to wishlist"><i class="pe-7s-like"></i></a>
-                                        <a href="compare.html" data-bs-toggle="tooltip" data-bs-placement="left" title="Add to Compare"><i class="pe-7s-refresh-2"></i></a>
-                                        <a href="#" data-bs-toggle="modal" data-bs-target="#quick_view"><span data-bs-toggle="tooltip" data-bs-placement="left" title="Quick View"><i class="pe-7s-search"></i></span></a>
-                                    </div>
-                                    <div class="cart-hover">
-                                        <button class="btn btn-cart">add to cart</button>
-                                    </div>
-                                </figure>
-                                <div class="product-caption text-center">
-                                    <div class="product-identity">
-                                        <p class="manufacturer-name"><a href="product-details.html">Gold</a></p>
-                                    </div>
-                                    <h6 class="product-name">
-                                        <a href="product-details.html">Handmade golden earrings for for new generation</a>
-                                    </h6>
-                                    <div class="price-box">
-                                        <span class="price-regular">$70.00</span>
-                                        <span class="price-old"><del>$80.00</del></span>
-                                    </div>
-                                    <div class="progress-quantity">
-                                        <div class="progress-title">
-                                            <p class="product-sold">Sold: <span>350</span></p>
-                                            <p class="product-available">Availabe: <span>650</span></p>
-                                        </div>
-                                        <div class="progress">
-                                            <div class="progress-bar" role="progressbar" style="width: 50%" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
-                                        </div>
-                                    </div>
-                                    <div class="product-countdown" data-countdown="2022/10/20"></div>
-                                </div>
-                            </div>
-                            <!-- hot deals item end -->
-
-                            <!-- hot deals item start -->
-                            <div class="hot-deals-item product-item">
-                                <figure class="product-thumb">
-                                    <a href="product-details.html">
-                                        <img src="assets/img/product/product-details-img3.jpg" alt="product">
-                                    </a>
-                                    <div class="product-badge">
-                                        <div class="product-label new">
-                                            <span>sale</span>
-                                        </div>
-                                        <div class="product-label discount">
-                                            <span>new</span>
-                                        </div>
-                                    </div>
-                                    <div class="button-group">
-                                        <a href="wishlist.html" data-bs-toggle="tooltip" data-bs-placement="left" title="Add to wishlist"><i class="pe-7s-like"></i></a>
-                                        <a href="compare.html" data-bs-toggle="tooltip" data-bs-placement="left" title="Add to Compare"><i class="pe-7s-refresh-2"></i></a>
-                                        <a href="#" data-bs-toggle="modal" data-bs-target="#quick_view"><span data-bs-toggle="tooltip" data-bs-placement="left" title="Quick View"><i class="pe-7s-search"></i></span></a>
-                                    </div>
-                                    <div class="cart-hover">
-                                        <button class="btn btn-cart">add to cart</button>
-                                    </div>
-                                </figure>
-                                <div class="product-caption text-center">
-                                    <div class="product-identity">
-                                        <p class="manufacturer-name"><a href="product-details.html">Gold</a></p>
-                                    </div>
-                                    <h6 class="product-name">
-                                        <a href="product-details.html">Diamond Exclusive bracelet for new generation</a>
-                                    </h6>
-                                    <div class="price-box">
-                                        <span class="price-regular">$80.00</span>
-                                        <span class="price-old"><del>$90.00</del></span>
-                                    </div>
-                                    <div class="progress-quantity">
-                                        <div class="progress-title">
-                                            <p class="product-sold">Sold: <span>556</span></p>
-                                            <p class="product-available">Availabe: <span>440</span></p>
-                                        </div>
-                                        <div class="progress">
-                                            <div class="progress-bar" role="progressbar" style="width: 75%" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100"></div>
-                                        </div>
-                                    </div>
-                                    <div class="product-countdown" data-countdown="2022/11/15"></div>
-                                </div>
-                            </div>
-                            <!-- hot deals item end -->
-
-                            <!-- hot deals item start -->
-                            <div class="hot-deals-item product-item">
-                                <figure class="product-thumb">
-                                    <a href="product-details.html">
-                                        <img src="assets/img/product/product-details-img4.jpg" alt="product">
-                                    </a>
-                                    <div class="product-badge">
-                                        <div class="product-label new">
-                                            <span>sale</span>
-                                        </div>
-                                        <div class="product-label discount">
-                                            <span>new</span>
-                                        </div>
-                                    </div>
-                                    <div class="button-group">
-                                        <a href="wishlist.html" data-bs-toggle="tooltip" data-bs-placement="left" title="Add to wishlist"><i class="pe-7s-like"></i></a>
-                                        <a href="compare.html" data-bs-toggle="tooltip" data-bs-placement="left" title="Add to Compare"><i class="pe-7s-refresh-2"></i></a>
-                                        <a href="#" data-bs-toggle="modal" data-bs-target="#quick_view"><span data-bs-toggle="tooltip" data-bs-placement="left" title="Quick View"><i class="pe-7s-search"></i></span></a>
-                                    </div>
-                                    <div class="cart-hover">
-                                        <button class="btn btn-cart">add to cart</button>
-                                    </div>
-                                </figure>
-                                <div class="product-caption text-center">
-                                    <div class="product-identity">
-                                        <p class="manufacturer-name"><a href="product-details.html">Gold</a></p>
-                                    </div>
-                                    <h6 class="product-name">
-                                        <a href="product-details.html">Perfect Diamond Jewellery for full family members</a>
-                                    </h6>
-                                    <div class="price-box">
-                                        <span class="price-regular">$50.00</span>
-                                        <span class="price-old"><del>$55.00</del></span>
-                                    </div>
-                                    <div class="progress-quantity">
-                                        <div class="progress-title">
-                                            <p class="product-sold">Sold: <span>150</span></p>
-                                            <p class="product-available">Availabe: <span>200</span></p>
-                                        </div>
-                                        <div class="progress">
-                                            <div class="progress-bar" role="progressbar" style="width: 90%" aria-valuenow="90" aria-valuemin="0" aria-valuemax="100"></div>
-                                        </div>
-                                    </div>
-                                    <div class="product-countdown" data-countdown="2022/12/15"></div>
-                                </div>
-                            </div>
-                            <!-- hot deals item end -->
-
-                            <!-- hot deals item start -->
-                            <div class="hot-deals-item product-item">
-                                <figure class="product-thumb">
-                                    <a href="product-details.html">
-                                        <img src="assets/img/product/product-details-img5.jpg" alt="product">
-                                    </a>
-                                    <div class="product-badge">
-                                        <div class="product-label new">
-                                            <span>sale</span>
-                                        </div>
-                                        <div class="product-label discount">
-                                            <span>new</span>
-                                        </div>
-                                    </div>
-                                    <div class="button-group">
-                                        <a href="wishlist.html" data-bs-toggle="tooltip" data-bs-placement="left" title="Add to wishlist"><i class="pe-7s-like"></i></a>
-                                        <a href="compare.html" data-bs-toggle="tooltip" data-bs-placement="left" title="Add to Compare"><i class="pe-7s-refresh-2"></i></a>
-                                        <a href="#" data-bs-toggle="modal" data-bs-target="#quick_view"><span data-bs-toggle="tooltip" data-bs-placement="left" title="Quick View"><i class="pe-7s-search"></i></span></a>
-                                    </div>
-                                    <div class="cart-hover">
-                                        <button class="btn btn-cart">add to cart</button>
-                                    </div>
-                                </figure>
-                                <div class="product-caption text-center">
-                                    <div class="product-identity">
-                                        <p class="manufacturer-name"><a href="product-details.html">Gold</a></p>
-                                    </div>
-                                    <h6 class="product-name">
-                                        <a href="product-details.html">Citygold Exclusive Ring only for women</a>
-                                    </h6>
-                                    <div class="price-box">
-                                        <span class="price-regular">$30.00</span>
-                                        <span class="price-old"><del>$40.00</del></span>
-                                    </div>
-                                    <div class="progress-quantity">
-                                        <div class="progress-title">
-                                            <p class="product-sold">Sold: <span>90</span></p>
-                                            <p class="product-available">Availabe: <span>120</span></p>
-                                        </div>
-                                        <div class="progress">
-                                            <div class="progress-bar" role="progressbar" style="width: 35%" aria-valuenow="35" aria-valuemin="0" aria-valuemax="100"></div>
-                                        </div>
-                                    </div>
-                                    <div class="product-countdown" data-countdown="2022/12/25"></div>
-                                </div>
-                            </div>
-                            <!-- hot deals item end -->
-                        </div>
-                    </div>
+            <div class="hero-single-slide hero-overlay">
+                <div class="hero-slider-item bg-img" data-bg="uploads/baner11.jpg" style="height: 600px; background-size: cover; background-position: center; background-repeat: no-repeat;">
                 </div>
             </div>
-        </section>
-        <!-- hot deals area end -->
 
-        <!-- banner statistics area start -->
-        <div class="banner-statistics-area">
-            <div class="container">
-                <div class="row row-20 mtn-20">
-                    <div class="col-sm-6">
-                        <figure class="banner-statistics mt-20">
-                            <a href="#">
-                                <img src="assets/img/banner/img1-top.jpg" alt="product banner">
-                            </a>
-                            <div class="banner-content text-right">
-                                <h5 class="banner-text1">BEAUTIFUL</h5>
-                                <h2 class="banner-text2">Wedding<span>Rings</span></h2>
-                                <a href="shop.html" class="btn btn-text">Shop Now</a>
-                            </div>
-                        </figure>
-                    </div>
-                    <div class="col-sm-6">
-                        <figure class="banner-statistics mt-20">
-                            <a href="#">
-                                <img src="assets/img/banner/img2-top.jpg" alt="product banner">
-                            </a>
-                            <div class="banner-content text-center">
-                                <h5 class="banner-text1">EARRINGS</h5>
-                                <h2 class="banner-text2">Tangerine Floral <span>Earring</span></h2>
-                                <a href="shop.html" class="btn btn-text">Shop Now</a>
-                            </div>
-                        </figure>
-                    </div>
-                    <div class="col-sm-6">
-                        <figure class="banner-statistics mt-20">
-                            <a href="#">
-                                <img src="assets/img/banner/img3-top.jpg" alt="product banner">
-                            </a>
-                            <div class="banner-content text-center">
-                                <h5 class="banner-text1">NEW ARRIVALLS</h5>
-                                <h2 class="banner-text2">Pearl<span>Necklaces</span></h2>
-                                <a href="shop.html" class="btn btn-text">Shop Now</a>
-                            </div>
-                        </figure>
-                    </div>
-                    <div class="col-sm-6">
-                        <figure class="banner-statistics mt-20">
-                            <a href="#">
-                                <img src="assets/img/banner/img4-top.jpg" alt="product banner">
-                            </a>
-                            <div class="banner-content text-right">
-                                <h5 class="banner-text1">NEW DESIGN</h5>
-                                <h2 class="banner-text2">Diamond<span>Jewelry</span></h2>
-                                <a href="shop.html" class="btn btn-text">Shop Now</a>
-                            </div>
-                        </figure>
-                    </div>
+            <div class="hero-single-slide hero-overlay">
+                <div class="hero-slider-item bg-img" data-bg="uploads/baner13.jpg" style="height: 600px; background-size: cover; background-position: center; background-repeat: no-repeat;">
+                </div>
+            </div>
+            <div class="hero-single-slide hero-overlay">
+                <div class="hero-slider-item bg-img" data-bg="uploads/baner14.jpg" style="height: 600px; background-size: cover; background-position: center; background-repeat: no-repeat;">
                 </div>
             </div>
         </div>
-        <!-- banner statistics area end -->
+    </section>
+    <!-- hero slider area end -->
 
-        <!-- featured product area start -->
-        <section class="feature-product section-padding">
-            <div class="container">
-                <div class="row">
-                    <div class="col-12">
-                        <!-- section title start -->
-                        <div class="section-title text-center">
-                            <h2 class="title">featured products</h2>
-                            <p class="sub-title">Add featured products to weekly lineup</p>
-                        </div>
-                        <!-- section title start -->
-                    </div>
+    <!-- hot deals area start -->
+    <section class="hot-deals section-padding">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <!-- section title start -->
+                <div class="section-title">
+                    <h2 class="title" style="color: black !important;">Sản phẩm mới</h2>
                 </div>
-                <div class="row">
-                    <div class="col-12">
-                        <div class="product-carousel-4_2 slick-row-10 slick-arrow-style">
-                            <!-- product item start -->
-                            <div class="product-item">
-                                <figure class="product-thumb">
-                                    <a href="product-details.html">
-                                        <img class="pri-img" src="assets/img/product/product-6.jpg" alt="product">
-                                        <img class="sec-img" src="assets/img/product/product-13.jpg" alt="product">
-                                    </a>
-                                    <div class="product-badge">
+                <!-- section title end -->
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12">
+                <div class="deals-carousel-active slick-row-10 slick-arrow-style">
+                    <!-- product item start -->
+                    <?php foreach ($listSanPham as $key => $sanPham): ?>
+                        <div class="product-item">
+                            <figure class="product-thumb">
+                                <a href="<?= BASE_URL . '?act=chi-tiet-san-pham&id_san_pham=' . $sanPham['id']; ?>">
+                                    <img class="pri-img" src="<?= BASE_URL . $sanPham['hinh_anh'] ?>" alt="<?= $sanPham['ten_san_pham'] ?>">
+                                    <img class="sec-img" src="<?= BASE_URL . $sanPham['hinh_anh'] ?>" alt="<?= $sanPham['ten_san_pham'] ?>">
+                                </a>
+                                <div class="product-badge">
+                                    <?php
+                                    $ngayNhap = new DateTime($sanPham['ngay_nhap']);
+                                    $ngayHienTai = new DateTime();
+                                    $tinhNgay = $ngayHienTai->diff($ngayNhap);
+
+                                    // Hiển thị nhãn "Mới" nếu sản phẩm nhập trong vòng 7 ngày
+                                    if ($tinhNgay->days <= 7):
+                                    ?>
                                         <div class="product-label new">
-                                            <span>new</span>
+                                            <span>Mới</span>
                                         </div>
+                                    <?php endif; ?>
+
+                                    <?php if ($sanPham['gia_khuyen_mai']): ?>
                                         <div class="product-label discount">
-                                            <span>10%</span>
+                                            <span>Giảm giá</span>
                                         </div>
-                                    </div>
-                                    <div class="button-group">
-                                        <a href="wishlist.html" data-bs-toggle="tooltip" data-bs-placement="left" title="Add to wishlist"><i class="pe-7s-like"></i></a>
-                                        <a href="compare.html" data-bs-toggle="tooltip" data-bs-placement="left" title="Add to Compare"><i class="pe-7s-refresh-2"></i></a>
-                                        <a href="#" data-bs-toggle="modal" data-bs-target="#quick_view"><span data-bs-toggle="tooltip" data-bs-placement="left" title="Quick View"><i class="pe-7s-search"></i></span></a>
-                                    </div>
-                                    <div class="cart-hover">
-                                        <button class="btn btn-cart">add to cart</button>
-                                    </div>
-                                </figure>
-                                <div class="product-caption text-center">
-                                    <div class="product-identity">
-                                        <p class="manufacturer-name"><a href="product-details.html">Gold</a></p>
-                                    </div>
-                                    <ul class="color-categories">
-                                        <li>
-                                            <a class="c-lightblue" href="#" title="LightSteelblue"></a>
-                                        </li>
-                                        <li>
-                                            <a class="c-darktan" href="#" title="Darktan"></a>
-                                        </li>
-                                        <li>
-                                            <a class="c-grey" href="#" title="Grey"></a>
-                                        </li>
-                                        <li>
-                                            <a class="c-brown" href="#" title="Brown"></a>
-                                        </li>
-                                    </ul>
-                                    <h6 class="product-name">
-                                        <a href="product-details.html">Perfect Diamond Jewelry</a>
-                                    </h6>
-                                    <div class="price-box">
-                                        <span class="price-regular">$60.00</span>
-                                        <span class="price-old"><del>$70.00</del></span>
-                                    </div>
+                                    <?php endif; ?>
                                 </div>
-                            </div>
-                            <!-- product item end -->
 
-                            <!-- product item start -->
-                            <div class="product-item">
-                                <figure class="product-thumb">
-                                    <a href="product-details.html">
-                                        <img class="pri-img" src="assets/img/product/product-7.jpg" alt="product">
-                                        <img class="sec-img" src="assets/img/product/product-9.jpg" alt="product">
-                                    </a>
-                                    <div class="product-badge">
-                                        <div class="product-label new">
-                                            <span>sale</span>
-                                        </div>
-                                        <div class="product-label discount">
-                                            <span>new</span>
-                                        </div>
-                                    </div>
-                                    <div class="button-group">
-                                        <a href="wishlist.html" data-bs-toggle="tooltip" data-bs-placement="left" title="Add to wishlist"><i class="pe-7s-like"></i></a>
-                                        <a href="compare.html" data-bs-toggle="tooltip" data-bs-placement="left" title="Add to Compare"><i class="pe-7s-refresh-2"></i></a>
-                                        <a href="#" data-bs-toggle="modal" data-bs-target="#quick_view"><span data-bs-toggle="tooltip" data-bs-placement="left" title="Quick View"><i class="pe-7s-search"></i></span></a>
-                                    </div>
-                                    <div class="cart-hover">
-                                        <button class="btn btn-cart">add to cart</button>
-                                    </div>
-                                </figure>
-                                <div class="product-caption text-center">
-                                    <div class="product-identity">
-                                        <p class="manufacturer-name"><a href="product-details.html">mony</a></p>
-                                    </div>
-                                    <ul class="color-categories">
-                                        <li>
-                                            <a class="c-lightblue" href="#" title="LightSteelblue"></a>
-                                        </li>
-                                        <li>
-                                            <a class="c-darktan" href="#" title="Darktan"></a>
-                                        </li>
-                                        <li>
-                                            <a class="c-grey" href="#" title="Grey"></a>
-                                        </li>
-                                        <li>
-                                            <a class="c-brown" href="#" title="Brown"></a>
-                                        </li>
-                                    </ul>
-                                    <h6 class="product-name">
-                                        <a href="product-details.html">Handmade Golden Necklace</a>
-                                    </h6>
-                                    <div class="price-box">
-                                        <span class="price-regular">$50.00</span>
-                                        <span class="price-old"><del>$80.00</del></span>
-                                    </div>
+                                <div class="cart-hover">
+                                    <button class="btn btn-cart">Xem chi tiết</button>
                                 </div>
-                            </div>
-                            <!-- product item end -->
+                            </figure>
 
-                            <!-- product item start -->
-                            <div class="product-item">
-                                <figure class="product-thumb">
-                                    <a href="product-details.html">
-                                        <img class="pri-img" src="assets/img/product/product-8.jpg" alt="product">
-                                        <img class="sec-img" src="assets/img/product/product-11.jpg" alt="product">
+                            <div class="product-caption text-center">
+                                <h6 class="product-name">
+                                    <a href="<?= BASE_URL . '?act=chi-tiet-san-pham&id_san_pham=' . $sanPham['id']; ?>">
+                                        <?= $sanPham['ten_san_pham'] ?>
                                     </a>
-                                    <div class="product-badge">
-                                        <div class="product-label new">
-                                            <span>new</span>
-                                        </div>
-                                    </div>
-                                    <div class="button-group">
-                                        <a href="wishlist.html" data-bs-toggle="tooltip" data-bs-placement="left" title="Add to wishlist"><i class="pe-7s-like"></i></a>
-                                        <a href="compare.html" data-bs-toggle="tooltip" data-bs-placement="left" title="Add to Compare"><i class="pe-7s-refresh-2"></i></a>
-                                        <a href="#" data-bs-toggle="modal" data-bs-target="#quick_view"><span data-bs-toggle="tooltip" data-bs-placement="left" title="Quick View"><i class="pe-7s-search"></i></span></a>
-                                    </div>
-                                    <div class="cart-hover">
-                                        <button class="btn btn-cart">add to cart</button>
-                                    </div>
-                                </figure>
-                                <div class="product-caption text-center">
-                                    <div class="product-identity">
-                                        <p class="manufacturer-name"><a href="product-details.html">Diamond</a></p>
-                                    </div>
-                                    <ul class="color-categories">
-                                        <li>
-                                            <a class="c-lightblue" href="#" title="LightSteelblue"></a>
-                                        </li>
-                                        <li>
-                                            <a class="c-darktan" href="#" title="Darktan"></a>
-                                        </li>
-                                        <li>
-                                            <a class="c-grey" href="#" title="Grey"></a>
-                                        </li>
-                                        <li>
-                                            <a class="c-brown" href="#" title="Brown"></a>
-                                        </li>
-                                    </ul>
-                                    <h6 class="product-name">
-                                        <a href="product-details.html">Perfect Diamond Jewelry</a>
-                                    </h6>
-                                    <div class="price-box">
-                                        <span class="price-regular">$99.00</span>
-                                        <span class="price-old"><del></del></span>
-                                    </div>
+                                </h6>
+                                <div class="price-box">
+                                    <?php if ($sanPham['gia_khuyen_mai']): ?>
+                                        <span class="price-regular"><?= formatPrice($sanPham['gia_khuyen_mai']) ?></span>
+                                        <span class="price-old"><del><?= formatPrice($sanPham['gia_san_pham']) ?></del></span>
+                                    <?php else: ?>
+                                        <span class="price-regular"><?= formatPrice($sanPham['gia_san_pham']) ?></span>
+                                    <?php endif; ?>
                                 </div>
                             </div>
-                            <!-- product item end -->
-
-                            <!-- product item start -->
-                            <div class="product-item">
-                                <figure class="product-thumb">
-                                    <a href="product-details.html">
-                                        <img class="pri-img" src="assets/img/product/product-16.jpg" alt="product">
-                                        <img class="sec-img" src="assets/img/product/product-10.jpg" alt="product">
-                                    </a>
-                                    <div class="product-badge">
-                                        <div class="product-label new">
-                                            <span>sale</span>
-                                        </div>
-                                        <div class="product-label discount">
-                                            <span>15%</span>
-                                        </div>
-                                    </div>
-                                    <div class="button-group">
-                                        <a href="wishlist.html" data-bs-toggle="tooltip" data-bs-placement="left" title="Add to wishlist"><i class="pe-7s-like"></i></a>
-                                        <a href="compare.html" data-bs-toggle="tooltip" data-bs-placement="left" title="Add to Compare"><i class="pe-7s-refresh-2"></i></a>
-                                        <a href="#" data-bs-toggle="modal" data-bs-target="#quick_view"><span data-bs-toggle="tooltip" data-bs-placement="left" title="Quick View"><i class="pe-7s-search"></i></span></a>
-                                    </div>
-                                    <div class="cart-hover">
-                                        <button class="btn btn-cart">add to cart</button>
-                                    </div>
-                                </figure>
-                                <div class="product-caption text-center">
-                                    <div class="product-identity">
-                                        <p class="manufacturer-name"><a href="product-details.html">silver</a></p>
-                                    </div>
-                                    <ul class="color-categories">
-                                        <li>
-                                            <a class="c-lightblue" href="#" title="LightSteelblue"></a>
-                                        </li>
-                                        <li>
-                                            <a class="c-darktan" href="#" title="Darktan"></a>
-                                        </li>
-                                        <li>
-                                            <a class="c-grey" href="#" title="Grey"></a>
-                                        </li>
-                                        <li>
-                                            <a class="c-brown" href="#" title="Brown"></a>
-                                        </li>
-                                    </ul>
-                                    <h6 class="product-name">
-                                        <a href="product-details.html">Diamond Exclusive Ornament</a>
-                                    </h6>
-                                    <div class="price-box">
-                                        <span class="price-regular">$55.00</span>
-                                        <span class="price-old"><del>$75.00</del></span>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- product item end -->
-
-                            <!-- product item start -->
-                            <div class="product-item">
-                                <figure class="product-thumb">
-                                    <a href="product-details.html">
-                                        <img class="pri-img" src="assets/img/product/product-10.jpg" alt="product">
-                                        <img class="sec-img" src="assets/img/product/product-9.jpg" alt="product">
-                                    </a>
-                                    <div class="product-badge">
-                                        <div class="product-label new">
-                                            <span>new</span>
-                                        </div>
-                                        <div class="product-label discount">
-                                            <span>20%</span>
-                                        </div>
-                                    </div>
-                                    <div class="button-group">
-                                        <a href="wishlist.html" data-bs-toggle="tooltip" data-bs-placement="left" title="Add to wishlist"><i class="pe-7s-like"></i></a>
-                                        <a href="compare.html" data-bs-toggle="tooltip" data-bs-placement="left" title="Add to Compare"><i class="pe-7s-refresh-2"></i></a>
-                                        <a href="#" data-bs-toggle="modal" data-bs-target="#quick_view"><span data-bs-toggle="tooltip" data-bs-placement="left" title="Quick View"><i class="pe-7s-search"></i></span></a>
-                                    </div>
-                                    <div class="cart-hover">
-                                        <button class="btn btn-cart">add to cart</button>
-                                    </div>
-                                </figure>
-                                <div class="product-caption text-center">
-                                    <div class="product-identity">
-                                        <p class="manufacturer-name"><a href="product-details.html">mony</a></p>
-                                    </div>
-                                    <ul class="color-categories">
-                                        <li>
-                                            <a class="c-lightblue" href="#" title="LightSteelblue"></a>
-                                        </li>
-                                        <li>
-                                            <a class="c-darktan" href="#" title="Darktan"></a>
-                                        </li>
-                                        <li>
-                                            <a class="c-grey" href="#" title="Grey"></a>
-                                        </li>
-                                        <li>
-                                            <a class="c-brown" href="#" title="Brown"></a>
-                                        </li>
-                                    </ul>
-                                    <h6 class="product-name">
-                                        <a href="product-details.html">Citygold Exclusive Ring</a>
-                                    </h6>
-                                    <div class="price-box">
-                                        <span class="price-regular">$60.00</span>
-                                        <span class="price-old"><del>$70.00</del></span>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- product item end -->
-
-                            <!-- product item start -->
-                            <div class="product-item">
-                                <figure class="product-thumb">
-                                    <a href="product-details.html">
-                                        <img class="pri-img" src="assets/img/product/product-1.jpg" alt="product">
-                                        <img class="sec-img" src="assets/img/product/product-18.jpg" alt="product">
-                                    </a>
-                                    <div class="product-badge">
-                                        <div class="product-label new">
-                                            <span>new</span>
-                                        </div>
-                                        <div class="product-label discount">
-                                            <span>10%</span>
-                                        </div>
-                                    </div>
-                                    <div class="button-group">
-                                        <a href="wishlist.html" data-bs-toggle="tooltip" data-bs-placement="left" title="Add to wishlist"><i class="pe-7s-like"></i></a>
-                                        <a href="compare.html" data-bs-toggle="tooltip" data-bs-placement="left" title="Add to Compare"><i class="pe-7s-refresh-2"></i></a>
-                                        <a href="#" data-bs-toggle="modal" data-bs-target="#quick_view"><span data-bs-toggle="tooltip" data-bs-placement="left" title="Quick View"><i class="pe-7s-search"></i></span></a>
-                                    </div>
-                                    <div class="cart-hover">
-                                        <button class="btn btn-cart">add to cart</button>
-                                    </div>
-                                </figure>
-                                <div class="product-caption text-center">
-                                    <div class="product-identity">
-                                        <p class="manufacturer-name"><a href="product-details.html">Gold</a></p>
-                                    </div>
-                                    <ul class="color-categories">
-                                        <li>
-                                            <a class="c-lightblue" href="#" title="LightSteelblue"></a>
-                                        </li>
-                                        <li>
-                                            <a class="c-darktan" href="#" title="Darktan"></a>
-                                        </li>
-                                        <li>
-                                            <a class="c-grey" href="#" title="Grey"></a>
-                                        </li>
-                                        <li>
-                                            <a class="c-brown" href="#" title="Brown"></a>
-                                        </li>
-                                    </ul>
-                                    <h6 class="product-name">
-                                        <a href="product-details.html">Perfect Diamond Jewelry</a>
-                                    </h6>
-                                    <div class="price-box">
-                                        <span class="price-regular">$60.00</span>
-                                        <span class="price-old"><del>$70.00</del></span>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- product item end -->
-
-                            <!-- product item start -->
-                            <div class="product-item">
-                                <figure class="product-thumb">
-                                    <a href="product-details.html">
-                                        <img class="pri-img" src="assets/img/product/product-2.jpg" alt="product">
-                                        <img class="sec-img" src="assets/img/product/product-17.jpg" alt="product">
-                                    </a>
-                                    <div class="product-badge">
-                                        <div class="product-label new">
-                                            <span>sale</span>
-                                        </div>
-                                        <div class="product-label discount">
-                                            <span>new</span>
-                                        </div>
-                                    </div>
-                                    <div class="button-group">
-                                        <a href="wishlist.html" data-bs-toggle="tooltip" data-bs-placement="left" title="Add to wishlist"><i class="pe-7s-like"></i></a>
-                                        <a href="compare.html" data-bs-toggle="tooltip" data-bs-placement="left" title="Add to Compare"><i class="pe-7s-refresh-2"></i></a>
-                                        <a href="#" data-bs-toggle="modal" data-bs-target="#quick_view"><span data-bs-toggle="tooltip" data-bs-placement="left" title="Quick View"><i class="pe-7s-search"></i></span></a>
-                                    </div>
-                                    <div class="cart-hover">
-                                        <button class="btn btn-cart">add to cart</button>
-                                    </div>
-                                </figure>
-                                <div class="product-caption text-center">
-                                    <div class="product-identity">
-                                        <p class="manufacturer-name"><a href="product-details.html">mony</a></p>
-                                    </div>
-                                    <ul class="color-categories">
-                                        <li>
-                                            <a class="c-lightblue" href="#" title="LightSteelblue"></a>
-                                        </li>
-                                        <li>
-                                            <a class="c-darktan" href="#" title="Darktan"></a>
-                                        </li>
-                                        <li>
-                                            <a class="c-grey" href="#" title="Grey"></a>
-                                        </li>
-                                        <li>
-                                            <a class="c-brown" href="#" title="Brown"></a>
-                                        </li>
-                                    </ul>
-                                    <h6 class="product-name">
-                                        <a href="product-details.html">Handmade Golden Necklace</a>
-                                    </h6>
-                                    <div class="price-box">
-                                        <span class="price-regular">$50.00</span>
-                                        <span class="price-old"><del>$80.00</del></span>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- product item end -->
-
-                            <!-- product item start -->
-                            <div class="product-item">
-                                <figure class="product-thumb">
-                                    <a href="product-details.html">
-                                        <img class="pri-img" src="assets/img/product/product-3.jpg" alt="product">
-                                        <img class="sec-img" src="assets/img/product/product-16.jpg" alt="product">
-                                    </a>
-                                    <div class="product-badge">
-                                        <div class="product-label new">
-                                            <span>new</span>
-                                        </div>
-                                    </div>
-                                    <div class="button-group">
-                                        <a href="wishlist.html" data-bs-toggle="tooltip" data-bs-placement="left" title="Add to wishlist"><i class="pe-7s-like"></i></a>
-                                        <a href="compare.html" data-bs-toggle="tooltip" data-bs-placement="left" title="Add to Compare"><i class="pe-7s-refresh-2"></i></a>
-                                        <a href="#" data-bs-toggle="modal" data-bs-target="#quick_view"><span data-bs-toggle="tooltip" data-bs-placement="left" title="Quick View"><i class="pe-7s-search"></i></span></a>
-                                    </div>
-                                    <div class="cart-hover">
-                                        <button class="btn btn-cart">add to cart</button>
-                                    </div>
-                                </figure>
-                                <div class="product-caption text-center">
-                                    <div class="product-identity">
-                                        <p class="manufacturer-name"><a href="product-details.html">Diamond</a></p>
-                                    </div>
-                                    <ul class="color-categories">
-                                        <li>
-                                            <a class="c-lightblue" href="#" title="LightSteelblue"></a>
-                                        </li>
-                                        <li>
-                                            <a class="c-darktan" href="#" title="Darktan"></a>
-                                        </li>
-                                        <li>
-                                            <a class="c-grey" href="#" title="Grey"></a>
-                                        </li>
-                                        <li>
-                                            <a class="c-brown" href="#" title="Brown"></a>
-                                        </li>
-                                    </ul>
-                                    <h6 class="product-name">
-                                        <a href="product-details.html">Perfect Diamond Jewelry</a>
-                                    </h6>
-                                    <div class="price-box">
-                                        <span class="price-regular">$99.00</span>
-                                        <span class="price-old"><del></del></span>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- product item end -->
-
-                            <!-- product item start -->
-                            <div class="product-item">
-                                <figure class="product-thumb">
-                                    <a href="product-details.html">
-                                        <img class="pri-img" src="assets/img/product/product-4.jpg" alt="product">
-                                        <img class="sec-img" src="assets/img/product/product-15.jpg" alt="product">
-                                    </a>
-                                    <div class="product-badge">
-                                        <div class="product-label new">
-                                            <span>sale</span>
-                                        </div>
-                                        <div class="product-label discount">
-                                            <span>15%</span>
-                                        </div>
-                                    </div>
-                                    <div class="button-group">
-                                        <a href="wishlist.html" data-bs-toggle="tooltip" data-bs-placement="left" title="Add to wishlist"><i class="pe-7s-like"></i></a>
-                                        <a href="compare.html" data-bs-toggle="tooltip" data-bs-placement="left" title="Add to Compare"><i class="pe-7s-refresh-2"></i></a>
-                                        <a href="#" data-bs-toggle="modal" data-bs-target="#quick_view"><span data-bs-toggle="tooltip" data-bs-placement="left" title="Quick View"><i class="pe-7s-search"></i></span></a>
-                                    </div>
-                                    <div class="cart-hover">
-                                        <button class="btn btn-cart">add to cart</button>
-                                    </div>
-                                </figure>
-                                <div class="product-caption text-center">
-                                    <div class="product-identity">
-                                        <p class="manufacturer-name"><a href="product-details.html">silver</a></p>
-                                    </div>
-                                    <ul class="color-categories">
-                                        <li>
-                                            <a class="c-lightblue" href="#" title="LightSteelblue"></a>
-                                        </li>
-                                        <li>
-                                            <a class="c-darktan" href="#" title="Darktan"></a>
-                                        </li>
-                                        <li>
-                                            <a class="c-grey" href="#" title="Grey"></a>
-                                        </li>
-                                        <li>
-                                            <a class="c-brown" href="#" title="Brown"></a>
-                                        </li>
-                                    </ul>
-                                    <h6 class="product-name">
-                                        <a href="product-details.html">Diamond Exclusive Ornament</a>
-                                    </h6>
-                                    <div class="price-box">
-                                        <span class="price-regular">$55.00</span>
-                                        <span class="price-old"><del>$75.00</del></span>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- product item end -->
-
-                            <!-- product item start -->
-                            <div class="product-item">
-                                <figure class="product-thumb">
-                                    <a href="product-details.html">
-                                        <img class="pri-img" src="assets/img/product/product-5.jpg" alt="product">
-                                        <img class="sec-img" src="assets/img/product/product-14.jpg" alt="product">
-                                    </a>
-                                    <div class="product-badge">
-                                        <div class="product-label new">
-                                            <span>new</span>
-                                        </div>
-                                        <div class="product-label discount">
-                                            <span>20%</span>
-                                        </div>
-                                    </div>
-                                    <div class="button-group">
-                                        <a href="wishlist.html" data-bs-toggle="tooltip" data-bs-placement="left" title="Add to wishlist"><i class="pe-7s-like"></i></a>
-                                        <a href="compare.html" data-bs-toggle="tooltip" data-bs-placement="left" title="Add to Compare"><i class="pe-7s-refresh-2"></i></a>
-                                        <a href="#" data-bs-toggle="modal" data-bs-target="#quick_view"><span data-bs-toggle="tooltip" data-bs-placement="left" title="Quick View"><i class="pe-7s-search"></i></span></a>
-                                    </div>
-                                    <div class="cart-hover">
-                                        <button class="btn btn-cart">add to cart</button>
-                                    </div>
-                                </figure>
-                                <div class="product-caption text-center">
-                                    <div class="product-identity">
-                                        <p class="manufacturer-name"><a href="product-details.html">mony</a></p>
-                                    </div>
-                                    <ul class="color-categories">
-                                        <li>
-                                            <a class="c-lightblue" href="#" title="LightSteelblue"></a>
-                                        </li>
-                                        <li>
-                                            <a class="c-darktan" href="#" title="Darktan"></a>
-                                        </li>
-                                        <li>
-                                            <a class="c-grey" href="#" title="Grey"></a>
-                                        </li>
-                                        <li>
-                                            <a class="c-brown" href="#" title="Brown"></a>
-                                        </li>
-                                    </ul>
-                                    <h6 class="product-name">
-                                        <a href="product-details.html">Citygold Exclusive Ring</a>
-                                    </h6>
-                                    <div class="price-box">
-                                        <span class="price-regular">$60.00</span>
-                                        <span class="price-old"><del>$70.00</del></span>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- product item end -->
                         </div>
-                    </div>
+                    <?php endforeach; ?>
+                    <!-- product item end -->
                 </div>
             </div>
-        </section>
-        <!-- featured product area end -->
+        </div>
+    </div>
+</section>
 
-        <!-- latest blog area start -->
-        <section class="latest-blog-area">
-            <div class="container">
-                <div class="row">
-                    <div class="col-12">
-                        <!-- section title start -->
-                        <div class="section-title text-center">
-                            <h2 class="title">latest blogs</h2>
-                            <p class="sub-title">There are latest blog posts</p>
-                        </div>
-                        <!-- section title start -->
-                    </div>
+    <!-- hot deals area end -->
+
+    <!-- banner statistics area start -->
+    <div class="banner-statistics-area">
+        <div class="container">
+            <div class="row row-20 mtn-20">
+                <div class="col-sm-6">
+                    <figure class="banner-statistics mt-20">
+                        <a href="#">
+                            <img src="./uploads/bst1.webp" alt="product banner">
+                        </a>
+                    </figure>
                 </div>
-                <div class="row">
-                    <div class="col-12">
-                        <div class="blog-carousel-active slick-row-10 slick-arrow-style">
-                            <!-- blog post item start -->
-                            <div class="blog-post-item">
-                                <figure class="blog-thumb">
-                                    <a href="blog-details.html">
-                                        <img src="assets/img/blog/blog-img1.jpg" alt="blog image">
-                                    </a>
-                                </figure>
-                                <div class="blog-content">
-                                    <div class="blog-meta">
-                                        <p>25/03/2019 | <a href="#">Corano</a></p>
-                                    </div>
-                                    <h5 class="blog-title">
-                                        <a href="blog-details.html">Celebrity Daughter Opens Up About Having Her Eye Color Changed</a>
-                                    </h5>
-                                </div>
-                            </div>
-                            <!-- blog post item end -->
-
-                            <!-- blog post item start -->
-                            <div class="blog-post-item">
-                                <figure class="blog-thumb">
-                                    <a href="blog-details.html">
-                                        <img src="assets/img/blog/blog-img2.jpg" alt="blog image">
-                                    </a>
-                                </figure>
-                                <div class="blog-content">
-                                    <div class="blog-meta">
-                                        <p>25/03/2019 | <a href="#">Corano</a></p>
-                                    </div>
-                                    <h5 class="blog-title">
-                                        <a href="blog-details.html">Children Left Home Alone For 4 Days In TV series Experiment</a>
-                                    </h5>
-                                </div>
-                            </div>
-                            <!-- blog post item end -->
-
-                            <!-- blog post item start -->
-                            <div class="blog-post-item">
-                                <figure class="blog-thumb">
-                                    <a href="blog-details.html">
-                                        <img src="assets/img/blog/blog-img3.jpg" alt="blog image">
-                                    </a>
-                                </figure>
-                                <div class="blog-content">
-                                    <div class="blog-meta">
-                                        <p>25/03/2019 | <a href="#">Corano</a></p>
-                                    </div>
-                                    <h5 class="blog-title">
-                                        <a href="blog-details.html">Lotto Winner Offering Up Money To Any Man That Will Date Her</a>
-                                    </h5>
-                                </div>
-                            </div>
-                            <!-- blog post item end -->
-
-                            <!-- blog post item start -->
-                            <div class="blog-post-item">
-                                <figure class="blog-thumb">
-                                    <a href="blog-details.html">
-                                        <img src="assets/img/blog/blog-img4.jpg" alt="blog image">
-                                    </a>
-                                </figure>
-                                <div class="blog-content">
-                                    <div class="blog-meta">
-                                        <p>25/03/2019 | <a href="#">Corano</a></p>
-                                    </div>
-                                    <h5 class="blog-title">
-                                        <a href="blog-details.html">People are Willing Lie When Comes Money, According to Research</a>
-                                    </h5>
-                                </div>
-                            </div>
-                            <!-- blog post item end -->
-
-                            <!-- blog post item start -->
-                            <div class="blog-post-item">
-                                <figure class="blog-thumb">
-                                    <a href="blog-details.html">
-                                        <img src="assets/img/blog/blog-img5.jpg" alt="blog image">
-                                    </a>
-                                </figure>
-                                <div class="blog-content">
-                                    <div class="blog-meta">
-                                        <p>25/03/2019 | <a href="#">Corano</a></p>
-                                    </div>
-                                    <h5 class="blog-title">
-                                        <a href="blog-details.html">romantic Love Stories Of Hollywood's Biggest Celebrities</a>
-                                    </h5>
-                                </div>
-                            </div>
-                            <!-- blog post item end -->
-                        </div>
-                    </div>
+                <div class="col-sm-6">
+                    <figure class="banner-statistics mt-20">
+                        <a href="#">
+                            <img src="./uploads/bst2.webp" alt="product banner">
+                        </a>
+                    </figure>
+                </div>
+                <div class="col-sm-6">
+                    <figure class="banner-statistics mt-20">
+                        <a href="#">
+                            <img src="./uploads/bst3.webp" alt="product banner">
+                        </a>
+                    </figure>
+                </div>
+                <div class="col-sm-6">
+                    <figure class="banner-statistics mt-20">
+                        <a href="#">
+                            <img src="./uploads/bst4.webp" alt="product banner">
+                        </a>
+                    </figure>
                 </div>
             </div>
-        </section>
-        <!-- latest blog area end -->
+        </div>
+    </div>
+    <!-- banner statistics area end -->
 
-        <!-- group product start -->
-        <section class="group-product-area section-padding">
-            <div class="container">
-                <div class="row">
-                    <div class="col-12">
-                        <!-- section title start -->
-                        <div class="section-title text-center">
-                            <h2 class="title">New Arrivals</h2>
-                            <p class="sub-title">Add new products to weekly lineup</p>
-                        </div>
-                        <!-- section title start -->
+    <!-- featured product area start -->
+    <section class="feature-product section-padding">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <!-- section title start -->
+                    <div class="section-title">
+                        <h2 class="title" style="color: black !important;">BST POLO COOL 2025</h2>
                     </div>
-                </div>
-                <div class="row">
-                    <div class="col-12">
-                        <div class="group-list-carousel--3 slick-row-10 slick-arrow-style">
-                            <!-- group list item start -->
-                            <div class="group-slide-item">
-                                <div class="group-item">
-                                    <div class="group-item-thumb">
-                                        <a href="product-details.html">
-                                            <img src="assets/img/product/product-1.jpg" alt="">
-                                        </a>
-                                    </div>
-                                    <div class="group-item-desc">
-                                        <h5 class="group-product-name"><a href="product-details.html">
-                                                Diamond Exclusive ring</a></h5>
-                                        <div class="price-box">
-                                            <span class="price-regular">$50.00</span>
-                                            <span class="price-old"><del>$29.99</del></span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- group list item end -->
-
-                            <!-- group list item start -->
-                            <div class="group-slide-item">
-                                <div class="group-item">
-                                    <div class="group-item-thumb">
-                                        <a href="product-details.html">
-                                            <img src="assets/img/product/product-3.jpg" alt="">
-                                        </a>
-                                    </div>
-                                    <div class="group-item-desc">
-                                        <h5 class="group-product-name"><a href="product-details.html">
-                                                Handmade Golden ring</a></h5>
-                                        <div class="price-box">
-                                            <span class="price-regular">$55.00</span>
-                                            <span class="price-old"><del>$30.00</del></span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- group list item end -->
-
-                            <!-- group list item start -->
-                            <div class="group-slide-item">
-                                <div class="group-item">
-                                    <div class="group-item-thumb">
-                                        <a href="product-details.html">
-                                            <img src="assets/img/product/product-5.jpg" alt="">
-                                        </a>
-                                    </div>
-                                    <div class="group-item-desc">
-                                        <h5 class="group-product-name"><a href="product-details.html">
-                                                exclusive gold Jewelry</a></h5>
-                                        <div class="price-box">
-                                            <span class="price-regular">$45.00</span>
-                                            <span class="price-old"><del>$25.00</del></span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- group list item end -->
-
-                            <!-- group list item start -->
-                            <div class="group-slide-item">
-                                <div class="group-item">
-                                    <div class="group-item-thumb">
-                                        <a href="product-details.html">
-                                            <img src="assets/img/product/product-7.jpg" alt="">
-                                        </a>
-                                    </div>
-                                    <div class="group-item-desc">
-                                        <h5 class="group-product-name"><a href="product-details.html">
-                                                Perfect Diamond earring</a></h5>
-                                        <div class="price-box">
-                                            <span class="price-regular">$50.00</span>
-                                            <span class="price-old"><del>$29.99</del></span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- group list item end -->
-
-                            <!-- group list item start -->
-                            <div class="group-slide-item">
-                                <div class="group-item">
-                                    <div class="group-item-thumb">
-                                        <a href="product-details.html">
-                                            <img src="assets/img/product/product-9.jpg" alt="">
-                                        </a>
-                                    </div>
-                                    <div class="group-item-desc">
-                                        <h5 class="group-product-name"><a href="product-details.html">
-                                                Handmade Golden Necklace</a></h5>
-                                        <div class="price-box">
-                                            <span class="price-regular">$90.00</span>
-                                            <span class="price-old"><del>$100.</del></span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- group list item end -->
-
-                            <!-- group list item start -->
-                            <div class="group-slide-item">
-                                <div class="group-item">
-                                    <div class="group-item-thumb">
-                                        <a href="product-details.html">
-                                            <img src="assets/img/product/product-11.jpg" alt="">
-                                        </a>
-                                    </div>
-                                    <div class="group-item-desc">
-                                        <h5 class="group-product-name"><a href="product-details.html">
-                                                Handmade Golden Necklace</a></h5>
-                                        <div class="price-box">
-                                            <span class="price-regular">$20.00</span>
-                                            <span class="price-old"><del>$30.00</del></span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- group list item end -->
-
-                            <!-- group list item start -->
-                            <div class="group-slide-item">
-                                <div class="group-item">
-                                    <div class="group-item-thumb">
-                                        <a href="product-details.html">
-                                            <img src="assets/img/product/product-13.jpg" alt="">
-                                        </a>
-                                    </div>
-                                    <div class="group-item-desc">
-                                        <h5 class="group-product-name"><a href="product-details.html">
-                                                Handmade Golden ring</a></h5>
-                                        <div class="price-box">
-                                            <span class="price-regular">$55.00</span>
-                                            <span class="price-old"><del>$30.00</del></span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- group list item end -->
-
-                            <!-- group list item start -->
-                            <div class="group-slide-item">
-                                <div class="group-item">
-                                    <div class="group-item-thumb">
-                                        <a href="product-details.html">
-                                            <img src="assets/img/product/product-15.jpg" alt="">
-                                        </a>
-                                    </div>
-                                    <div class="group-item-desc">
-                                        <h5 class="group-product-name"><a href="product-details.html">
-                                                exclusive gold Jewelry</a></h5>
-                                        <div class="price-box">
-                                            <span class="price-regular">$45.00</span>
-                                            <span class="price-old"><del>$25.00</del></span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- group list item end -->
-
-                            <!-- group list item start -->
-                            <div class="group-slide-item">
-                                <div class="group-item">
-                                    <div class="group-item-thumb">
-                                        <a href="product-details.html">
-                                            <img src="assets/img/product/product-17.jpg" alt="">
-                                        </a>
-                                    </div>
-                                    <div class="group-item-desc">
-                                        <h5 class="group-product-name"><a href="product-details.html">
-                                                Handmade Golden Necklace</a></h5>
-                                        <div class="price-box">
-                                            <span class="price-regular">$50.00</span>
-                                            <span class="price-old"><del>$29.99</del></span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- group list item end -->
-
-                            <!-- group list item start -->
-                            <div class="group-slide-item">
-                                <div class="group-item">
-                                    <div class="group-item-thumb">
-                                        <a href="product-details.html">
-                                            <img src="assets/img/product/product-16.jpg" alt="">
-                                        </a>
-                                    </div>
-                                    <div class="group-item-desc">
-                                        <h5 class="group-product-name"><a href="product-details.html">
-                                                Handmade Golden Necklaces</a></h5>
-                                        <div class="price-box">
-                                            <span class="price-regular">$55.00</span>
-                                            <span class="price-old"><del>$30.00</del></span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- group list item end -->
-
-                            <!-- group list item start -->
-                            <div class="group-slide-item">
-                                <div class="group-item">
-                                    <div class="group-item-thumb">
-                                        <a href="product-details.html">
-                                            <img src="assets/img/product/product-12.jpg" alt="">
-                                        </a>
-                                    </div>
-                                    <div class="group-item-desc">
-                                        <h5 class="group-product-name"><a href="product-details.html">
-                                                exclusive silver top bracellet</a></h5>
-                                        <div class="price-box">
-                                            <span class="price-regular">$45.00</span>
-                                            <span class="price-old"><del>$25.00</del></span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- group list item end -->
-
-                            <!-- group list item start -->
-                            <div class="group-slide-item">
-                                <div class="group-item">
-                                    <div class="group-item-thumb">
-                                        <a href="product-details.html">
-                                            <img src="assets/img/product/product-11.jpg" alt="">
-                                        </a>
-                                    </div>
-                                    <div class="group-item-desc">
-                                        <h5 class="group-product-name"><a href="product-details.html">
-                                                top Perfect Diamond necklace</a></h5>
-                                        <div class="price-box">
-                                            <span class="price-regular">$50.00</span>
-                                            <span class="price-old"><del>$29.99</del></span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- group list item end -->
-                        </div>
-                    </div>
+                    <!-- section title start -->
                 </div>
             </div>
-        </section>
-        <!-- group product end -->
-
-        <!-- instagram feed start -->
-        <section class="instagram-area">
-            <div class="container">
-                <div class="row">
-                    <div class="col-12">
-                        <!-- section title start -->
-                        <div class="section-title text-center">
-                            <h2 class="title">Instagram</h2>
-                            <p class="sub-title">Displays an Instagram feed of your photos from your Instagram account on your website.</p>
+            <div class="row">
+                <div class="col-12">
+                    <div class="swipe-slider">
+                        <div class="swipe-slider-container">
+                            <div class="swipe-slide" style="background-image: url('<?= BASE_URL ?>uploads/3d1.webp')"></div>
+                            <div class="swipe-slide" style="background-image: url('<?= BASE_URL ?>uploads/3d2.webp')"></div>
+                            <div class="swipe-slide" style="background-image: url('<?= BASE_URL ?>uploads/3d3.webp')"></div>
+                            <div class="swipe-slide" style="background-image: url('<?= BASE_URL ?>uploads/3d4.webp')"></div>
                         </div>
-                        <!-- section title start -->
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-12">
-                        <div class="instagram-feed-thumb">
-                            <div class="instagram-carousel">
-                                <!-- single instagram start -->
-                                <div class="instagram-item">
-                                    <a href="#">
-                                        <img src="assets/img/instagram/instagram-1.jpg" alt="instagram">
-                                    </a>
-                                </div>
-                                <!-- single instagram end -->
-                                <!-- single instagram start -->
-                                <div class="instagram-item">
-                                    <a href="#">
-                                        <img src="assets/img/instagram/instagram-2.jpg" alt="instagram">
-                                    </a>
-                                </div>
-                                <!-- single instagram end -->
-                                <!-- single instagram start -->
-                                <div class="instagram-item">
-                                    <a href="#">
-                                        <img src="assets/img/instagram/instagram-3.jpg" alt="instagram">
-                                    </a>
-                                </div>
-                                <!-- single instagram end -->
-                                <!-- single instagram start -->
-                                <div class="instagram-item">
-                                    <a href="#">
-                                        <img src="assets/img/instagram/instagram-4.jpg" alt="instagram">
-                                    </a>
-                                </div>
-                                <!-- single instagram end -->
-                                <!-- single instagram start -->
-                                <div class="instagram-item">
-                                    <a href="#">
-                                        <img src="assets/img/instagram/instagram-5.jpg" alt="instagram">
-                                    </a>
-                                </div>
-                                <!-- single instagram end -->
-                                <!-- single instagram start -->
-                                <div class="instagram-item">
-                                    <a href="#">
-                                        <img src="assets/img/instagram/instagram-3.jpg" alt="instagram">
-                                    </a>
-                                </div>
-                                <!-- single instagram end -->
-                            </div>
+                        <div class="swipe-nav">
+                            <button class="swipe-prev">❮</button>
+                            <button class="swipe-next">❯</button>
                         </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-        <!-- instagram feed end -->
-
-        <!-- brand logo area start -->
-        <div class="brand-logo section-padding">
-            <div class="container">
-                <div class="row">
-                    <div class="col-12">
-                        <div class="brand-logo-carousel slick-row-10 slick-arrow-style">
-                            <!-- single brand start -->
-                            <div class="brand-item">
-                                <a href="#">
-                                    <img src="assets/img/brand/1.png" alt="">
-                                </a>
-                            </div>
-                            <!-- single brand end -->
-
-                            <!-- single brand start -->
-                            <div class="brand-item">
-                                <a href="#">
-                                    <img src="assets/img/brand/2.png" alt="">
-                                </a>
-                            </div>
-                            <!-- single brand end -->
-
-                            <!-- single brand start -->
-                            <div class="brand-item">
-                                <a href="#">
-                                    <img src="assets/img/brand/3.png" alt="">
-                                </a>
-                            </div>
-                            <!-- single brand end -->
-
-                            <!-- single brand start -->
-                            <div class="brand-item">
-                                <a href="#">
-                                    <img src="assets/img/brand/4.png" alt="">
-                                </a>
-                            </div>
-                            <!-- single brand end -->
-
-                            <!-- single brand start -->
-                            <div class="brand-item">
-                                <a href="#">
-                                    <img src="assets/img/brand/5.png" alt="">
-                                </a>
-                            </div>
-                            <!-- single brand end -->
-
-                            <!-- single brand start -->
-                            <div class="brand-item">
-                                <a href="#">
-                                    <img src="assets/img/brand/6.png" alt="">
-                                </a>
-                            </div>
-                            <!-- single brand end -->
+                        <div class="swipe-dots">
+                            <div class="swipe-dot active"></div>
+                            <div class="swipe-dot"></div>
+                            <div class="swipe-dot"></div>
+                            <div class="swipe-dot"></div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        <!-- brand logo area end -->
-    </main>
+    </section>
+    <!-- featured product area end -->
 
-  
-
-    
-
-   
-
-    <!-- offcanvas mini cart start -->
-    <div class="offcanvas-minicart-wrapper">
-        <div class="minicart-inner">
-            <div class="offcanvas-overlay"></div>
-            <div class="minicart-inner-content">
-                <div class="minicart-close">
-                    <i class="pe-7s-close"></i>
+    <!-- latest blog area start -->
+    <section class="latest-blog-area">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <!-- section title start -->
+                    <div class="section-title">
+                        <h2 class="title" style="color: black !important;">Bản tin Yody</h2>
+                    </div>
+                    <!-- section title start -->
                 </div>
-                <div class="minicart-content-box">
-                    <div class="minicart-item-wrapper">
-                        <ul>
-                            <li class="minicart-item">
-                                <div class="minicart-thumb">
-                                    <a href="product-details.html">
-                                        <img src="assets/img/cart/cart-1.jpg" alt="product">
-                                    </a>
-                                </div>
-                                <div class="minicart-content">
-                                    <h3 class="product-name">
-                                        <a href="product-details.html">Dozen White Botanical Linen Dinner Napkins</a>
-                                    </h3>
-                                    <p>
-                                        <span class="cart-quantity">1 <strong>&times;</strong></span>
-                                        <span class="cart-price">$100.00</span>
-                                    </p>
-                                </div>
-                                <button class="minicart-remove"><i class="pe-7s-close"></i></button>
-                            </li>
-                            <li class="minicart-item">
-                                <div class="minicart-thumb">
-                                    <a href="product-details.html">
-                                        <img src="assets/img/cart/cart-2.jpg" alt="product">
-                                    </a>
-                                </div>
-                                <div class="minicart-content">
-                                    <h3 class="product-name">
-                                        <a href="product-details.html">Dozen White Botanical Linen Dinner Napkins</a>
-                                    </h3>
-                                    <p>
-                                        <span class="cart-quantity">1 <strong>&times;</strong></span>
-                                        <span class="cart-price">$80.00</span>
-                                    </p>
-                                </div>
-                                <button class="minicart-remove"><i class="pe-7s-close"></i></button>
-                            </li>
-                        </ul>
-                    </div>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <div class="blog-carousel-active slick-row-10 slick-arrow-style">
+                        <!-- blog post item start -->
+                        <div class="blog-post-item">
+                            <figure class="blog-thumb">
+                                <a href="blog-details.html">
+                                    <img src="./uploads/tin1.jpeg" alt="blog image">
+                                </a>
+                            </figure>
+                            <div class="blog-content">
+                                <h5 class="blog-title">
+                                    <a href="blog-details.html">Chung tay phủ xanh đất Việt: YODY góp sức 1 tỷ đồng trồng rừng</a>
+                                </h5>
+                            </div>
+                        </div>
+                        <!-- blog post item end -->
 
-                    <div class="minicart-pricing-box">
-                        <ul>
-                            <li>
-                                <span>sub-total</span>
-                                <span><strong>$300.00</strong></span>
-                            </li>
-                            <li>
-                                <span>Eco Tax (-2.00)</span>
-                                <span><strong>$10.00</strong></span>
-                            </li>
-                            <li>
-                                <span>VAT (20%)</span>
-                                <span><strong>$60.00</strong></span>
-                            </li>
-                            <li class="total">
-                                <span>total</span>
-                                <span><strong>$370.00</strong></span>
-                            </li>
-                        </ul>
-                    </div>
+                        <!-- blog post item start -->
+                        <div class="blog-post-item">
+                            <figure class="blog-thumb">
+                                <a href="blog-details.html">
+                                    <img src="./uploads/tin4.jpg" alt="blog image">
+                                </a>
+                            </figure>
+                            <div class="blog-content">
+                                <h5 class="blog-title">
+                                    <a href="blog-details.html">YODY ra mắt Polo Cafe Đá - Dấu ấn tiên phong trên thị trường thời trang Việt</a>
+                                </h5>
+                            </div>
+                        </div>
+                        <!-- blog post item end -->
 
-                    <div class="minicart-button">
-                        <a href="cart.html"><i class="fa fa-shopping-cart"></i> View Cart</a>
-                        <a href="cart.html"><i class="fa fa-share"></i> Checkout</a>
+                        <!-- blog post item start -->
+                        <div class="blog-post-item">
+                            <figure class="blog-thumb">
+                                <a href="blog-details.html">
+                                    <img src="./uploads/tin8.jpeg" alt="blog image">
+                                </a>
+                            </figure>
+                            <div class="blog-content">
+                                <h5 class="blog-title">
+                                    <a href="blog-details.html">CÙNG YODY CHUNG TAY ĐẨY LÙI MẠO DANH, LỪA ĐẢO QUA MẠNG</a>
+                                </h5>
+                            </div>
+                        </div>
+                        <!-- blog post item end -->
+
+                        <!-- blog post item start -->
+                        <div class="blog-post-item">
+                            <figure class="blog-thumb">
+                                <a href="blog-details.html">
+                                    <img src="./uploads/tin6.webp" alt="blog image">
+                                </a>
+                            </figure>
+                            <div class="blog-content">
+                                <h5 class="blog-title">
+                                    <a href="blog-details.html">QUỐC TẾ THIẾU NHI - YODY SALE 20% TOÀN BỘ SẢN PHẨM TRẺ EM!</a>
+                                </h5>
+                            </div>
+                        </div>
+                        <!-- blog post item end -->
+
+                        <!-- blog post item start -->
+                        <div class="blog-post-item">
+                            <figure class="blog-thumb">
+                                <a href="blog-details.html">
+                                    <img src="./uploads/tin7.png" alt="blog image">
+                                </a>
+                            </figure>
+                            <div class="blog-content">
+                                <h5 class="blog-title">
+                                    <a href="blog-details.html">SINH NHẬT 11 TUỔI YODY - ƯU ĐÃI TRI ÂN NGẬP TRÀN</a>
+                                </h5>
+                            </div>
+                        </div>
+                        <!-- blog post item end -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- latest blog area end -->
+
+    <!-- brand logo area start -->
+    <div class="brand-logo section-padding">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <div class="brand-logo-carousel slick-row-10 slick-arrow-style">
+                        <!-- single brand start -->
+                        <div class="brand-item">
+                            <a href="#">
+                                <img src="assets/img/brand/1.png" alt="">
+                            </a>
+                        </div>
+                        <!-- single brand end -->
+
+                        <!-- single brand start -->
+                        <div class="brand-item">
+                            <a href="#">
+                                <img src="assets/img/brand/2.png" alt="">
+                            </a>
+                        </div>
+                        <!-- single brand end -->
+
+                        <!-- single brand start -->
+                        <div class="brand-item">
+                            <a href="#">
+                                <img src="assets/img/brand/3.png" alt="">
+                            </a>
+                        </div>
+                        <!-- single brand end -->
+
+                        <!-- single brand start -->
+                        <div class="brand-item">
+                            <a href="#">
+                                <img src="assets/img/brand/4.png" alt="">
+                            </a>
+                        </div>
+                        <!-- single brand end -->
+
+                        <!-- single brand start -->
+                        <div class="brand-item">
+                            <a href="#">
+                                <img src="assets/img/brand/5.png" alt="">
+                            </a>
+                        </div>
+                        <!-- single brand end -->
+
+                        <!-- single brand start -->
+                        <div class="brand-item">
+                            <a href="#">
+                                <img src="assets/img/brand/6.png" alt="">
+                            </a>
+                        </div>
+                        <!-- single brand end -->
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    <!-- offcanvas mini cart end -->
+    <!-- brand logo area end -->
+</main>
+
+<!-- offcanvas mini cart start -->
+<!-- <div class="offcanvas-minicart-wrapper">
+    <div class="minicart-inner">
+        <div class="offcanvas-overlay"></div>
+        <div class="minicart-inner-content">
+            <div class="minicart-close">
+                <i class="pe-7s-close"></i>
+            </div>
+            <div class="minicart-content-box">
+                <div class="minicart-item-wrapper">
+                    <ul>
+                        <li class="minicart-item">
+                            <div class="minicart-thumb">
+                                <a href="product-details.html">
+                                    <img src="assets/img/cart/cart-1.jpg" alt="product">
+                                </a>
+                            </div>
+                            <div class="minicart-content">
+                                <h3 class="product-name">
+                                    <a href="product-details.html">Dozen White Botanical Linen Dinner Napkins</a>
+                                </h3>
+                                <p>
+                                    <span class="cart-quantity">1 <strong>&times;</strong></span>
+                                    <span class="cart-price">$100.00</span>
+                                </p>
+                            </div>
+                            <button class="minicart-remove"><i class="pe-7s-close"></i></button>
+                        </li>
+                        <li class="minicart-item">
+                            <div class="minicart-thumb">
+                                <a href="product-details.html">
+                                    <img src="assets/img/cart/cart-2.jpg" alt="product">
+                                </a>
+                            </div>
+                            <div class="minicart-content">
+                                <h3 class="product-name">
+                                    <a href="product-details.html">Dozen White Botanical Linen Dinner Napkins</a>
+                                </h3>
+                                <p>
+                                    <span class="cart-quantity">1 <strong>&times;</strong></span>
+                                    <span class="cart-price">$80.00</span>
+                                </p>
+                            </div>
+                            <button class="minicart-remove"><i class="pe-7s-close"></i></button>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="minicart-pricing-box">
+                    <ul>
+                        <li>
+                            <span>sub-total</span>
+                            <span><strong>$300.00</strong></span>
+                        </li>
+                        <li>
+                            <span>Eco Tax (-2.00)</span>
+                            <span><strong>$10.00</strong></span>
+                        </li>
+                        <li>
+                            <span>VAT (20%)</span>
+                            <span><strong>$60.00</strong></span>
+                        </li>
+                        <li class="total">
+                            <span>total</span>
+                            <span><strong>$370.00</strong></span>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="minicart-button">
+                    <a href="cart.html"><i class="fa fa-shopping-cart"></i> View Cart</a>
+                    <a href="cart.html"><i class="fa fa-share"></i> Checkout</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div> -->
+<!-- offcanvas mini cart end -->
 
 
-   <?php require_once './views/layout/footer.php'; ?>
+<?php require_once './views/layout/footer.php'; ?>

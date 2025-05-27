@@ -1,9 +1,24 @@
-
-  <!-- Scroll to top start -->
+<!-- Scroll to top start -->
     <div class="scroll-top not-visible">
         <i class="fa fa-angle-up"></i>
     </div>
     <!-- Scroll to Top End --><!-- footer area start -->
+    <style>
+        .footer-widget-area {
+            font-family: 'Roboto', sans-serif !important;
+        }
+        
+        .footer-widget-area .widget-title,
+        .footer-widget-area .widget-title-text,
+        .footer-widget-area .contact-block li,
+        .footer-widget-area .contact-block a,
+        .footer-widget-area .info-list li a,
+        .footer-widget-area .news-field,
+        .footer-widget-area .news-btn {
+            font-family: 'Roboto', sans-serif !important;
+            font-weight: 400 !important;
+        }
+    </style>
     <footer class="footer-widget-area">
         <div class="footer-top section-padding">
             <div class="container">
