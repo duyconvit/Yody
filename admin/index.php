@@ -8,9 +8,12 @@ require_once '../commons/function.php'; // Hàm hỗ trợ
 require_once './controllers/AdminDanhMucController.php';
 require_once './controllers/AdminSanPhamController.php';
 require_once './controllers/AdminDashboardController.php';
+require_once './controllers/AdminTaiKhoanController.php';
+
 // Require toàn bộ file Models
 require_once './models/AdminDanhMuc.php';
 require_once './models/AdminSanPham.php';
+require_once './models/AdminTaiKhoan.php';
 
 // Route
 $act = $_GET['act'] ?? '/';
@@ -28,6 +31,7 @@ match ($act) {
     'sua-danh-muc' => (new AdminDanhMucController())->suaDanhMuc(),
     'xoa-danh-muc' => (new AdminDanhMucController())->xoaDanhMuc(),
 
+
     
   // Route quản lí sản phẩm
     'san-pham' => (new AdminSanPhamController())->danhSachSanPham(),
@@ -38,5 +42,8 @@ match ($act) {
     'sua-san-pham' => (new AdminSanPhamController())->suaSanPham(),
     'xoa-san-pham' => (new AdminSanPhamController())->xoaSanPham(),
     'chi-tiet-san-pham' => (new AdminSanPhamController())->detailSanPham(),
+
+    // Route quản lí san pham
+    'list-tai-khoan-quan-tri' => (new AdminTaiKhoanController())->danhSachQuanTri(),
 
 };

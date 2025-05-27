@@ -15,4 +15,6 @@ class HomeController
         $listSanPham = $this-> modelSanPham->getAllSanPham();
         var_dump($listSanPham);die();
     }
+
+    //test
 }
