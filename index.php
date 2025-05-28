@@ -21,4 +21,22 @@ match ($act) {
     // 'list-san-pham' => (new HomeController())->dssanpham(),
 
     // 'danh-sach-san-pham' => (new HomeController())->danhSachSanPham(),
+
+
+
+
+
+    // Giỏ hàng
+   // 'them-gio-hang' => (new HomeController())->addGioHang(),
+    'gio-hang' => (new HomeController())->gioHang(),
+    //'xoa-gio-hang' => (new HomeController())->deleteGioHang(),
+    
+
+    // // Thanh toán
+    // 'thanh-toan' => (new HomeController())->thanhToan(),
+    // 'xu-ly-thanh-toan' => (new HomeController())->postThanhToan(),
+    // 'lich-su-mua-hang' => (new HomeController())->lichSuMuaHang(),
+    // 'chi-tiet-mua-hang' => (new HomeController())->chiTietMuaHang(),
+    // 'huy-don-hang' => (new HomeController())->huyDonHang(),
+
 };

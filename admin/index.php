@@ -8,7 +8,7 @@ require_once '../commons/function.php'; // Hàm hỗ trợ
 require_once './controllers/AdminDanhMucController.php';
 require_once './controllers/AdminSanPhamController.php';
 require_once './controllers/AdminDashboardController.php';
-require_once './controllers/AdminBinhLuanController.php';
+
 
 require_once './controllers/AdminTaiKhoanController.php';
 
@@ -16,7 +16,7 @@ require_once './controllers/AdminTaiKhoanController.php';
 // Require toàn bộ file Models
 require_once './models/AdminDanhMuc.php';
 require_once './models/AdminSanPham.php';
-require_once './models/AdminBinhLuan.php';
+
 
 require_once './models/AdminTaiKhoan.php';
 
@@ -52,10 +52,7 @@ match ($act) {
   
 
 
-  // Route quản lí bình luận
-    'quan-ly-binh-luan' => (new AdminBinhLuanController())->danhSachBinhLuan(),
-    'danh-sach-binh-luan' => (new AdminBinhLuanController())->danhSachDetailBinhLuan(),
-    'xoa-binh-luan' => (new AdminBinhLuanController())->deleteBinhLuan(),
+  
 
     // Route quản lí san pham
     'list-tai-khoan-quan-tri' => (new AdminTaiKhoanController())->danhSachQuanTri(),

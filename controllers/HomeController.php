@@ -3,6 +3,7 @@
 class HomeController
 {
     public $modelSanPham;
+    public $modelGioHang;
     // public $danhMuc;
     
     public function __construct(){
@@ -14,6 +15,10 @@ class HomeController
         $listSanPham = $this-> modelSanPham->getAllSanPham();
         require_once './views/home.php';
     }
+    
 
+
+    
    
+
 }
