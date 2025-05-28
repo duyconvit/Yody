@@ -52,6 +52,9 @@ match ($act) {
     // Route quản lí đơn hàng
     'quan-ly-don-hang' => (new AdminDonHangController())->danhSachDonHang(),
     'chi-tiet-don-hang' => (new AdminDonHangController())->detailDonHang(),
+    'form-sua-don-hang' => (new AdminDonHangController())->formEditDonHang(),
+    'sua-don-hang' => (new AdminDonHangController())->postEditDonHang(),
+
 
 
 
