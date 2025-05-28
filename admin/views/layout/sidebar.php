@@ -56,20 +56,6 @@
             </a>
           </li>
 
-          <li class="nav-item">
-            <a href="<?= BASE_URL_ADMIN . '?act=quan-ly-binh-luan' ?>" class="nav-link">
-            <i class="nav-icon fas fa-comments"></i>
-              <p>Quản lý bình luận</p>
-            </a>
-          </li>
-
-          <li class="nav-item">
-            <a href="<?= BASE_URL_ADMIN . '?act=lien-he' ?>" class="nav-link">
-            <i class="nav-icon fas fa-id-badge"></i>
-              <p>Quản lý liên hệ</p>
-            </a>
-          </li>
-
           <li class="nav-item menu-open">
           <a href="#" class="nav-link">
             <i class="nav-icon fas fa-user"></i>
