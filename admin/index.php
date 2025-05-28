@@ -1,5 +1,5 @@
 <?php 
-
+session_start();
 // Require file Common
 require_once '../commons/env.php'; // Khai báo biến môi trường
 require_once '../commons/function.php'; // Hàm hỗ trợ
@@ -37,7 +37,7 @@ match ($act) {
 
     // Route quản lí đơn hàng
     'quan-ly-don-hang' => (new AdminDonHangController())->danhSachDonHang(),
-        'chi-tiet-don-hang' => (new AdminDonHangController())->detailDonHang(),
+    'chi-tiet-don-hang' => (new AdminDonHangController())->detailDonHang(),
 
 
 
