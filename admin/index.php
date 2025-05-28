@@ -9,11 +9,14 @@ require_once './controllers/AdminDanhMucController.php';
 require_once './controllers/AdminSanPhamController.php';
 require_once './controllers/AdminDashboardController.php';
 require_once './controllers/AdminDonHangController.php';
+require_once './controllers/AdminTaiKhoanController.php';
 
 // Require toàn bộ file Models
 require_once './models/AdminDanhMuc.php';
 require_once './models/AdminSanPham.php';
 require_once './models/AdminDonHang.php';
+
+require_once './models/AdminTaiKhoan.php';
 
 // Route
 $act = $_GET['act'] ?? '/';
@@ -31,9 +34,20 @@ match ($act) {
     'sua-danh-muc' => (new AdminDanhMucController())->suaDanhMuc(),
     'xoa-danh-muc' => (new AdminDanhMucController())->xoaDanhMuc(),
 
-    // Route quản lí san pham
-    'san-pham' => (new AdminSanPhamController())->danhSachSanPham(),
 
+    
+  // Route quản lí sản phẩm
+    'san-pham' => (new AdminSanPhamController())->danhSachSanPham(),
+    'form-them-san-pham' => (new AdminSanPhamController())->formAddSanPham(),
+    'them-san-pham' => (new AdminSanPhamController())->themSanPham(),
+    'form-sua-san-pham' => (new AdminSanPhamController())->formEditSanPham(),
+    // 'sua-album-anh-san-pham' => (new AdminSanPhamController())->postEditAnhSanPham(),
+    'sua-san-pham' => (new AdminSanPhamController())->suaSanPham(),
+    'xoa-san-pham' => (new AdminSanPhamController())->xoaSanPham(),
+    'chi-tiet-san-pham' => (new AdminSanPhamController())->detailSanPham(),
+
+    // Route quản lí san pham
+    'list-tai-khoan-quan-tri' => (new AdminTaiKhoanController())->danhSachQuanTri(),
 
     // Route quản lí đơn hàng
     'quan-ly-don-hang' => (new AdminDonHangController())->danhSachDonHang(),

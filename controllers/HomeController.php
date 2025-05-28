@@ -3,16 +3,17 @@
 class HomeController
 {
     public $modelSanPham;
+    // public $danhMuc;
     
     public function __construct(){
         $this->modelSanPham = new AdminSanPham();
+        // $this->danhMuc = new AdminDanhMuc();
     }
 
-    public function index() {
-        echo "Xin chao ban";
-    }
-        public function danhSachSanPham() {
+    public function home() {
         $listSanPham = $this-> modelSanPham->getAllSanPham();
-        var_dump($listSanPham);die();
+        require_once './views/home.php';
     }
+
+   
 }
