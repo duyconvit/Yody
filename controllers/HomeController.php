@@ -1,4 +1,5 @@
 <?php 
+require_once './models/GioHang.php';
 
 class HomeController
 {
@@ -15,6 +16,7 @@ class HomeController
         $this->modelSanPham = new AdminSanPham();
         // $this->danhMuc = new AdminDanhMuc();
         $this->modelTaiKhoan = new AdminTaiKhoan();
+        $this->modelGioHang = new AdminGioHang();
     }
 
     public function home() {
@@ -253,10 +255,10 @@ class HomeController
 
     public function gioHang() 
     {
-        if (isset($_SESSION['user_clinet'])) {
-            $tongDonHang = $this->tongDonHang();
+        if (isset($_SESSION['user_client'])) {
+           // $tongDonHang = $this->tongDonHang();
 
-            $mail = $this->modelTaiKhoan->getTaiKhoanformEmail($_SESSION['user_clinet']);
+            $mail = $this->modelTaiKhoan->getTaiKhoanformEmail($_SESSION['user_client']);
             // var_dump($mail['id']);die();
             // Lấy dữ liệu giỏ hàng của người dùng  
             $gioHang = $this->modelGioHang->getGioHangFromUser($mail['id']);

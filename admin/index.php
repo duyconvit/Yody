@@ -39,7 +39,6 @@ match ($act) {
     'xoa-danh-muc' => (new AdminDanhMucController())->xoaDanhMuc(),
 
 
-    
   // Route quản lí sản phẩm
     'san-pham' => (new AdminSanPhamController())->danhSachSanPham(),
     'form-them-san-pham' => (new AdminSanPhamController())->formAddSanPham(),
@@ -55,6 +54,7 @@ match ($act) {
 
     // Route quản lí san pham
     'list-tai-khoan-quan-tri' => (new AdminTaiKhoanController())->danhSachQuanTri(),
+
 
 
     //route auth
