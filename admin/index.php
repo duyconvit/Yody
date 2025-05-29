@@ -8,16 +8,14 @@ require_once '../commons/function.php'; // Hàm hỗ trợ
 require_once './controllers/AdminDanhMucController.php';
 require_once './controllers/AdminSanPhamController.php';
 require_once './controllers/AdminDashboardController.php';
-
-
+require_once './controllers/AdminDonHangController.php';
 require_once './controllers/AdminTaiKhoanController.php';
 
 
 // Require toàn bộ file Models
 require_once './models/AdminDanhMuc.php';
 require_once './models/AdminSanPham.php';
-
-
+require_once './models/AdminDonHang.php';
 require_once './models/AdminTaiKhoan.php';
 
 // Route
@@ -81,4 +79,11 @@ match ($act) {
     'login-admin' => (new AdminTaiKhoanController())->formLogin(),
     'check-login-admin' => (new AdminTaiKhoanController())->login(),
     'logout-admin' => (new AdminTaiKhoanController())->logout(),
+
+    // Route quản lí đơn hàng
+    'quan-ly-don-hang' => (new AdminDonHangController())->danhSachDonHang(),
+    'chi-tiet-don-hang' => (new AdminDonHangController())->detailDonHang(),
+    'form-sua-don-hang' => (new AdminDonHangController())->formEditDonHang(),
+    'sua-don-hang' => (new AdminDonHangController())->postEditDonHang(),
+
 };
