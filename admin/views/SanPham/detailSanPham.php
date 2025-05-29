@@ -47,47 +47,7 @@
 
 
                     </div>
-                    <div class="col-12">
-                        <h2>Lịch sử bình luận</h2>
-                        <div>
-                            <table id="example2" class="table table-bordered table-striped">
-                                <thead>
-                                    <tr>
-                                        <th>STT</th>
-                                        <th>Sản phẩm</th>
-                                        <th>Nội dung</th>
-                                        <th>Ngày bình luận</th>
-                                        <th>Trạng thái</th>
-                                        <th>Thao tác</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <?php foreach ($listBinhLuan as $key => $binhLuan): ?>
-
-                                    <tr>
-                                        <td><?= $key + 1 ?></td>
-                                        <td>
-                                            <a target="_blank"
-                                                href="<?= BASE_URL_ADMIN . '?act=chi-tiet-khach-hang&id_khach_hang=' . $binhLuan['tai_khoan_id'] ?>">
-                                                <?= $binhLuan['ho_ten'] ?>
-                                            </a>
-                                        </td>
-                                        <td><?= $binhLuan['noi_dung'] ?></td>
-                                        <td><?= $binhLuan['ngay_dang'] ?></td>
-                                        <td><?= $binhLuan['trang_thai'] == 1 ? 'Hiển thị' : 'Bị ẩn'?></td>
-                                        <td>
-                                            <a href="<?= BASE_URL_ADMIN . '?act=xoa-binh-luan&id=' . $binhLuan['id']  ?>"
-                                                class="btn btn-danger btn-sm"
-                                                onclick="return confirm('Bạn có chắc chắn muốn xóa không?')">
-                                                Xóa bình luận
-                                            </a>
-                                        </td>
-                                    </tr>
-                                    <?php endforeach ?>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
+                   
 
                 </div>
 

@@ -75,3 +75,12 @@ function formatDate($date){
 function formatPrice($price) {
     return number_format($price, 0, ',', '.') .'đ';
 }
+function checkLoginAdmin()
+{
+    if (!isset($_SESSION['user_admin'])) {
+        $_SESSION['errors'] = "Bạn cần đăng nhập để tiếp tục!";
+        // header("Location: " . BASE_URL_ADMIN . '?act=login-admin');
+        require_once './views/auth/formLogin.php';
+        exit();
+    }
+}

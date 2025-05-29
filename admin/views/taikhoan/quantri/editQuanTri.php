@@ -15,7 +15,7 @@
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1>Quản lý tài khoản quản trị viênviên</h1>
+                    <h1>Quản lý tài khoản quản trị viên</h1>
                 </div>
             </div><!-- /.container-fluid -->
     </section>
