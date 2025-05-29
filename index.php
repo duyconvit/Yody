@@ -26,7 +26,7 @@ match ($act) {
     // 'danh-sach-san-pham' => (new HomeController())->danhSachSanPham(),
 
    // Giỏ hàng
-   //'them-gio-hang' => (new HomeController())->addGioHang(),
+   'them-gio-hang' => (new HomeController())->addGioHang(),
    'gio-hang' => (new HomeController())->gioHang(),
    //'xoa-gio-hang' => (new HomeController())->deleteGioHang(),
     
@@ -50,5 +50,9 @@ match ($act) {
     'chi-tiet-khach-hang' => (new HomeController())->chiTietKhachHang(),
     'sua-khach-hang' => (new HomeController())->suaKhachHang(),
     'doi-mat-khau-khach-hang' => (new HomeController())->doiMatKhauKhachHang(),
+
+
+      // chi tiết sản phẩm
+    'chi-tiet-san-pham' => (new HomeController())->chiTietSanPham(),
 
 };

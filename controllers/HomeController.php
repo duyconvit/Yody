@@ -253,6 +253,7 @@ class HomeController
         require_once './views/formDoiMatKhauKhachHang.php';
     }
 
+
     public function gioHang() 
     {
         if (isset($_SESSION['user_client'])) {
@@ -280,6 +281,66 @@ class HomeController
 
             header('Location: ' . BASE_URL . '?act=login');
             exit();
+        }
+    }
+
+
+    public function chiTietSanPham(){
+        $id = $_GET['id_san_pham'];
+
+        $sanPham = $this->modelSanPham->getDetailSanPham($id);
+
+        $listSanPhamLienQuan = $this->modelSanPham->getListSanPhamDanhMuc($sanPham['danh_muc_id']);
+        // var_dump($listSanPhamLienQuan);die;
+    
+        if ($sanPham) {
+            require_once './views/detailSanPham.php';
+        } else {
+            header("Location: " . BASE_URL);
+            exit();
+        }
+    }
+
+
+    public function addGioHang()
+    {
+        if($_SERVER['REQUEST_METHOD'] == 'POST') {
+            if(isset($_SESSION['user_client'])) {
+                $mail = $this->modelTaiKhoan->getTaiKhoanformEmail($_SESSION['user_client']);
+                // lấy dữ liệu giỏ hàng của người dùng
+                $gioHang = $this->modelGioHang->getGioHangFromUser($mail['id']);
+
+                if(!$gioHang) {
+                    $gioHangId = $this->modelGioHang->addGioHang($mail['id']);
+                    $gioHang = ['id' =>$gioHangId];
+                    $chiTietGioHang = $this->modelGioHang->getDeltailGioHang($gioHang['id']);
+                }else {
+                    $chiTietGioHang = $this->modelGioHang->getDeltailGioHang($gioHang['id']);
+                }
+                $san_pham_id = $_POST['san_pham_id'];
+                $so_luong = $_POST['so_luong'];
+
+                $checkSanPham = false;
+
+                foreach($chiTietGioHang as $detail)  {
+                    if ($detail['san_pham_id'] == $san_pham_id) {
+                        $newSoLuong = $detail['so_luong'] + $so_luong;
+                        $this->modelGioHang->updateSoLuong($gioHang['id'], $san_pham_id, $newSoLuong);
+                        $checkSanPham = true;
+                        break;
+                    }
+                }
+                if(!$checkSanPham) {
+                    $this->modelGioHang->addDetailGioHang($gioHang['id'], $san_pham_id, $so_luong);
+                }
+                $_SESSION['success'] = 'Thêm sản phẩm vào giỏ hàng thành công!';
+                header('Location: ' . BASE_URL . '?act=gio-hang');
+                exit();
+            } else {
+                $_SESSION['error'] = 'Vui lòng đăng nhập để thêm sản phẩm vào giỏ hàng!';
+                header('Location: ' . BASE_URL . '?act=login');
+                exit();
+            }
         }
     }
 
