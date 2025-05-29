@@ -245,4 +245,20 @@ class HomeController
 
         require_once './views/formDoiMatKhauKhachHang.php';
     }
+
+    public function chiTietSanPham(){
+        $id = $_GET['id_san_pham'];
+
+        $sanPham = $this->modelSanPham->getDetailSanPham($id);
+
+        $listSanPhamLienQuan = $this->modelSanPham->getListSanPhamDanhMuc($sanPham['danh_muc_id']);
+        // var_dump($listSanPhamLienQuan);die;
+    
+        if ($sanPham) {
+            require_once './views/detailSanPham.php';
+        } else {
+            header("Location: " . BASE_URL);
+            exit();
+        }
+    }
 }
