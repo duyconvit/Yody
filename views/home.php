@@ -366,7 +366,15 @@ document.addEventListener('DOMContentLoaded', function() {
             <div class="col-12">
                 <div class="deals-carousel-active slick-row-10 slick-arrow-style">
                     <!-- product item start -->
-                    <?php foreach ($listSanPham as $key => $sanPham): ?>
+                    <?php foreach ($listSanPham as $key => $sanPham): 
+                        $ngayNhap = new DateTime($sanPham['ngay_nhap']);
+                        $ngayHienTai = new DateTime();
+                        $tinhNgay = $ngayHienTai->diff($ngayNhap);
+                        $isNew = $tinhNgay->days <= 7;
+                        $isDiscount = $sanPham['gia_khuyen_mai'] && $sanPham['gia_khuyen_mai'] != $sanPham['gia_san_pham'];
+                        
+                        if ($isNew):
+                    ?>
                         <div class="product-item">
                             <figure class="product-thumb">
                                 <a href="<?= BASE_URL . '?act=chi-tiet-san-pham&id_san_pham=' . $sanPham['id']; ?>">
@@ -374,20 +382,11 @@ document.addEventListener('DOMContentLoaded', function() {
                                     <img class="sec-img" src="<?= BASE_URL . $sanPham['hinh_anh'] ?>" alt="<?= $sanPham['ten_san_pham'] ?>">
                                 </a>
                                 <div class="product-badge">
-                                    <?php
-                                    $ngayNhap = new DateTime($sanPham['ngay_nhap']);
-                                    $ngayHienTai = new DateTime();
-                                    $tinhNgay = $ngayHienTai->diff($ngayNhap);
+                                    <div class="product-label new">
+                                        <span>Mới</span>
+                                    </div>
 
-                                    // Hiển thị nhãn "Mới" nếu sản phẩm nhập trong vòng 7 ngày
-                                    if ($tinhNgay->days <= 7):
-                                    ?>
-                                        <div class="product-label new">
-                                            <span>Mới</span>
-                                        </div>
-                                    <?php endif; ?>
-
-                                    <?php if ($sanPham['gia_khuyen_mai']): ?>
+                                    <?php if ($isDiscount): ?>
                                         <div class="product-label discount">
                                             <span>Giảm giá</span>
                                         </div>
@@ -395,7 +394,7 @@ document.addEventListener('DOMContentLoaded', function() {
                                 </div>
 
                                 <div class="cart-hover">
-                                    <button class="btn btn-cart">Xem chi tiết</button>
+                                    <a href="<?= BASE_URL . '?act=chi-tiet-san-pham&id_san_pham=' . $sanPham['id']; ?>" class="btn btn-cart">Xem chi tiết</a>
                                 </div>
                             </figure>
 
@@ -406,7 +405,7 @@ document.addEventListener('DOMContentLoaded', function() {
                                     </a>
                                 </h6>
                                 <div class="price-box">
-                                    <?php if ($sanPham['gia_khuyen_mai']): ?>
+                                    <?php if ($isDiscount): ?>
                                         <span class="price-regular"><?= formatCurrency($sanPham['gia_khuyen_mai']) ?></span>
                                         <span class="price-old"><del><?= formatCurrency($sanPham['gia_san_pham']) ?></del></span>
                                     <?php else: ?>
@@ -415,7 +414,7 @@ document.addEventListener('DOMContentLoaded', function() {
                                 </div>
                             </div>
                         </div>
-                    <?php endforeach; ?>
+                    <?php endif; endforeach; ?>
                     <!-- product item end -->
                 </div>
             </div>
