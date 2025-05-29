@@ -407,10 +407,10 @@ document.addEventListener('DOMContentLoaded', function() {
                                 </h6>
                                 <div class="price-box">
                                     <?php if ($sanPham['gia_khuyen_mai']): ?>
-                                        <span class="price-regular"><?= formatPrice($sanPham['gia_khuyen_mai']) ?></span>
-                                        <span class="price-old"><del><?= formatPrice($sanPham['gia_san_pham']) ?></del></span>
+                                        <span class="price-regular"><?= formatCurrency($sanPham['gia_khuyen_mai']) ?></span>
+                                        <span class="price-old"><del><?= formatCurrency($sanPham['gia_san_pham']) ?></del></span>
                                     <?php else: ?>
-                                        <span class="price-regular"><?= formatPrice($sanPham['gia_san_pham']) ?></span>
+                                        <span class="price-regular"><?= formatCurrency($sanPham['gia_san_pham']) ?></span>
                                     <?php endif; ?>
                                 </div>
                             </div>

@@ -53,14 +53,14 @@
                                         <div class="price-box" style="margin-top: 17px;">
                                             <?php if ($sanPham['gia_khuyen_mai']) { ?>
                                                 <span class="price-regular" style="font-size: 24px; font-weight: bold; color: red;">
-                                                    <?= formatPrice($sanPham['gia_khuyen_mai']) . ''; ?>
+                                                    <?= formatCurrency($sanPham['gia_khuyen_mai']); ?>
                                                 </span>
                                                 <span class="price-old" style="font-size: 18px; color: gray;">
-                                                    <del><?= formatPrice($sanPham['gia_san_pham']) . ''; ?></del>
+                                                    <del><?= formatCurrency($sanPham['gia_san_pham']); ?></del>
                                                 </span>
                                             <?php } else { ?>
                                                 <span class="price-regular" style="font-size: 24px; font-weight: bold; color: red;">
-                                                    <?= formatPrice($sanPham['gia_san_pham']) . ''; ?>
+                                                    <?= formatCurrency($sanPham['gia_san_pham']); ?>
                                                 </span>
                                             <?php } ?>
                                         </div>
@@ -140,10 +140,10 @@
                                     </h6>
                                     <div class="price-box">
                                         <?php if ($sanPham['gia_khuyen_mai']): ?>
-                                            <span class="price-regular"><?= formatPrice($sanPham['gia_khuyen_mai']) ?></span>
-                                            <span class="price-old"><del><?= formatPrice($sanPham['gia_san_pham']) ?></del></span>
+                                            <span class="price-regular"><?= formatCurrency($sanPham['gia_khuyen_mai']) ?></span>
+                                            <span class="price-old"><del><?= formatCurrency($sanPham['gia_san_pham']) ?></del></span>
                                         <?php else: ?>
-                                            <span class="price-regular"><?= formatPrice($sanPham['gia_san_pham']) ?></span>
+                                            <span class="price-regular"><?= formatCurrency($sanPham['gia_san_pham']) ?></span>
                                         <?php endif; ?>
                                     </div>
                                 </div>

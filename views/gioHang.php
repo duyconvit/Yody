@@ -33,10 +33,10 @@
                                         <td class="pro-title"><a href="#"><?= $sanPham['ten_san_pham'] ?></a></td>
                                         <td class="pro-price">
                                             <span>
-                                                <?php if ($sanPham['gia_san_pham']) { ?>
-                                                <?= formatPrice($sanPham['gia_khuyen_mai']) ?>
+                                                <?php if ($sanPham['gia_khuyen_mai']) { ?>
+                                                <?= formatCurrency($sanPham['gia_khuyen_mai']) ?>
                                                 <?php } else { ?>
-                                                <?= formatPrice($sanPham['gia_san_pham']) ?>
+                                                <?= formatCurrency($sanPham['gia_san_pham']) ?>
                                                 <?php } ?>
                                             </span>
                                         </td>
@@ -55,7 +55,7 @@
                                                             $tong_tien = $sanPham['gia_san_pham'] * $sanPham['so_luong'];
                                                         }
                                                         $tongGioHang += $tong_tien; 
-                                                        echo formatPrice($tong_tien);
+                                                        echo formatCurrency($tong_tien);
                                                     ?>
                                             </span>
                                         </td>
@@ -80,7 +80,7 @@
                                     <table class="table">
                                         <tr class="total">
                                             <td>Tổng tiền giỏ hàng</td>
-                                            <td class="total-amount"><?= formatPrice($tongGioHang) ?></td>
+                                            <td class="total-amount"><?= formatCurrency($tongGioHang) ?></td>
                                         </tr>
                                     </table>
                                 </div>
