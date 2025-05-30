@@ -9,6 +9,7 @@ require_once './controllers/HomeController.php';
 
 // Require toàn bộ file Models
 require_once './models/SanPham.php';
+require_once './models/DanhMuc.php'; // Thêm dòng này nếu chưa có
 
 // Route
 $act = $_GET['act'] ?? '/';
@@ -17,8 +18,9 @@ $act = $_GET['act'] ?? '/';
 
 match ($act) {
     // Trang chủ
-    '/'                 => (new HomeController())->home(),
-    // 'list-san-pham' => (new HomeController())->dssanpham(),
+    '/'=> (new HomeController())->home(),
+    'list-san-pham' => (new HomeController())->dssanpham(),
 
-    // 'danh-sach-san-pham' => (new HomeController())->danhSachSanPham(),
+    'danh-sach-san-pham' => (new HomeController())->danhSachSanPham(),
+    
 };
