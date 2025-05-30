@@ -34,7 +34,7 @@
                         <!-- start logo area -->
                         <div class="col-lg-4">
                             <div class="logo text-center">
-                                <a href="index-4.html">
+                                <a href="<?= BASE_URL . '?act=/' ?>">
                                     <img src="assets/img/yody.png" alt="Brand Logo" style="max-width: 120px; height: auto;">
                                 </a>
                             </div>
@@ -54,19 +54,37 @@
                                             </form>
                                         </li>
                                         <li class="user-hover">
+                                            <label for="">
+                                                <?php 
+                                                    if (isset($_SESSION['user_client'])) {
+                                                        echo $_SESSION['user_client'];
+                                                    } elseif (isset($_SESSION['user_admin'])) {
+                                                        echo $_SESSION['user_admin'];
+                                                    }
+                                                ?>
+                                            </label>
                                             <a href="#">
-                                                <i class="pe-7s-user"></i>
+                                                    <i class="pe-7s-user"></i>
                                             </a>
                                             <ul class="dropdown-list">
-                                                <li><a href="login-register.html">Đăng Nhập</a></li>
-                                                <li><a href="login-register.html">Đăng Ký</a></li>
-                                                <li><a href="my-account.html">Tài Khoản</a></li>
+                                                <?php if (!isset($_SESSION['user_client']) && !isset($_SESSION['user_admin'])) { ?>
+                                                    <li><a href="<?= BASE_URL . '/?act=login' ?>">Đăng Nhập</a></li>
+                                                    <li><a href="<?= BASE_URL . '/?act=register' ?>">Đăng Ký</a></li>
+                                                <?php } else { ?>
+                                                    <li><a href="<?= BASE_URL . '/?act=chi-tiet-khach-hang' ?>">Tài Khoản</a>
+                                                    </li>
+                                                    <li><a href="<?= BASE_URL . '/?act=lich-su-mua-hang' ?>">Đơn Hàng</a>
+                                                    </li>
+                                                    <li>
+                                                        <a href="#" onclick="confirmLogout()">Đăng xuất</a>
+                                                    </li>
+                                                <?php } ?>
                                             </ul>
                                         </li>
                                         <li>
                                             <a href="#" class="minicart-btn">
                                                 <i class="pe-7s-shopbag"></i>
-                                                <div class="notification">2</div>
+                                                <div class="notification"></div>
                                             </a>
                                         </li>
                                     </ul>
@@ -84,7 +102,7 @@
                                     <nav class="desktop-menu">
                                         <ul class="justify-content-center header-style-4">
 
-                                            <li><a href="index.html">Trang chủ</i></a></li>
+                                            <li><a href="<?= BASE_URL . '?act=/' ?>">Trang chủ</i></a></li>
 
                                             <li><a href="#">Giới Thiệu</i></a></li>
 
@@ -109,3 +127,13 @@
 
     </header>
     <!-- end Header Area -->
+      <script>
+        function confirmLogout() {
+            let confirmAction = confirm(
+                "Bạn có chắc chắn muốn đăng xuất không?");
+            if (confirmAction) {
+                window.location.href =
+                    "<?= BASE_URL . '/?act=logout-clinet' ?>";
+            }
+        }
+    </script>

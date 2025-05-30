@@ -1,4 +1,5 @@
 <?php 
+session_start();
 
 // Require file Common
 require_once './commons/env.php'; // Khai báo biến môi trường
@@ -9,7 +10,14 @@ require_once './controllers/HomeController.php';
 
 // Require toàn bộ file Models
 require_once './models/SanPham.php';
+
 require_once './models/DanhMuc.php'; // Thêm dòng này nếu chưa có
+
+require_once './models/taikhoan.php';  // Model AdminTaiKhoan
+require_once __DIR__ . '/models/DanhMuc.php';
+
+
+
 
 // Route
 $act = $_GET['act'] ?? '/';
@@ -21,6 +29,21 @@ match ($act) {
     '/'=> (new HomeController())->home(),
     'list-san-pham' => (new HomeController())->dssanpham(),
 
+
     'danh-sach-san-pham' => (new HomeController())->danhSachSanPham(),
     
+
+    // 'danh-sach-san-pham' => (new HomeController())->danhSachSanPham(),
+      //đăng kí đăng nhập client
+    'login' => (new HomeController())->formlogin(),
+    'check-login' => (new HomeController())->postLogin(),
+    'register' => (new HomeController())->formRegister(),
+    'check-register' => (new HomeController())->postRegister(),
+    'logout-clinet' => (new HomeController())->Logout(),
+
+        // thông tin chi tiết khách hàng
+    'chi-tiet-khach-hang' => (new HomeController())->chiTietKhachHang(),
+    'sua-khach-hang' => (new HomeController())->suaKhachHang(),
+    'doi-mat-khau-khach-hang' => (new HomeController())->doiMatKhauKhachHang(),
+
 };
