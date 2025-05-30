@@ -1,21 +1,23 @@
 <?php 
 require_once './models/GioHang.php';
 
+// Thêm require_once cho các model cần thiết
+require_once './models/DanhMuc.php';
+require_once './models/SanPham.php';
+require_once './models/taikhoan.php';
+
 class HomeController
 {
     public $modelSanPham;
-
     public $modelGioHang;
-
+    public $danhMuc;
     public $modelTaiKhoan;
-
-
-    // public $danhMuc;
-    
+ 
     public function __construct(){
         $this->modelSanPham = new AdminSanPham();
-        // $this->danhMuc = new AdminDanhMuc();
+        $this->danhMuc = new DanhMuc();
         $this->modelTaiKhoan = new AdminTaiKhoan();
+
         $this->modelGioHang = new AdminGioHang();
     }
 
@@ -23,6 +25,19 @@ class HomeController
         $listSanPham = $this-> modelSanPham->getAllSanPham();
         require_once './views/home.php';
     }
+      public function dssanpham()
+{
+    $danhMucId = isset($_GET['danh_muc_id']) ? intval($_GET['danh_muc_id']) : 0;
+    $listDanhMuc = $this->danhMuc->getAllDanhMuc();
+
+    if ($danhMucId>0){
+      $listSanPham = $this->modelSanPham->getListSanPhamDanhMuc($danhMucId);
+    }else{
+        $listSanPham = $this->modelSanPham->getAllSanPham();
+    }
+
+    require_once './views/dssanpham.php';
+}
     
 
       public function formLogin()

@@ -6,8 +6,12 @@
 <!-- /.navbar -->
 
 <!-- Main Sidebar Container -->
+<<<<<<< HEAD
 <?php include './views/layout/sidebar.php'; ?> 
 
+=======
+<?php include './views/layout/sidebar.php'; ?>
+>>>>>>> caba0ad162f1c377343cdd4ce42733d9221fa62a
 <!DOCTYPE html>
 <html lang="vi">
 <head>

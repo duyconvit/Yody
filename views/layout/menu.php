@@ -115,7 +115,7 @@
 
                                             <li><a href="#">Giới Thiệu</i></a></li>
 
-                                            <li><a href="index.html">Sản phẩm</i></a></li>
+                                            <li><a href="?act=list-san-pham">Sản phẩm</i></a></li>
                                             
                                             <li><a href="index.html">Tin tức</i></a></li>
               
