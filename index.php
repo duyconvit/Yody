@@ -32,12 +32,7 @@ match ($act) {
    'xoa-gio-hang' => (new HomeController())->deleteGioHang(),
     
 
-    // // Thanh toán
-    // 'thanh-toan' => (new HomeController())->thanhToan(),
-    // 'xu-ly-thanh-toan' => (new HomeController())->postThanhToan(),
-    // 'lich-su-mua-hang' => (new HomeController())->lichSuMuaHang(),
-    // 'chi-tiet-mua-hang' => (new HomeController())->chiTietMuaHang(),
-    // 'huy-don-hang' => (new HomeController())->huyDonHang(),
+    
 
 
       //đăng kí đăng nhập client
@@ -55,5 +50,11 @@ match ($act) {
 
       // chi tiết sản phẩm
     'chi-tiet-san-pham' => (new HomeController())->chiTietSanPham(),
+
+
+
+    // // Thanh toán
+    // 'thanh-toan' => (new HomeController())->thanhToan(),
+    // 'xu-ly-thanh-toan' => (new HomeController())->postThanhToan(),
 
 };
