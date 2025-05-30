@@ -10,6 +10,8 @@ require_once './controllers/HomeController.php';
 
 // Require toàn bộ file Models
 require_once './models/SanPham.php';
+require_once './models/DanhMuc.php';
+require_once './models/taikhoan.php';
 
 require_once './models/DanhMuc.php'; // Thêm dòng này nếu chưa có
 
@@ -31,6 +33,7 @@ match ($act) {
 
 
     'danh-sach-san-pham' => (new HomeController())->danhSachSanPham(),
+    'chi-tiet-san-pham' => (new HomeController())->chiTietSanPham(),
     
 
     // 'danh-sach-san-pham' => (new HomeController())->danhSachSanPham(),

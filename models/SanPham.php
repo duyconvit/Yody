@@ -41,4 +41,21 @@ class AdminSanPham
             return [];
         }
     }
+
+    public function getSanPhamById($id)
+    {
+        try {
+            $sql = "SELECT san_phams.*, danh_mucs.ten_danh_muc as ten FROM san_phams
+            INNER JOIN danh_mucs ON san_phams.danh_muc_id = danh_mucs.id
+            WHERE san_phams.id = :id";
+
+            $stmt = $this->conn->prepare($sql);
+            $stmt->execute([':id' => $id]);
+
+            return $stmt->fetch(PDO::FETCH_ASSOC);
+        } catch (Exception $e) {
+            echo "Lỗi: " . $e->getMessage();
+            return null;
+        }
+    }
 }    

@@ -267,4 +267,23 @@ class HomeController
 
         require_once './views/formDoiMatKhauKhachHang.php';
     }
+
+    public function chiTietSanPham()
+    {
+        if (isset($_GET['id'])) {
+            $id = intval($_GET['id']);
+            $sanPham = $this->modelSanPham->getSanPhamById($id);
+            if ($sanPham) {
+                require_once './views/chiTietSanPham.php';
+            } else {
+                // Nếu không tìm thấy sản phẩm, chuyển về trang danh sách
+                header("Location: " . BASE_URL . "?act=list-san-pham");
+                exit();
+            }
+        } else {
+            // Nếu không có ID, chuyển về trang danh sách
+            header("Location: " . BASE_URL . "?act=list-san-pham");
+            exit();
+        }
+    }
 }
