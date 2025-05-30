@@ -298,6 +298,7 @@
                                             <span>Trong kho: <?= $sanPham['so_luong'] ?></span>
                                         </div>
                                         <div class="pro-desc" style="margin-top: 17px; font-size: 20px;">Mô tả: <?= $sanPham['mo_ta'] ?></div>
+                                        <?php if ($sanPham['so_luong'] > 0): ?>
                                         <form action="<?= BASE_URL . '?act=them-gio-hang' ?>" method="post" class="d-flex align-items-center gap-3 flex-wrap">
                                             <div class="d-flex align-items-center gap-2" style="margin-top:20px; font-size: 20px;">
                                                 <div>Số lượng:</div>
@@ -309,13 +310,14 @@
                                                 </div>
                                             </div>
                                             <div class="border rounded p-2" style="margin-top:20px; font-size: 20px;">
-                                                <?php if ($sanPham['so_luong'] > 0) { ?>
-                                                    <button class="btn btn-warning fw-bold w-100">Thêm vào giỏ hàng</button>
-                                                <?php } else { ?>
-                                                    <button class="btn btn-danger fw-bold w-100">Đã hết hàng</button>
-                                                <?php } ?>
+                                                <button class="btn btn-warning fw-bold w-100">Thêm vào giỏ hàng</button>
                                             </div>
                                         </form>
+                                        <?php else: ?>
+                                        <div class="border rounded p-2" style="margin-top:20px; font-size: 20px;">
+                                            <button class="btn btn-danger fw-bold w-100" disabled>Sản phẩm đã hết hàng</button>
+                                        </div>
+                                        <?php endif; ?>
                                     </div>
                                 </div>
                             </div>

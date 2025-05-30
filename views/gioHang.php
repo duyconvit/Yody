@@ -174,6 +174,12 @@
     <div class="cart-main-wrapper section-padding">
         <div class="container">
             <h1 class="" style="margin-bottom: 30px;">Giỏ Hàng</h1>
+            <?php if (isset($_SESSION['cart_notice'])): ?>
+                <div class="alert alert-warning">
+                    <?= $_SESSION['cart_notice'] ?>
+                    <?php unset($_SESSION['cart_notice']); ?>
+                </div>
+            <?php endif; ?>
             <div class="section-bg-color">
                 <div class="row">
                     <div class="col-lg-12">
