@@ -342,6 +342,27 @@ class HomeController
                 exit();
             }
         }
+      
+    }
+    public function deleteGioHang()
+    {
+        if(isset($_SESSION['user_client']))  {
+            $gioHangId = $_GET['id'];
+
+            $chiTietGH = $this->modelGioHang->getProductGioHang($gioHangId);
+            
+            if($chiTietGH) {
+                $this->modelGioHang->deleteProductGioHang($gioHangId);
+            }
+            // var_dump($gioHangId);die();
+
+            header("Location: " . BASE_URL . '?act=gio-hang');
+            die();
+        } else {
+            $_SESSION['message'] = 'Bạn chưa đăng nhập. ';
+            header('Location: ' . BASE_URL . '?act=login');
+            die();
+        }
     }
 
 }

@@ -29,7 +29,7 @@ match ($act) {
    // Giỏ hàng
    'them-gio-hang' => (new HomeController())->addGioHang(),
    'gio-hang' => (new HomeController())->gioHang(),
-   //'xoa-gio-hang' => (new HomeController())->deleteGioHang(),
+   'xoa-gio-hang' => (new HomeController())->deleteGioHang(),
     
 
     // // Thanh toán
