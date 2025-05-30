@@ -365,9 +365,4 @@ class HomeController
         }
     }
 
-    public function thanhToan()
-    {
-        
-    }
-
 }

@@ -135,5 +135,6 @@ class AdminSanPham {
             echo "lỗi" . $e->getMessage();
         }
     }
+    
 }
 
