@@ -460,4 +460,12 @@ class HomeController
     
     
 
+    public function search()
+    {
+        $keyword = $_GET['keyword'] ?? '';
+        $listSanPham = $this->modelSanPham->searchSanPhamByName($keyword);
+        $listDanhMuc = $this->danhMuc->getAllDanhMuc();
+        require_once './views/dssanpham.php';
+    }
+
 }

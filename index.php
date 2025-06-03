@@ -31,7 +31,7 @@ match ($act) {
     // Trang chủ
     '/'=> (new HomeController())->home(),
     'list-san-pham' => (new HomeController())->dssanpham(),
-
+    'search' => (new HomeController())->search(),
 
     'danh-sach-san-pham' => (new HomeController())->danhSachSanPham(),
     'chi-tiet-san-pham' => (new HomeController())->chiTietSanPham(),

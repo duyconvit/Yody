@@ -196,7 +196,14 @@ main {
     <!-- Danh sách sản phẩm bên phải -->
     <section class="product-list">
         <?php if (empty($listSanPham)): ?>
-        <p>Không có sản phẩm nào!</p>
+            <?php if (isset($_GET['keyword'])): ?>
+                <div class="col-12 text-center">
+                    <h3>Không tìm thấy sản phẩm nào cho từ khóa "<?= htmlspecialchars($_GET['keyword']) ?>"</h3>
+                    <p>Vui lòng thử lại với từ khóa khác</p>
+                </div>
+            <?php else: ?>
+                <p>Không có sản phẩm nào!</p>
+            <?php endif; ?>
         <?php else: ?>
         <?php foreach ($listSanPham as $sanPham): ?>
         <div class="product-item">
