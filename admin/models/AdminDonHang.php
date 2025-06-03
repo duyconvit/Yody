@@ -25,7 +25,7 @@ class AdminDonHang {
         }
     }
 
-    public function getAllTrangThaiDonHang(){
+        public function getAllTrangThaiDonHang(){
         try {
             $sql = 'SELECT * FROM trang_thai_don_hangs';
 
@@ -62,8 +62,7 @@ class AdminDonHang {
             echo "lỗi" . $e->getMessage();
         }
     }
-
-    public function getListSpDonHang($id){
+        public function getListSpDonHang($id){
         try {
             $sql = 'SELECT chi_tiet_don_hangs.*, san_phams.ten_san_pham
             FROM chi_tiet_don_hangs

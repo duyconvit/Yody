@@ -4,13 +4,22 @@ session_start();
 // Require file Common
 require_once './commons/env.php'; // Khai báo biến môi trường
 require_once './commons/function.php'; // Hàm hỗ trợ
+require_once './helpers/format.php'; // Helper format tiền tệ
 
 // Require toàn bộ file Controllers
 require_once './controllers/HomeController.php';
 
 // Require toàn bộ file Models
 require_once './models/SanPham.php';
+require_once './models/DanhMuc.php';
+require_once './models/taikhoan.php';
+
+require_once './models/DanhMuc.php'; // Thêm dòng này nếu chưa có
+
 require_once './models/taikhoan.php';  // Model AdminTaiKhoan
+require_once __DIR__ . '/models/DanhMuc.php';
+
+
 
 
 // Route
@@ -20,10 +29,30 @@ $act = $_GET['act'] ?? '/';
 
 match ($act) {
     // Trang chủ
-    '/'                 => (new HomeController())->home(),
-    // 'list-san-pham' => (new HomeController())->dssanpham(),
+    '/'=> (new HomeController())->home(),
+    'list-san-pham' => (new HomeController())->dssanpham(),
 
-    // 'danh-sach-san-pham' => (new HomeController())->danhSachSanPham(),
+
+    'danh-sach-san-pham' => (new HomeController())->danhSachSanPham(),
+    'chi-tiet-san-pham' => (new HomeController())->chiTietSanPham(),
+    
+
+    
+
+   // Giỏ hàng
+   'them-gio-hang' => (new HomeController())->addGioHang(),
+   'gio-hang' => (new HomeController())->gioHang(),
+   'xoa-gio-hang' => (new HomeController())->deleteGioHang(),
+    
+
+    // // Thanh toán
+     'thanh-toan' => (new HomeController())->thanhToan(),
+     'xu-ly-thanh-toan' => (new HomeController())->postThanhToan(),
+     'lich-su-mua-hang' => (new HomeController())->lichSuMuaHang(),
+     'chi-tiet-mua-hang' => (new HomeController())->chiTietMuaHang(),
+     'huy-don-hang' => (new HomeController())->huyDonHang(),
+
+
       //đăng kí đăng nhập client
     'login' => (new HomeController())->formlogin(),
     'check-login' => (new HomeController())->postLogin(),
@@ -36,6 +65,8 @@ match ($act) {
     'sua-khach-hang' => (new HomeController())->suaKhachHang(),
     'doi-mat-khau-khach-hang' => (new HomeController())->doiMatKhauKhachHang(),
 
+
       // chi tiết sản phẩm
     'chi-tiet-san-pham' => (new HomeController())->chiTietSanPham(),
+
 };

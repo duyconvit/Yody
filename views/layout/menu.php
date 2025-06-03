@@ -81,11 +81,20 @@
                                                 <?php } ?>
                                             </ul>
                                         </li>
+
                                         <li>
-                                            <a href="#" class="minicart-btn">
-                                                <i class="pe-7s-shopbag"></i>
-                                                <div class="notification"></div>
-                                            </a>
+                                            <?php if (!isset($_SESSION['user_client'])) { ?>
+                                                    <a href="<?= BASE_URL . '?act=gio-hang' ?>">
+                                                        <i class="pe-7s-shopbag"></i>
+                                                    </a>
+                                                <?php } else { ?>
+                                                    <a href="<?= BASE_URL ?>?act=gio-hang" class="minicart-btn" style="position: relative; display: inline-block; padding-right: 20px;">
+                                                        <i class="pe-7s-shopbag"></i>
+                                                        <span style="position: absolute; top: 0; right: 0; font-size: 12px; padding: 2px 5px; background-color: #f0f0f0; border-radius: 3px; white-space: nowrap;">
+                                                            (<?= isset($tongDonHang) ? $tongDonHang : 0 ?>)
+                                                        </span>
+                                                    </a>
+                                                <?php } ?>
                                         </li>
                                     </ul>
                                 </div>
@@ -101,15 +110,10 @@
                                     <!-- main menu navbar start -->
                                     <nav class="desktop-menu">
                                         <ul class="justify-content-center header-style-4">
-
                                             <li><a href="<?= BASE_URL . '?act=/' ?>">Trang chủ</i></a></li>
-
                                             <li><a href="#">Giới Thiệu</i></a></li>
-
-                                            <li><a href="index.html">Sản phẩm</i></a></li>
-                                            
+                                            <li><a href="<?= BASE_URL . '?act=list-san-pham' ?>">Sản phẩm</i></a></li>
                                             <li><a href="index.html">Tin tức</i></a></li>
-              
                                             <li><a href="contact-us.html">Liên hệ</a></li>
                                         </ul>
                                     </nav>
