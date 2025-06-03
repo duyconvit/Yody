@@ -1,5 +1,5 @@
 <?php
-class AdminTaiKhoan
+class TaiKhoan
 {
     public $conn;
 

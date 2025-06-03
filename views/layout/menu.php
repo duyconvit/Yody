@@ -110,15 +110,10 @@
                                     <!-- main menu navbar start -->
                                     <nav class="desktop-menu">
                                         <ul class="justify-content-center header-style-4">
-
                                             <li><a href="<?= BASE_URL . '?act=/' ?>">Trang chủ</i></a></li>
-
                                             <li><a href="#">Giới Thiệu</i></a></li>
-
-                                            <li><a href="?act=list-san-pham">Sản phẩm</i></a></li>
-                                            
+                                            <li><a href="<?= BASE_URL . '?act=list-san-pham' ?>">Sản phẩm</i></a></li>
                                             <li><a href="index.html">Tin tức</i></a></li>
-              
                                             <li><a href="contact-us.html">Liên hệ</a></li>
                                         </ul>
                                     </nav>

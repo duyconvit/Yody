@@ -1,19 +1,3 @@
-
-                                <div class="price-box">
-                                    <?php if ($sanPham['gia_khuyen_mai'] && $sanPham['gia_khuyen_mai'] != $sanPham['gia_san_pham']): ?>
-                                        <span class="price-regular"><?= formatCurrency($sanPham['gia_khuyen_mai']) ?></span>
-                                        <span class="price-old"><del><?= formatCurrency($sanPham['gia_san_pham']) ?></del></span>
-                                    <?php else: ?>
-                                        <span class="price-regular"><?= formatCurrency($sanPham['gia_san_pham']) ?></span>
-                                    <?php endif; ?>
-                                </div>
-
-                                <?php if ($sanPham['gia_khuyen_mai'] && $sanPham['gia_khuyen_mai'] != $sanPham['gia_san_pham']): ?>
-                                    <div class="product-label discount">
-                                        <span>Giảm giá</span>
-                                    </div>
-                                <?php endif; ?>
-
 <?php require_once 'layout/header.php'; ?>
 <?php require_once 'layout/menu.php'; ?>
 
@@ -81,6 +65,8 @@ main {
     text-align: center;
     background: #fff;
     border-radius: 5px;
+    position: relative;
+    overflow: hidden;
 }
 
 .product-item img {
@@ -92,18 +78,41 @@ main {
 .product-item h3 {
     font-size: 14px;
     margin: 8px 0;
+    min-height: 40px;
 }
 
-.price {
-    font-size: 14px;
-    color: red;
+.price-box {
+    margin: 10px 0;
 }
 
-.old-price {
+.price-regular {
+    color: #ff0000;
+    font-weight: bold;
+    font-size: 16px;
+}
+
+.price-old {
+    color: #999;
     text-decoration: line-through;
-    color: gray;
-    margin-right: 6px;
+    font-size: 14px;
+    margin-left: 5px;
+}
+
+/* Style cho mác giảm giá */
+.product-label {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    z-index: 1;
+}
+
+.product-label.discount {
+    background: #ff0000;
+    color: white;
+    padding: 5px 10px;
+    border-radius: 3px;
     font-size: 12px;
+    font-weight: bold;
 }
 
 /* Responsive */
@@ -148,6 +157,7 @@ main {
     }
 }
 </style>
+
 <div class="breadcrumb-area">
     <div class="container">
         <div class="row">
@@ -155,10 +165,8 @@ main {
                 <div class="breadcrumb-wrap">
                     <nav aria-label="breadcrumb">
                         <ul class="breadcrumb">
-                            <li class="breadcrumb-item"><a href="<?= BASE_URL ?>"><i class="fa fa-home"></i></a>
-                            </li>
-                            <li class="breadcrumb-item"><a href="<?= BASE_URL . '?act=list-san-pham' ?>">Sản
-                                    phẩm</a></li>
+                            <li class="breadcrumb-item"><a href="<?= BASE_URL ?>"><i class="fa fa-home"></i></a></li>
+                            <li class="breadcrumb-item"><a href="<?= BASE_URL . '?act=list-san-pham' ?>">Sản phẩm</a></li>
                         </ul>
                     </nav>
                 </div>
@@ -166,46 +174,47 @@ main {
         </div>
     </div>
 </div>
+
 <main>
     <!-- Bộ lọc danh mục bên trái -->
     <aside class="sidebar">
         <h3>Bộ Lọc</h3>
-        <h2>Danh mục</h2>
         <ul>
-            <li><a href="?act=list-san-pham">Tất cả</a></li>
             <?php foreach ($listDanhMuc as $danhMuc): ?>
-            <li>
-                <a href="?act=list-san-pham&danh_muc_id=<?= $danhMuc['id'] ?>">
-                    <?= $danhMuc['ten_danh_muc'] ?>
-                </a>
-            </li>
+                <li>
+                    <a href="<?= BASE_URL . '?act=list-san-pham&danh_muc_id=' . $danhMuc['id'] ?>">
+                        <?= $danhMuc['ten_danh_muc'] ?>
+                    </a>
+                </li>
             <?php endforeach; ?>
         </ul>
     </aside>
 
-    <!-- Danh sách sản phẩm bên phải -->
-    <section class="product-list">
-        <?php if (empty($listSanPham)): ?>
-        <p>Không có sản phẩm nào!</p>
-        <?php else: ?>
+    <!-- Danh sách sản phẩm -->
+    <div class="product-list">
         <?php foreach ($listSanPham as $sanPham): ?>
-        <div class="product-item">
-            <a href="<?= BASE_URL . '?act=chi-tiet-san-pham&id_san_pham=' . $sanPham['id']; ?>">
-                <img src="<?= $sanPham['hinh_anh'] ?>" alt="<?= $sanPham['ten_san_pham'] ?>">
-            </a>
-            <h3><?= $sanPham['ten_san_pham'] ?></h3>
-            <p class="price">
-                <span class="old-price">
-                    <?= number_format($sanPham['gia_san_pham'], 0, ',', '.') ?>đ
-                </span>
-                <span class="new-price">
-                    <?= number_format($sanPham['gia_khuyen_mai'], 0, ',', '.') ?>đ
-                </span>
-            </p>
-        </div>
+            <div class="product-item">
+                <a href="<?= BASE_URL . '?act=chi-tiet-san-pham&id_san_pham=' . $sanPham['id'] ?>">
+                    <img src="<?= BASE_URL . $sanPham['hinh_anh'] ?>" alt="<?= $sanPham['ten_san_pham'] ?>">
+                    <h3><?= $sanPham['ten_san_pham'] ?></h3>
+                </a>
+                <div class="price-box">
+                    <?php if ($sanPham['gia_khuyen_mai'] && $sanPham['gia_khuyen_mai'] != $sanPham['gia_san_pham']): ?>
+                        <span class="price-regular"><?= formatCurrency($sanPham['gia_khuyen_mai']) ?></span>
+                        <span class="price-old"><del><?= formatCurrency($sanPham['gia_san_pham']) ?></del></span>
+                    <?php else: ?>
+                        <span class="price-regular"><?= formatCurrency($sanPham['gia_san_pham']) ?></span>
+                    <?php endif; ?>
+                </div>
+
+                <?php if ($sanPham['gia_khuyen_mai'] && $sanPham['gia_khuyen_mai'] != $sanPham['gia_san_pham']): ?>
+                    <div class="product-label discount">
+                        <span>Giảm giá</span>
+                    </div>
+                <?php endif; ?>
+            </div>
         <?php endforeach; ?>
-        <?php endif; ?>
-    </section>
+    </div>
 </main>
 
 <?php require_once 'layout/footer.php'; ?>

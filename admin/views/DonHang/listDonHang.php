@@ -6,7 +6,9 @@
 <!-- /.navbar -->
 
 <!-- Main Sidebar Container -->
+<?php include './views/layout/sidebar.php'; ?> 
 <?php include './views/layout/sidebar.php'; ?>
+
 <!DOCTYPE html>
 <html lang="vi">
 <head>

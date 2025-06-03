@@ -1,4 +1,3 @@
-
 <?php 
 session_start();
 
@@ -12,7 +11,15 @@ require_once './controllers/HomeController.php';
 
 // Require toàn bộ file Models
 require_once './models/SanPham.php';
+require_once './models/DanhMuc.php';
+require_once './models/taikhoan.php';
+
+require_once './models/DanhMuc.php'; // Thêm dòng này nếu chưa có
+
 require_once './models/taikhoan.php';  // Model AdminTaiKhoan
+require_once __DIR__ . '/models/DanhMuc.php';
+
+
 
 
 // Route
@@ -22,10 +29,15 @@ $act = $_GET['act'] ?? '/';
 
 match ($act) {
     // Trang chủ
-    '/'                 => (new HomeController())->home(),
-    // 'list-san-pham' => (new HomeController())->dssanpham(),
+    '/'=> (new HomeController())->home(),
+    'list-san-pham' => (new HomeController())->dssanpham(),
 
-    // 'danh-sach-san-pham' => (new HomeController())->danhSachSanPham(),
+
+    'danh-sach-san-pham' => (new HomeController())->danhSachSanPham(),
+    'chi-tiet-san-pham' => (new HomeController())->chiTietSanPham(),
+    
+
+    
 
    // Giỏ hàng
    'them-gio-hang' => (new HomeController())->addGioHang(),
@@ -34,11 +46,11 @@ match ($act) {
     
 
     // // Thanh toán
-    // 'thanh-toan' => (new HomeController())->thanhToan(),
-    // 'xu-ly-thanh-toan' => (new HomeController())->postThanhToan(),
-    // 'lich-su-mua-hang' => (new HomeController())->lichSuMuaHang(),
-    // 'chi-tiet-mua-hang' => (new HomeController())->chiTietMuaHang(),
-    // 'huy-don-hang' => (new HomeController())->huyDonHang(),
+     'thanh-toan' => (new HomeController())->thanhToan(),
+     'xu-ly-thanh-toan' => (new HomeController())->postThanhToan(),
+     'lich-su-mua-hang' => (new HomeController())->lichSuMuaHang(),
+     'chi-tiet-mua-hang' => (new HomeController())->chiTietMuaHang(),
+     'huy-don-hang' => (new HomeController())->huyDonHang(),
 
 
       //đăng kí đăng nhập client
