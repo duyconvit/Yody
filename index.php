@@ -4,6 +4,7 @@ session_start();
 // Require file Common
 require_once './commons/env.php'; // Khai báo biến môi trường
 require_once './commons/function.php'; // Hàm hỗ trợ
+require_once './helpers/format.php'; // Helper format tiền tệ
 
 // Require toàn bộ file Controllers
 require_once './controllers/HomeController.php';
@@ -37,6 +38,21 @@ match ($act) {
     
 
     // 'danh-sach-san-pham' => (new HomeController())->danhSachSanPham(),
+
+   // Giỏ hàng
+   'them-gio-hang' => (new HomeController())->addGioHang(),
+   'gio-hang' => (new HomeController())->gioHang(),
+   'xoa-gio-hang' => (new HomeController())->deleteGioHang(),
+    
+
+    // // Thanh toán
+    // 'thanh-toan' => (new HomeController())->thanhToan(),
+    // 'xu-ly-thanh-toan' => (new HomeController())->postThanhToan(),
+    // 'lich-su-mua-hang' => (new HomeController())->lichSuMuaHang(),
+    // 'chi-tiet-mua-hang' => (new HomeController())->chiTietMuaHang(),
+    // 'huy-don-hang' => (new HomeController())->huyDonHang(),
+
+
       //đăng kí đăng nhập client
     'login' => (new HomeController())->formlogin(),
     'check-login' => (new HomeController())->postLogin(),
@@ -48,5 +64,9 @@ match ($act) {
     'chi-tiet-khach-hang' => (new HomeController())->chiTietKhachHang(),
     'sua-khach-hang' => (new HomeController())->suaKhachHang(),
     'doi-mat-khau-khach-hang' => (new HomeController())->doiMatKhauKhachHang(),
+
+
+      // chi tiết sản phẩm
+    'chi-tiet-san-pham' => (new HomeController())->chiTietSanPham(),
 
 };

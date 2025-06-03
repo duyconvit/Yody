@@ -1,4 +1,5 @@
 <?php 
+require_once './models/GioHang.php';
 
 // Thêm require_once cho các model cần thiết
 require_once './models/DanhMuc.php';
@@ -8,17 +9,15 @@ require_once './models/taikhoan.php';
 class HomeController
 {
     public $modelSanPham;
-
+    public $modelGioHang;
     public $danhMuc;
     public $modelTaiKhoan;
-
-    // public $danhMuc;
-    
+ 
     public function __construct(){
         $this->modelSanPham = new AdminSanPham();
         $this->danhMuc = new DanhMuc();
         $this->modelTaiKhoan = new AdminTaiKhoan();
-
+        $this->modelGioHang = new AdminGioHang();
     }
 
     public function home() {
@@ -151,11 +150,15 @@ class HomeController
     }
      public function chiTietKhachHang()
     {
-        $email = $_SESSION['user_client'];
-        // var_dump($email);die();
-        $listTaiKhoan = $this->modelTaiKhoan->getTaiKhoanformEmail($email);
-        // var_dump($listTaiKhoan);die();
-        require_once './views/chiTietKhachHang.php';
+        if (isset($_SESSION['user_client'])) {
+            $email = $_SESSION['user_client'];
+            $listTaiKhoan = $this->modelTaiKhoan->getTaiKhoanformEmail($email);
+            require_once './views/chiTietKhachHang.php';
+        } else {
+            $_SESSION['error'] = 'Vui lòng đăng nhập để xem thông tin cá nhân';
+            header("Location: " . BASE_URL . "?act=login");
+            exit();
+        }
     }
 
     public function suaKhachHang()
@@ -228,6 +231,7 @@ class HomeController
             }
         }
     }
+    
 
     public function doiMatKhauKhachHang()
     {   
@@ -268,22 +272,192 @@ class HomeController
         require_once './views/formDoiMatKhauKhachHang.php';
     }
 
+
     public function chiTietSanPham()
     {
-        if (isset($_GET['id'])) {
-            $id = intval($_GET['id']);
-            $sanPham = $this->modelSanPham->getSanPhamById($id);
+        if (isset($_GET['id_san_pham'])) {
+            $id = intval($_GET['id_san_pham']);
+            $sanPham = $this->modelSanPham->getDetailSanPham($id);
             if ($sanPham) {
-                require_once './views/chiTietSanPham.php';
+                $listSanPhamLienQuan = $this->modelSanPham->getListSanPhamDanhMuc($sanPham['danh_muc_id']);
+                require_once './views/detailSanPham.php';
             } else {
-                // Nếu không tìm thấy sản phẩm, chuyển về trang danh sách
                 header("Location: " . BASE_URL . "?act=list-san-pham");
                 exit();
             }
         } else {
-            // Nếu không có ID, chuyển về trang danh sách
             header("Location: " . BASE_URL . "?act=list-san-pham");
             exit();
         }
     }
+
+
+    public function gioHang() 
+    {
+        if (isset($_SESSION['user_client'])) {
+            $mail = $this->modelTaiKhoan->getTaiKhoanformEmail($_SESSION['user_client']);
+            $gioHang = $this->modelGioHang->getGioHangFromUser($mail['id']);
+            
+            if (!$gioHang) {
+                $gioHangId = $this->modelGioHang->addGioHang($mail['id']);
+                $gioHang = ['id' => $gioHangId]; 
+                $chiTietGioHang = $this->modelGioHang->getDeltailGioHang($gioHang['id']);
+            } else {
+                $chiTietGioHang = $this->modelGioHang->getDeltailGioHang($gioHang['id']);
+                // Kiểm tra và cập nhật số lượng sản phẩm trong giỏ hàng
+                $this->checkAndUpdateCartQuantity($gioHang['id'], $chiTietGioHang);
+                // Lấy lại chi tiết giỏ hàng sau khi cập nhật
+                $chiTietGioHang = $this->modelGioHang->getDeltailGioHang($gioHang['id']);
+            }
+           
+            require_once './views/gioHang.php';
+        } else {
+            $_SESSION['message'] = 'Bạn chưa đăng nhâp.';
+            header('Location: ' . BASE_URL . '?act=login');
+            exit();
+        }
+    }
+
+    private function checkAndUpdateCartQuantity($gioHangId, $chiTietGioHang) {
+        $hasChanges = false;
+        $notices = [];
+        foreach ($chiTietGioHang as $item) {
+            // Lấy thông tin sản phẩm hiện tại
+            $sanPham = $this->modelSanPham->getDetailSanPham($item['san_pham_id']);
+            
+            // Nếu số lượng trong kho nhỏ hơn số lượng trong giỏ hàng
+            if ($sanPham['so_luong'] < $item['so_luong']) {
+                // Cập nhật số lượng trong giỏ hàng bằng số lượng trong kho
+                $this->modelGioHang->updateSoLuong($gioHangId, $item['san_pham_id'], $sanPham['so_luong']);
+                $hasChanges = true;
+                
+                // Thêm thông báo cho người dùng
+                $notices[] = "Số lượng sản phẩm {$sanPham['ten_san_pham']} trong giỏ hàng đã được điều chỉnh từ {$item['so_luong']} xuống {$sanPham['so_luong']} do số lượng trong kho đã giảm.";
+            }
+            // Nếu sản phẩm hết hàng
+            else if ($sanPham['so_luong'] == 0) {
+                // Xóa sản phẩm khỏi giỏ hàng
+                $this->modelGioHang->deleteProductGioHang($item['id']);
+                $notices[] = "Sản phẩm {$sanPham['ten_san_pham']} đã hết hàng và đã được xóa khỏi giỏ hàng.";
+            }
+        }
+        
+        if (!empty($notices)) {
+            $_SESSION['cart_notice'] = implode("<br>", $notices);
+        }
+        
+        return $hasChanges;
+    }
+
+  
+
+
+    public function addGioHang()
+    {
+        if($_SERVER['REQUEST_METHOD'] == 'POST') {
+            if(isset($_SESSION['user_client'])) {
+                $mail = $this->modelTaiKhoan->getTaiKhoanformEmail($_SESSION['user_client']);
+                // lấy dữ liệu giỏ hàng của người dùng
+                $gioHang = $this->modelGioHang->getGioHangFromUser($mail['id']);
+
+                if(!$gioHang) {
+                    $gioHangId = $this->modelGioHang->addGioHang($mail['id']);
+                    if (!$gioHangId) {
+                        $_SESSION['error'] = "Không thể tạo giỏ hàng mới!";
+                        header('Location: ' . BASE_URL . '?act=chi-tiet-san-pham&id_san_pham=' . $_POST['san_pham_id']);
+                        exit();
+                    }
+                    $gioHang = ['id' =>$gioHangId];
+                    $chiTietGioHang = $this->modelGioHang->getDeltailGioHang($gioHang['id']);
+                }else {
+                    $chiTietGioHang = $this->modelGioHang->getDeltailGioHang($gioHang['id']);
+                }
+                $san_pham_id = $_POST['san_pham_id'];
+                $so_luong = $_POST['so_luong'];
+
+                // Kiểm tra số lượng sản phẩm trong kho
+                $sanPham = $this->modelSanPham->getDetailSanPham($san_pham_id);
+                if (!$sanPham) {
+                    $_SESSION['error'] = "Không tìm thấy sản phẩm!";
+                    header('Location: ' . BASE_URL);
+                    exit();
+                }
+
+                // Kiểm tra sản phẩm có còn hàng không
+                if ($sanPham['so_luong'] <= 0) {
+                    $_SESSION['error'] = "Sản phẩm {$sanPham['ten_san_pham']} đã hết hàng!";
+                    header('Location: ' . BASE_URL . '?act=chi-tiet-san-pham&id_san_pham=' . $san_pham_id);
+                    exit();
+                }
+
+                if ($sanPham['so_luong'] < $so_luong) {
+                    $_SESSION['error'] = "Số lượng sản phẩm {$sanPham['ten_san_pham']} trong kho không đủ. Chỉ còn {$sanPham['so_luong']} sản phẩm.";
+                    header('Location: ' . BASE_URL . '?act=chi-tiet-san-pham&id_san_pham=' . $san_pham_id);
+                    exit();
+                }
+
+                $checkSanPham = false;
+                if (!empty($chiTietGioHang)) {
+                    foreach($chiTietGioHang as $detail)  {
+                        if ($detail['san_pham_id'] == $san_pham_id) {
+                            $newSoLuong = $detail['so_luong'] + $so_luong;
+                            // Kiểm tra tổng số lượng sau khi thêm
+                            if ($newSoLuong > $sanPham['so_luong']) {
+                                $_SESSION['error'] = "Số lượng sản phẩm {$sanPham['ten_san_pham']} trong kho không đủ. Chỉ còn {$sanPham['so_luong']} sản phẩm.";
+                                header('Location: ' . BASE_URL . '?act=chi-tiet-san-pham&id_san_pham=' . $san_pham_id);
+                                exit();
+                            }
+                            $result = $this->modelGioHang->updateSoLuong($gioHang['id'], $san_pham_id, $newSoLuong);
+                            if (!$result) {
+                                $_SESSION['error'] = "Không thể cập nhật số lượng sản phẩm!";
+                                header('Location: ' . BASE_URL . '?act=chi-tiet-san-pham&id_san_pham=' . $san_pham_id);
+                                exit();
+                            }
+                            $checkSanPham = true;
+                            break;
+                        }
+                    }
+                }
+                
+                if(!$checkSanPham) {
+                    $result = $this->modelGioHang->addDetailGioHang($gioHang['id'], $san_pham_id, $so_luong);
+                    if (!$result) {
+                        $_SESSION['error'] = "Không thể thêm sản phẩm vào giỏ hàng!";
+                        header('Location: ' . BASE_URL . '?act=chi-tiet-san-pham&id_san_pham=' . $san_pham_id);
+                        exit();
+                    }
+                }
+                $_SESSION['success'] = 'Thêm sản phẩm vào giỏ hàng thành công!';
+                header('Location: ' . BASE_URL . '?act=gio-hang');
+                exit();
+            } else {
+                $_SESSION['error'] = 'Vui lòng đăng nhập để thêm sản phẩm vào giỏ hàng!';
+                header('Location: ' . BASE_URL . '?act=login');
+                exit();
+            }
+        }
+    }
+    public function deleteGioHang()
+    {
+        if(isset($_SESSION['user_client']))  {
+            $gioHangId = $_GET['id'];
+
+            $chiTietGH = $this->modelGioHang->getProductGioHang($gioHangId);
+            
+            if($chiTietGH) {
+                $this->modelGioHang->deleteProductGioHang($gioHangId);
+            }
+            // var_dump($gioHangId);die();
+
+            header("Location: " . BASE_URL . '?act=gio-hang');
+            die();
+        } else {
+            $_SESSION['message'] = 'Bạn chưa đăng nhập. ';
+            header('Location: ' . BASE_URL . '?act=login');
+            die();
+        }
+    }
+    
+    
+
 }

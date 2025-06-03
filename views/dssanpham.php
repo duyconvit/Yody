@@ -65,6 +65,8 @@ main {
     text-align: center;
     background: #fff;
     border-radius: 5px;
+    position: relative;
+    overflow: hidden;
 }
 
 .product-item img {
@@ -76,18 +78,41 @@ main {
 .product-item h3 {
     font-size: 14px;
     margin: 8px 0;
+    min-height: 40px;
 }
 
-.price {
-    font-size: 14px;
-    color: red;
+.price-box {
+    margin: 10px 0;
 }
 
-.old-price {
+.price-regular {
+    color: #ff0000;
+    font-weight: bold;
+    font-size: 16px;
+}
+
+.price-old {
+    color: #999;
     text-decoration: line-through;
-    color: gray;
-    margin-right: 6px;
+    font-size: 14px;
+    margin-left: 5px;
+}
+
+/* Style cho mác giảm giá */
+.product-label {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    z-index: 1;
+}
+
+.product-label.discount {
+    background: #ff0000;
+    color: white;
+    padding: 5px 10px;
+    border-radius: 3px;
     font-size: 12px;
+    font-weight: bold;
 }
 
 /* Responsive */
@@ -132,6 +157,7 @@ main {
     }
 }
 </style>
+
 <div class="breadcrumb-area">
     <div class="container">
         <div class="row">
@@ -178,14 +204,17 @@ main {
                 <img src="<?= $sanPham['hinh_anh'] ?>" alt="<?= $sanPham['ten_san_pham'] ?>">
             </a>
             <h3><?= $sanPham['ten_san_pham'] ?></h3>
-            <p class="price">
-                <span class="old-price">
-                    <?= number_format($sanPham['gia_san_pham'], 0, ',', '.') ?>đ
-                </span>
-                <span class="new-price">
-                    <?= number_format($sanPham['gia_khuyen_mai'], 0, ',', '.') ?>đ
-                </span>
-            </p>
+            <div class="price-box">
+                <?php if ($sanPham['gia_khuyen_mai'] && $sanPham['gia_khuyen_mai'] != $sanPham['gia_san_pham']): ?>
+                    <span class="price-regular"><?= formatCurrency($sanPham['gia_khuyen_mai']) ?></span>
+                    <span class="price-old"><del><?= formatCurrency($sanPham['gia_san_pham']) ?></del></span>
+                <?php else: ?>
+                    <span class="price-regular"><?= formatCurrency($sanPham['gia_san_pham']) ?></span>
+                <?php endif; ?>
+            </div>
+            <?php if ($sanPham['gia_khuyen_mai'] && $sanPham['gia_khuyen_mai'] != $sanPham['gia_san_pham']): ?>
+            
+            <?php endif; ?>
         </div>
         <?php endforeach; ?>
         <?php endif; ?>
@@ -193,3 +222,4 @@ main {
 </main>
 
 <?php require_once 'layout/footer.php'; ?>
+

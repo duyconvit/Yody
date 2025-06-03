@@ -61,7 +61,7 @@
                                 </div>
                             </form>
                             <?php if (isset($_SESSION['errors'])): ?>
-                            <p class="error-message"><?= $_SESSION['errors'];
+                            <p class="error-message"><?= is_array($_SESSION['errors']) ? implode('<br>', $_SESSION['errors']) : $_SESSION['errors'];
                                 unset($_SESSION['errors']); ?></p>
                             <?php endif; ?>
 

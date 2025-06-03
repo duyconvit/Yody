@@ -21,6 +21,7 @@ function connectDB() {
         echo ("Connection failed: " . $e->getMessage());
     }
 }
+
 // Thêm file 
 function uploadFile($file, $folderUpload){
     $pathStorage = $folderUpload . time() . $file['name'];
@@ -51,6 +52,7 @@ function deleteSessionError(){
         // session_unset();
     }
 }
+
 
 // Upload - update album ảnh
 

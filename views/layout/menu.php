@@ -48,10 +48,10 @@
                                     <ul class="nav justify-content-end">
                                         <li class="header-search-container mr-0">
                                             <button class="search-trigger d-block"><i class="pe-7s-search"></i></button>
-                                            <form class="header-search-box d-none">
-                                                <input type="text" placeholder="Search entire store hire" class="header-search-field">
-                                                <button class="header-search-btn"><i class="pe-7s-search"></i></button>
-                                            </form>
+                                           <form class="header-search-box d-none" action="<?= BASE_URL . '?act=search' ?>" method="GET">
+    <input type="text" name="keyword" placeholder="Tìm kiếm sản phẩm..." class="header-search-field">
+    <button type="submit" class="header-search-btn"><i class="pe-7s-search"></i></button>
+</form>
                                         </li>
                                         <li class="user-hover">
                                             <label for="">
@@ -81,11 +81,20 @@
                                                 <?php } ?>
                                             </ul>
                                         </li>
+
                                         <li>
-                                            <a href="#" class="minicart-btn">
-                                                <i class="pe-7s-shopbag"></i>
-                                                <div class="notification"></div>
-                                            </a>
+                                            <?php if (!isset($_SESSION['user_client'])) { ?>
+                                                    <a href="<?= BASE_URL . '?act=gio-hang' ?>">
+                                                        <i class="pe-7s-shopbag"></i>
+                                                    </a>
+                                                <?php } else { ?>
+                                                    <a href="<?= BASE_URL ?>?act=gio-hang" class="minicart-btn" style="position: relative; display: inline-block; padding-right: 20px;">
+                                                        <i class="pe-7s-shopbag"></i>
+                                                        <span style="position: absolute; top: 0; right: 0; font-size: 12px; padding: 2px 5px; background-color: #f0f0f0; border-radius: 3px; white-space: nowrap;">
+                                                            (<?= isset($tongDonHang) ? $tongDonHang : 0 ?>)
+                                                        </span>
+                                                    </a>
+                                                <?php } ?>
                                         </li>
                                     </ul>
                                 </div>
