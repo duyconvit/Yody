@@ -588,6 +588,65 @@ class HomeController
             exit();
         }
     }
-    
+     public function chiTietMuaHang()
+    {
+        if (isset($_SESSION['user_client'])) {
+            // Lấy ra thông tin tài khoản đăng nhập
+            $user = $this->modelTaiKhoan->getTaiKhoanformEmail($_SESSION['user_client']);
+            $tai_khoan_id = $user['id'];
+
+            // Lấy id đơn hàng truyền từ url
+            $donHangId = $_GET['id'];
+
+            // Lấy ra danh sách trạng thái đơn hàng
+            $arrTrangThaiDonHang = $this->modelDonHang->getAllTrangThaiDonHang();
+            $trangThaiDonHang = array_column($arrTrangThaiDonHang, 'ten_trang_thai', 'id');
+
+            // Lấy ra danh sách phương thức thanh toán
+            $arrPhuongThucThanhToan = $this->modelDonHang->getAllPhuongThucThanhToan();
+            $phuongThucThanhToan = array_column($arrPhuongThucThanhToan, 'ten_phuong_thuc', 'id');
+
+            // Lấy ra thông tin đơn hàng theo id
+            $donHang = $this->modelDonHang->getDonHangById($donHangId);
+         
+            // Lấy thông tin sản phẩm của đơn hàng trong bảng chi tiết đơn hàng
+            $chiTietDonHang = $this->modelDonHang->getChiTietDonHangByDonHangId($donHangId);
+
+            if ($donHang['tai_khoan_id'] != $tai_khoan_id) {
+                echo "Bạn không có quyền truy cập đơn hàng này";
+                exit;
+            }
+            require_once "./views/chiTietMuaHang.php";
+        } else {
+            $_SESSION['message'] = 'Bạn chưa đăng nhập.';
+            header('Location: ' . BASE_URL . '?act=login');
+            exit();
+        }
+    }
+    public function huyDonHang()
+    {
+        if (isset($_SESSION['user_clinet'])) {
+            // Lấy ra thông tin tài khoản đăng nhập
+            $user = $this->modelTaiKhoan->getTaiKhoanformEmail($_SESSION['user_clinet']);
+            $tai_khoan_id = $user['id'];
+
+            // Lấy id đơn hàng truyền từ url
+            $donHangId = $_GET['id'];
+
+            // Kiểm tra đơn hàng
+            $donHang = $this->modelDonHang->getDonHangById($donHangId);
+
+            // Hủy đơn hàng
+            $this->modelDonHang->updateTrangThaiDonHang($donHangId,11);
+
+            header("Location: " . BASE_URL . '?act=lich-su-mua-hang');
+            exit();
+        } else {
+            $_SESSION['message'] = 'Bạn chưa đăng nhâp.';
+
+            header('Location: ' . BASE_URL . '?act=login');
+            exit();
+        }
+    }
     
 }
