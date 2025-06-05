@@ -1,3 +1,17 @@
+<!-- Header -->
+<?php include './views/layout/header.php'; ?>
+<!-- End Header -->
+<!-- Navbar -->
+<?php include './views/layout/navbar.php'; ?>
+<!-- /.navbar -->
+
+<!-- Main Sidebar Container -->
+
+<?php include './views/layout/sidebar.php'; ?> 
+
+
+<?php include './views/layout/sidebar.php'; ?>
+
 <!DOCTYPE html>
 <html lang="vi">
 <head>

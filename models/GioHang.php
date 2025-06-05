@@ -68,15 +68,20 @@ class AdminGioHang
 
             $stmt = $this->conn->prepare($sql);
 
-            $stmt->execute([
+            $result = $stmt->execute([
                 ':gio_hang_id' => $gio_hang_id,
                 ':san_pham_id' => $san_pham_id,
                 ':so_luong' => $so_luong
             ]);
             
+            if (!$result) {
+                throw new Exception("Không thể cập nhật số lượng sản phẩm");
+            }
+            
             return true;
         } catch (Exception $e) {
-            echo "Lỗi" . $e->getMessage();
+            error_log("Lỗi cập nhật số lượng sản phẩm: " . $e->getMessage());
+            return false;
         }
     }
 
@@ -88,15 +93,20 @@ class AdminGioHang
 
             $stmt = $this->conn->prepare($sql);
 
-            $stmt->execute([
+            $result = $stmt->execute([
                 ':gio_hang_id' => $gio_hang_id,
                 ':san_pham_id' => $san_pham_id,
                 ':so_luong' => $so_luong
             ]);
             
+            if (!$result) {
+                throw new Exception("Không thể thêm sản phẩm vào giỏ hàng");
+            }
+            
             return true;
         } catch (Exception $e) {
-            echo "Lỗi" . $e->getMessage();
+            error_log("Lỗi thêm sản phẩm vào giỏ hàng: " . $e->getMessage());
+            return false;
         }
     }
 

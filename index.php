@@ -11,7 +11,15 @@ require_once './controllers/HomeController.php';
 
 // Require toàn bộ file Models
 require_once './models/SanPham.php';
+require_once './models/DanhMuc.php';
+require_once './models/taikhoan.php';
+
+require_once './models/DanhMuc.php'; // Thêm dòng này nếu chưa có
+
 require_once './models/taikhoan.php';  // Model AdminTaiKhoan
+require_once __DIR__ . '/models/DanhMuc.php';
+
+
 
 
 // Route
@@ -21,15 +29,20 @@ $act = $_GET['act'] ?? '/';
 
 match ($act) {
     // Trang chủ
-    '/'                 => (new HomeController())->home(),
-    // 'list-san-pham' => (new HomeController())->dssanpham(),
+    '/'=> (new HomeController())->home(),
+    'list-san-pham' => (new HomeController())->dssanpham(),
+    'search' => (new HomeController())->search(),
+
+    'danh-sach-san-pham' => (new HomeController())->danhSachSanPham(),
+    'chi-tiet-san-pham' => (new HomeController())->chiTietSanPham(),
+    
 
     // 'danh-sach-san-pham' => (new HomeController())->danhSachSanPham(),
 
    // Giỏ hàng
    'them-gio-hang' => (new HomeController())->addGioHang(),
    'gio-hang' => (new HomeController())->gioHang(),
-   //'xoa-gio-hang' => (new HomeController())->deleteGioHang(),
+   'xoa-gio-hang' => (new HomeController())->deleteGioHang(),
     
 
     // // Thanh toán
