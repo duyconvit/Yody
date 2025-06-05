@@ -625,9 +625,9 @@ class HomeController
     }
     public function huyDonHang()
     {
-        if (isset($_SESSION['user_clinet'])) {
+        if (isset($_SESSION['user_client'])) {
             // Lấy ra thông tin tài khoản đăng nhập
-            $user = $this->modelTaiKhoan->getTaiKhoanformEmail($_SESSION['user_clinet']);
+            $user = $this->modelTaiKhoan->getTaiKhoanformEmail($_SESSION['user_client']);
             $tai_khoan_id = $user['id'];
 
             // Lấy id đơn hàng truyền từ url
@@ -642,8 +642,7 @@ class HomeController
             header("Location: " . BASE_URL . '?act=lich-su-mua-hang');
             exit();
         } else {
-            $_SESSION['message'] = 'Bạn chưa đăng nhâp.';
-
+            $_SESSION['message'] = 'Bạn chưa đăng nhập.';
             header('Location: ' . BASE_URL . '?act=login');
             exit();
         }

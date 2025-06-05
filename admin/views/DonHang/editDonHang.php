@@ -115,13 +115,15 @@ include './views/layout/sidebar.php';
                                             <th>Thành tiền:</th>
                                             <td><?= number_format($tong_tien) ?> đ</td>
                                         </tr>
+                                        <?php /*
                                         <tr>
                                             <th>Vận chuyển:</th>
                                             <td>30,000 đ</td>
                                         </tr>
+                                        */ ?>
                                         <tr>
                                             <th>Tổng tiền:</th>
-                                            <td><strong><?= number_format($tong_tien + 30000) ?> đ</strong></td>
+                                            <td><strong><?= number_format($tong_tien) ?> đ</strong></td>
                                         </tr>
                                     </table>
                                 </div>

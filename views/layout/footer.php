@@ -27,8 +27,9 @@
                         <div class="widget-item">
                             <div class="widget-title">
                                 <div class="widget-logo">
-                                    <a href="index.html">
-                                        <img src="assets/img/yody.png" alt="brand logo">
+                                    <a href="index.html" style="text-decoration: none;">
+                                        <h4 style="font-size: 24px; margin-bottom: 10px;">YODY XIN CHÀO 💖</h4>
+                                        <p style="font-size: 14px; line-height: 1.5; color: #666;">Chúng tôi luôn quý trọng và tiếp thu mọi ý kiến đóng góp từ khách hàng, nhằm không ngừng cải thiện và nâng tầm trải nghiệm dịch vụ cũng như chất lượng sản phẩm.</p>
                                     </a>
                                 </div>
                             </div>

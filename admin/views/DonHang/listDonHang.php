@@ -1,13 +1,10 @@
-<!-- Header -->
-<?php include './views/layout/header.php'; ?>
-<!-- End Header -->
-<!-- Navbar -->
-<?php include './views/layout/navbar.php'; ?>
-<!-- /.navbar -->
+<?php 
+// Include các phần giao diện
+include './views/layout/header.php'; 
+include './views/layout/navbar.php'; 
+include './views/layout/sidebar.php'; 
 
-<!-- Main Sidebar Container -->
-<?php include './views/layout/sidebar.php'; ?> 
-<?php include './views/layout/sidebar.php'; ?>
+?>
 
 <!DOCTYPE html>
 <html lang="vi">
@@ -109,7 +106,7 @@
                                             <td><?= $donHang['ma_don_hang'] ?></td>
                                             <td><?= $donHang['ten_nguoi_nhan'] ?></td>
                                             <td><?= $donHang['sdt_nguoi_nhan'] ?></td>
-                                            <td><?= $donHang['ngay_dat'] ?></td>
+                                            <td><?= date('d/m/Y', strtotime($donHang['ngay_dat'])) ?></td>
                                             <td><?= number_format($donHang['tong_tien'], 0, ',', '.') ?> đ</td>
                                             <td><span class="badge <?= $badgeClass ?>"><?= $donHang['ten_trang_thai'] ?></span></td>
                                             <td>

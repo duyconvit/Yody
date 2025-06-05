@@ -1,5 +1,145 @@
 <?php require_once 'layout/header.php'; ?>
 
+<style>
+    .checkout-page-wrapper {
+        background-color: #f8f9fa;
+        padding: 40px 0;
+    }
+    
+    .checkout-title {
+        color: #333;
+        font-size: 24px;
+        font-weight: 600;
+        margin-bottom: 25px;
+        padding-bottom: 15px;
+        border-bottom: 2px solid #e9ecef;
+    }
+
+    .checkout-billing-details-wrap,
+    .order-summary-details {
+        background: #fff;
+        padding: 30px;
+        border-radius: 8px;
+        box-shadow: 0 0 15px rgba(0,0,0,0.05);
+    }
+
+    .single-input-item {
+        margin-bottom: 20px;
+    }
+
+    .single-input-item label {
+        display: block;
+        margin-bottom: 8px;
+        font-weight: 500;
+        color: #555;
+    }
+
+    .single-input-item input,
+    .single-input-item textarea {
+        width: 100%;
+        padding: 12px 15px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        transition: all 0.3s ease;
+    }
+
+    .single-input-item input:focus,
+    .single-input-item textarea:focus {
+        border-color: #4CAF50;
+        box-shadow: 0 0 0 2px rgba(76,175,80,0.1);
+    }
+
+    .order-summary-table {
+        margin-bottom: 30px;
+    }
+
+    .order-summary-table table {
+        border: 1px solid #e9ecef;
+    }
+
+    .order-summary-table th {
+        background-color: #f8f9fa;
+        padding: 15px;
+        font-weight: 600;
+    }
+
+    .order-summary-table td {
+        padding: 15px;
+        vertical-align: middle;
+    }
+
+    .order-summary-table tfoot tr {
+        background-color: #f8f9fa;
+    }
+
+    .order-summary-table tfoot tr:last-child {
+        background-color: #4CAF50;
+        color: white;
+        font-size: 18px;
+    }
+
+    .order-summary-table tfoot tr:last-child td {
+        padding: 20px 15px;
+    }
+
+    .payment-method-name {
+        padding: 15px;
+        border: 1px solid #e9ecef;
+        border-radius: 4px;
+        margin-bottom: 10px;
+    }
+
+    .custom-control-label {
+        font-weight: 500;
+        color: #555;
+    }
+
+    .btn-sqr {
+        padding: 12px 30px;
+        font-weight: 500;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        transition: all 0.3s ease;
+    }
+
+    .btn-sqr:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    }
+
+    .price-amount {
+        font-weight: 600;
+        color: #4CAF50;
+    }
+
+    .product-name {
+        color: #333;
+        text-decoration: none;
+        font-weight: 500;
+    }
+
+    .product-name:hover {
+        color: #4CAF50;
+    }
+
+    .product-quantity {
+        color: #666;
+        font-size: 0.9em;
+    }
+
+    .total-payment {
+        background-color: #4CAF50 !important;
+        color: white !important;
+        font-size: 18px;
+        font-weight: 600;
+    }
+    
+    .total-payment .price-amount {
+        color: white !important;
+        font-size: 20px;
+    }
+</style>
+
 <?php require_once 'layout/menu.php'; ?>
 
 <main>
@@ -26,33 +166,7 @@
     <!-- checkout main wrapper start -->
     <div class="checkout-page-wrapper section-padding">
         <div class="container">
-            <div class="row">
-                <div class="col-12">
-                    <!-- Checkout Login Coupon Accordion Start -->
-                    <div class="checkoutaccordion" id="checkOutAccordion">
-                        <div class="card">
-                            <h6>Thêm mã giảm giá
-                                <span data-bs-toggle="collapse" data-bs-target="#couponaccordion">
-                                    Nhập mã giảm giá vào đây...
-                                </span>
-                            </h6>
-                            <div id="couponaccordion" class="collapse" data-parent="#checkOutAccordion">
-                                <div class="card-body">
-                                    <div class="cart-update-option">
-                                        <div class="apply-coupon-wrapper">
-                                            <form action="#" method="post" class=" d-block d-md-flex">
-                                                <input type="text" placeholder="Enter Your Coupon Code" required />
-                                                <button class="btn btn-sqr">Apply Coupon</button>
-                                            </form>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- Checkout Login Coupon Accordion End -->
-                </div>
-            </div>
+            
 
             <form action="<?= BASE_URL . '?act=xu-ly-thanh-toan' ?>" method="POST">
                 <div class="row">
@@ -115,44 +229,38 @@
                                             ?>
                                             <tr>
                                                 <td>
-                                                    <a href=""><?= $sanPham['ten_san_pham'] ?>
-                                                        <strong>
+                                                    <a href="" class="product-name"><?= $sanPham['ten_san_pham'] ?>
+                                                        <span class="product-quantity">
                                                             x <?= $sanPham['so_luong'] ?>
-                                                        </strong>
+                                                        </span>
                                                     </a>
                                                 </td>
                                                 <td>
                                                     <?php
                                                         $tong_tien = 0;
-                                                        if ($sanPham['gia_khuyen_mai']) {
-                                                            $tong_tien = $sanPham['gia_khuyen_mai'] * $sanPham['so_luong'];
-                                                        } else {
-                                                            $tong_tien = $sanPham['gia_san_pham'] * $sanPham['so_luong'];
-                                                        }
+                                                        $giaSanPham = $sanPham['gia_khuyen_mai'] ? $sanPham['gia_khuyen_mai'] : $sanPham['gia_san_pham'];
+                                                        $soLuong = $sanPham['so_luong'];
+                                                        // Ensure values are numeric before multiplication
+                                                        $tong_tien = (float)$giaSanPham * (int)$soLuong;
+                                                        
                                                         $tongGioHang += $tong_tien; 
-                                                        echo formatPrice($tong_tien);
                                                     ?>
+                                                    <span class="price-amount"><?= formatCurrency($tong_tien) ?></span>
                                                 </td>
                                             </tr>
                                             <?php endforeach; ?>
                                         </tbody>
                                         <tfoot>
-                                            <!-- <tr>
+                                            <tr>
                                                 <td>Tạm tính</td>
-                                                <td><strong><?= formatPrice($tongGioHang); ?></strong></td>
-                                            </tr> -->
-                                            <tr>
-                                                <td>Vận chuyển</td>
-                                                <td class="d-flex justify-content-center">
-                                                    <strong>
-                                                        30.000đ
-                                                    </strong>
-                                                </td>
+                                                <td><span class="price-amount"><?= formatCurrency($tongGioHang) ?></span></td>
                                             </tr>
-                                            <tr>
+                                            <tr class="total-payment">
                                                 <td>Tổng tiền thanh toán</td>
-                                                <input type="hidden" name="tong_tien" value="<?= $tongGioHang + 30000 ?>">
-                                                <td><strong><?= formatPrice($tongGioHang + 30000); ?></strong></td>
+                                                <td>
+                                                    <input type="hidden" name="tong_tien" value="<?= $tongGioHang ?>">
+                                                    <span class="price-amount"><?= formatCurrency($tongGioHang) ?></span>
+                                                </td>
                                             </tr>
                                         </tfoot>
                                     </table>
@@ -172,7 +280,7 @@
                                             <div class="payment-method-name">
                                                 <div class="custom-control custom-radio">
                                                     <input type="radio" id="directbank" value="2" name="phuong_thuc_thanh_toan_id" class="custom-control-input" />
-                                                    <label class="custom-control-label" for="directbank">thanh toán online</label>
+                                                    <label class="custom-control-label" for="directbank">Thanh toán online</label>
                                                 </div>
                                             </div>
                                         </div>

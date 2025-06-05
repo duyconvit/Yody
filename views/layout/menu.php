@@ -35,7 +35,7 @@
                         <div class="col-lg-4">
                             <div class="logo text-center">
                                 <a href="<?= BASE_URL . '?act=/' ?>">
-                                    <img src="assets/img/yody.png" alt="Brand Logo" style="max-width: 120px; height: auto;">
+                                    <img src="uploads/logo.svg" alt="Brand Logo" style="max-width: 120px; height: auto;">
                                 </a>
                             </div>
                         </div>
