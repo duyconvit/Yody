@@ -167,6 +167,23 @@
 </style>
 
 <?php require_once 'layout/menu.php'; ?>
+    <div class="breadcrumb-area">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <div class="breadcrumb-wrap">
+                        <nav aria-label="breadcrumb">
+                            <ul class="breadcrumb">
+                                <li class="breadcrumb-item"><a href="<?= BASE_URL ?>"><i class="fa fa-home"></i></a>
+                                <li class="breadcrumb-item"><a href="<?= BASE_URL . '?act=chi-tiet-mua-hang' ?>">Đơn hàng</a></li>
+                                <li class="breadcrumb-item" aria-current="page">Chi tiết đơn hàng</li>
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
 <div class="container py-5">
     <div class="row">

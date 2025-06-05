@@ -90,9 +90,6 @@
                                                 <?php } else { ?>
                                                     <a href="<?= BASE_URL ?>?act=gio-hang" class="minicart-btn" style="position: relative; display: inline-block; padding-right: 20px;">
                                                         <i class="pe-7s-shopbag"></i>
-                                                        <span style="position: absolute; top: 0; right: 0; font-size: 12px; padding: 2px 5px; background-color: #f0f0f0; border-radius: 3px; white-space: nowrap;">
-                                                            (<?= isset($tongDonHang) ? $tongDonHang : 0 ?>)
-                                                        </span>
                                                     </a>
                                                 <?php } ?>
                                         </li>

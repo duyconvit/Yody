@@ -154,7 +154,7 @@
                                 </li>
                                 <li class="breadcrumb-item"><a href="<?= BASE_URL . '?act=gio-hang' ?>">Giỏ hàng</a>
                                 </li>
-                                <li class="breadcrumb-item active" aria-current="page">Thanh toán</li>
+                                <li class="breadcrumb-item" aria-current="page">Thanh toán</li>
                             </ul>
                         </nav>
                     </div>
