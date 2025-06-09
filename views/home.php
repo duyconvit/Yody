@@ -1,4 +1,105 @@
 <?php require_once './views/layout/header.php'; ?>
+<?php require_once './views/layout/menu.php'; ?>
+
+<!-- hero slider area start -->
+<section class="slider-area">
+    <div class="hero-slider-active slick-arrow-style slick-arrow-style_hero slick-dot-style">
+        <!-- single slider item start -->
+        <div class="hero-single-slide hero-overlay">
+            <div class="hero-slider-item bg-img" data-bg="uploads/banner1.png">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="hero-slider-content slide-1">
+                                <h2 class="slide-title">Thời Trang Nam</h2>
+                                <h4 class="slide-desc">Xu hướng thời trang 2024</h4>
+                                <a href="<?= BASE_URL . '?act=list-san-pham' ?>" class="btn btn-hero">Xem ngay</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- single slider item start -->
+
+        <!-- single slider item start -->
+        <div class="hero-single-slide hero-overlay">
+            <div class="hero-slider-item bg-img" data-bg="uploads/banner2.png">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="hero-slider-content slide-1">
+                                <h2 class="slide-title">Thời Trang Nữ</h2>
+                                <h4 class="slide-desc">Xu hướng thời trang 2024</h4>
+                                <a href="<?= BASE_URL . '?act=list-san-pham' ?>" class="btn btn-hero">Xem ngay</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- single slider item start -->
+
+        <!-- single slider item start -->
+        <div class="hero-single-slide hero-overlay">
+            <div class="hero-slider-item bg-img" data-bg="uploads/banner3.png">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="hero-slider-content slide-1">
+                                <h2 class="slide-title">Thời Trang Trẻ Em</span></h2>
+                                <h4 class="slide-desc">Xu hướng thời trang 2024</h4>
+                                <a href="<?= BASE_URL . '?act=list-san-pham' ?>" class="btn btn-hero">Xem ngay</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- single slider item end -->
+    </div>
+</section>
+<!-- hero slider area end -->
+
+<!-- Sản phẩm mới -->
+<div class="feature-product section-padding">
+    <div class="container">
+        <div class="section-title">
+            <h2 class="title">SẢN PHẨM MỚI</h2>
+        </div>
+        <div class="product-carousel-4_2">
+            <?php foreach ($newProducts as $product): ?>
+                <div class="product-item">
+                    <div class="product-thumb">
+                        <a href="<?= BASE_URL . '?act=chi-tiet-san-pham&id_san_pham=' . $product['id'] ?>">
+                            <img src="<?= BASE_URL . $product['hinh_anh'] ?>" alt="<?= $product['ten_san_pham'] ?>">
+                        </a>
+                        <div class="cart-hover">
+                            <a href="<?= BASE_URL . '?act=chi-tiet-san-pham&id_san_pham=' . $product['id'] ?>" class="btn-cart">
+                                Xem chi tiết
+                            </a>
+                        </div>
+                    </div>
+                    <div class="product-caption">
+                        <div class="product-name">
+                            <a href="<?= BASE_URL . '?act=chi-tiet-san-pham&id_san_pham=' . $product['id'] ?>">
+                                <?= $product['ten_san_pham'] ?>
+                            </a>
+                        </div>
+                        <div class="price-box">
+                            <?php if ($product['gia_khuyen_mai'] && $product['gia_khuyen_mai'] != $product['gia_san_pham']): ?>
+                                <span class="price-regular"><?= formatCurrency($product['gia_khuyen_mai']) ?></span>
+                                <span class="price-old"><del><?= formatCurrency($product['gia_san_pham']) ?></del></span>
+                            <?php else: ?>
+                                <span class="price-regular"><?= formatCurrency($product['gia_san_pham']) ?></span>
+                            <?php endif; ?>
+                        </div>
+                    </div>
+                </div>
+            <?php endforeach; ?>
+        </div>
+    </div>
+</div>
 
 <style>
     body {
@@ -322,34 +423,7 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 </script>
 
-<?php require_once './views/layout/menu.php'; ?>
-
 <main>
-    <!-- hero slider area start -->
-    <section class="slider-area" style="height: 600px; overflow: hidden;">
-        <div class="hero-slider-active slick-arrow-style slick-arrow-style_hero slick-dot-style">
-            <div class="hero-single-slide hero-overlay">
-                <div class="hero-slider-item bg-img" data-bg="uploads/baner12.jpg" style="height: 600px; background-size: cover; background-position: center; background-repeat: no-repeat;">
-                </div>
-            </div>
-
-            <div class="hero-single-slide hero-overlay">
-                <div class="hero-slider-item bg-img" data-bg="uploads/baner11.jpg" style="height: 600px; background-size: cover; background-position: center; background-repeat: no-repeat;">
-                </div>
-            </div>
-
-            <div class="hero-single-slide hero-overlay">
-                <div class="hero-slider-item bg-img" data-bg="uploads/baner13.jpg" style="height: 600px; background-size: cover; background-position: center; background-repeat: no-repeat;">
-                </div>
-            </div>
-            <div class="hero-single-slide hero-overlay">
-                <div class="hero-slider-item bg-img" data-bg="uploads/baner14.jpg" style="height: 600px; background-size: cover; background-position: center; background-repeat: no-repeat;">
-                </div>
-            </div>
-        </div>
-    </section>
-    <!-- hero slider area end -->
-
     <!-- hot deals area start -->
     <section class="hot-deals section-padding">
     <div class="container">

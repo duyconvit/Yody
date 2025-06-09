@@ -165,10 +165,8 @@ main {
                 <div class="breadcrumb-wrap">
                     <nav aria-label="breadcrumb">
                         <ul class="breadcrumb">
-                            <li class="breadcrumb-item"><a href="<?= BASE_URL ?>"><i class="fa fa-home"></i></a>
-                            </li>
-                            <li class="breadcrumb-item"><a href="<?= BASE_URL . '?act=list-san-pham' ?>">Sản
-                                    phẩm</a></li>
+                            <li class="breadcrumb-item"><a href="<?= BASE_URL ?>"><i class="fa fa-home"></i></a></li>
+                            <li class="breadcrumb-item"><a href="<?= BASE_URL . '?act=list-san-pham' ?>">Sản phẩm</a></li>
                         </ul>
                     </nav>
                 </div>
@@ -176,22 +174,22 @@ main {
         </div>
     </div>
 </div>
+
 <main>
     <!-- Bộ lọc danh mục bên trái -->
     <aside class="sidebar">
         <h3>Bộ Lọc</h3>
-        <h2>Danh mục</h2>
         <ul>
-            <li><a href="?act=list-san-pham">Tất cả</a></li>
             <?php foreach ($listDanhMuc as $danhMuc): ?>
-            <li>
-                <a href="?act=list-san-pham&danh_muc_id=<?= $danhMuc['id'] ?>">
-                    <?= $danhMuc['ten_danh_muc'] ?>
-                </a>
-            </li>
+                <li>
+                    <a href="<?= BASE_URL . '?act=list-san-pham&danh_muc_id=' . $danhMuc['id'] ?>">
+                        <?= $danhMuc['ten_danh_muc'] ?>
+                    </a>
+                </li>
             <?php endforeach; ?>
         </ul>
     </aside>
+
 
     <!-- Danh sách sản phẩm bên phải -->
     <section class="product-list">
@@ -205,28 +203,30 @@ main {
                 <p>Không có sản phẩm nào!</p>
             <?php endif; ?>
         <?php else: ?>
-        <?php foreach ($listSanPham as $sanPham): ?>
-        <div class="product-item">
-            <a href="<?= BASE_URL . '?act=chi-tiet-san-pham&id_san_pham=' . $sanPham['id']; ?>">
-                <img src="<?= $sanPham['hinh_anh'] ?>" alt="<?= $sanPham['ten_san_pham'] ?>">
-            </a>
-            <h3><?= $sanPham['ten_san_pham'] ?></h3>
-            <div class="price-box">
-                <?php if ($sanPham['gia_khuyen_mai'] && $sanPham['gia_khuyen_mai'] != $sanPham['gia_san_pham']): ?>
-                    <span class="price-regular"><?= formatCurrency($sanPham['gia_khuyen_mai']) ?></span>
-                    <span class="price-old"><del><?= formatCurrency($sanPham['gia_san_pham']) ?></del></span>
-                <?php else: ?>
-                    <span class="price-regular"><?= formatCurrency($sanPham['gia_san_pham']) ?></span>
-                <?php endif; ?>
-            </div>
-            <?php if ($sanPham['gia_khuyen_mai'] && $sanPham['gia_khuyen_mai'] != $sanPham['gia_san_pham']): ?>
-            
-            <?php endif; ?>
-        </div>
-        <?php endforeach; ?>
+            <?php foreach ($listSanPham as $sanPham): ?>
+                <div class="product-item">
+                    <a href="<?= BASE_URL . '?act=chi-tiet-san-pham&id_san_pham=' . $sanPham['id'] ?>">
+                        <img src="<?= BASE_URL . $sanPham['hinh_anh'] ?>" alt="<?= $sanPham['ten_san_pham'] ?>">
+                        <h3><?= $sanPham['ten_san_pham'] ?></h3>
+                    </a>
+                    <div class="price-box">
+                        <?php if ($sanPham['gia_khuyen_mai'] && $sanPham['gia_khuyen_mai'] != $sanPham['gia_san_pham']): ?>
+                            <span class="price-regular"><?= formatCurrency($sanPham['gia_khuyen_mai']) ?></span>
+                            <span class="price-old"><del><?= formatCurrency($sanPham['gia_san_pham']) ?></del></span>
+                        <?php else: ?>
+                            <span class="price-regular"><?= formatCurrency($sanPham['gia_san_pham']) ?></span>
+                        <?php endif; ?>
+                    </div>
+
+                    <?php if ($sanPham['gia_khuyen_mai'] && $sanPham['gia_khuyen_mai'] != $sanPham['gia_san_pham']): ?>
+                        <div class="product-label discount">
+                            <span>Giảm giá</span>
+                        </div>
+                    <?php endif; ?>
+                </div>
+            <?php endforeach; ?>
         <?php endif; ?>
     </section>
 </main>
 
 <?php require_once 'layout/footer.php'; ?>
-

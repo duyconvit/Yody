@@ -37,7 +37,7 @@ match ($act) {
     'chi-tiet-san-pham' => (new HomeController())->chiTietSanPham(),
     
 
-    // 'danh-sach-san-pham' => (new HomeController())->danhSachSanPham(),
+    
 
    // Giỏ hàng
    'them-gio-hang' => (new HomeController())->addGioHang(),
@@ -46,11 +46,11 @@ match ($act) {
     
 
     // // Thanh toán
-    // 'thanh-toan' => (new HomeController())->thanhToan(),
-    // 'xu-ly-thanh-toan' => (new HomeController())->postThanhToan(),
-    // 'lich-su-mua-hang' => (new HomeController())->lichSuMuaHang(),
-    // 'chi-tiet-mua-hang' => (new HomeController())->chiTietMuaHang(),
-    // 'huy-don-hang' => (new HomeController())->huyDonHang(),
+     'thanh-toan' => (new HomeController())->thanhToan(),
+     'xu-ly-thanh-toan' => (new HomeController())->postThanhToan(),
+     'lich-su-mua-hang' => (new HomeController())->lichSuMuaHang(),
+     'chi-tiet-mua-hang' => (new HomeController())->chiTietMuaHang(),
+     'huy-don-hang' => (new HomeController())->huyDonHang(),
 
 
       //đăng kí đăng nhập client

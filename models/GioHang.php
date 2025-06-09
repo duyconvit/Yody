@@ -1,5 +1,5 @@
 <?php
-class AdminGioHang
+class GioHang
 {
     public $conn;
 
