@@ -192,28 +192,41 @@ main {
 
     <!-- Danh sách sản phẩm -->
     <div class="product-list">
-        <?php foreach ($listSanPham as $sanPham): ?>
-            <div class="product-item">
-                <a href="<?= BASE_URL . '?act=chi-tiet-san-pham&id_san_pham=' . $sanPham['id'] ?>">
-                    <img src="<?= BASE_URL . $sanPham['hinh_anh'] ?>" alt="<?= $sanPham['ten_san_pham'] ?>">
-                    <h3><?= $sanPham['ten_san_pham'] ?></h3>
-                </a>
-                <div class="price-box">
+        <?php if (empty($listSanPham)): ?>
+            <?php if (isset($_GET['keyword'])): ?>
+                <div class="col-12 text-center">
+                    <h3>Không tìm thấy sản phẩm nào cho từ khóa "<?= htmlspecialchars($_GET['keyword']) ?>"</h3>
+                    <p>Vui lòng thử lại với từ khóa khác</p>
+                </div>
+            <?php else: ?>
+                <div class="col-12 text-center">
+                    <p>Không có sản phẩm nào!</p>
+                </div>
+            <?php endif; ?>
+        <?php else: ?>
+            <?php foreach ($listSanPham as $sanPham): ?>
+                <div class="product-item">
+                    <a href="<?= BASE_URL . '?act=chi-tiet-san-pham&id_san_pham=' . $sanPham['id'] ?>">
+                        <img src="<?= BASE_URL . $sanPham['hinh_anh'] ?>" alt="<?= $sanPham['ten_san_pham'] ?>">
+                        <h3><?= $sanPham['ten_san_pham'] ?></h3>
+                    </a>
+                    <div class="price-box">
+                        <?php if ($sanPham['gia_khuyen_mai'] && $sanPham['gia_khuyen_mai'] != $sanPham['gia_san_pham']): ?>
+                            <span class="price-regular"><?= formatCurrency($sanPham['gia_khuyen_mai']) ?></span>
+                            <span class="price-old"><del><?= formatCurrency($sanPham['gia_san_pham']) ?></del></span>
+                        <?php else: ?>
+                            <span class="price-regular"><?= formatCurrency($sanPham['gia_san_pham']) ?></span>
+                        <?php endif; ?>
+                    </div>
+
                     <?php if ($sanPham['gia_khuyen_mai'] && $sanPham['gia_khuyen_mai'] != $sanPham['gia_san_pham']): ?>
-                        <span class="price-regular"><?= formatCurrency($sanPham['gia_khuyen_mai']) ?></span>
-                        <span class="price-old"><del><?= formatCurrency($sanPham['gia_san_pham']) ?></del></span>
-                    <?php else: ?>
-                        <span class="price-regular"><?= formatCurrency($sanPham['gia_san_pham']) ?></span>
+                        <div class="product-label discount">
+                            <span>Giảm giá</span>
+                        </div>
                     <?php endif; ?>
                 </div>
-
-                <?php if ($sanPham['gia_khuyen_mai'] && $sanPham['gia_khuyen_mai'] != $sanPham['gia_san_pham']): ?>
-                    <div class="product-label discount">
-                        <span>Giảm giá</span>
-                    </div>
-                <?php endif; ?>
-            </div>
-        <?php endforeach; ?>
+            <?php endforeach; ?>
+        <?php endif; ?>
     </div>
 </main>
 

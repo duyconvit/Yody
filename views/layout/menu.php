@@ -48,9 +48,9 @@
                                     <ul class="nav justify-content-end">
                                         <li class="header-search-container mr-0">
                                             <button class="search-trigger d-block"><i class="pe-7s-search"></i></button>
-                                            <form class="header-search-box d-none">
-                                                <input type="text" placeholder="Search entire store hire" class="header-search-field">
-                                                <button class="header-search-btn"><i class="pe-7s-search"></i></button>
+                                                <form class="header-search-box d-none" action="<?= BASE_URL . '?act=list-san-pham' ?>" method="GET">
+                                                <input type="text" name="keyword" placeholder="Tìm kiếm sản phẩm..." class="header-search-field">
+                                                <button type="submit" class="header-search-btn"><i class="pe-7s-search"></i></button>
                                             </form>
                                         </li>
                                         <li class="user-hover">
@@ -108,10 +108,10 @@
                                     <nav class="desktop-menu">
                                         <ul class="justify-content-center header-style-4">
                                             <li><a href="<?= BASE_URL . '?act=/' ?>">Trang chủ</i></a></li>
-                                            <li><a href="#">Giới Thiệu</i></a></li>
+                                            <li><a href="<?= BASE_URL . '?act=/' ?>">Giới thiệu</i></a></li>
                                             <li><a href="<?= BASE_URL . '?act=list-san-pham' ?>">Sản phẩm</i></a></li>
-                                            <li><a href="index.html">Tin tức</i></a></li>
-                                            <li><a href="contact-us.html">Liên hệ</a></li>
+                                            <li><a href="<?= BASE_URL . '?act=/' ?>">Tin tức</i></a></li>
+                                            <li><a href="<?= BASE_URL . '?act=/' ?>">Liên hệ</i></a></li>
                                         </ul>
                                     </nav>
                                     <!-- main menu navbar end -->

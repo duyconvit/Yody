@@ -22,6 +22,7 @@ $act = $_GET['act'] ?? '/';
 match ($act) {
     // Trang chủ
     '/'=> (new HomeController())->home(),
+     'search' => (new HomeController())->search(),
 
     // Giỏ hàng
     'them-gio-hang' => (new HomeController())->addGioHang(),

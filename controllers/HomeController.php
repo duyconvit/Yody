@@ -25,23 +25,24 @@ class HomeController
         require_once './views/home.php';
     }
 
-      public function dssanpham()
-{
-    $danhMucId = isset($_GET['danh_muc_id']) ? intval($_GET['danh_muc_id']) : 0;
-    $listDanhMuc = $this->danhMuc->getAllDanhMuc();
+    public function dssanpham()
+    {
+        $danhMucId = isset($_GET['danh_muc_id']) ? intval($_GET['danh_muc_id']) : 0;
+        $keyword = isset($_GET['keyword']) ? trim($_GET['keyword']) : '';
+        $listDanhMuc = $this->danhMuc->getAllDanhMuc();
 
-    if ($danhMucId>0){
-      $listSanPham = $this->modelSanPham->getListSanPhamDanhMuc($danhMucId);
-    }else{
-        $listSanPham = $this->modelSanPham->getAllSanPham();
+        if (!empty($keyword)) {
+            $listSanPham = $this->modelSanPham->searchSanPhamByName($keyword);
+        } else if ($danhMucId > 0) {
+            $listSanPham = $this->modelSanPham->getListSanPhamDanhMuc($danhMucId);
+        } else {
+            $listSanPham = $this->modelSanPham->getAllSanPham();
+        }
+
+        require_once './views/dssanpham.php';
     }
 
-    require_once './views/dssanpham.php';
-}
-
-    
-
-      public function formLogin()
+    public function formLogin()
     {
       require_once './views/auth/formLogin.php';
       unset($_SESSION['errors']); // Xóa thông báo lỗi sau khi hiển thị
@@ -647,5 +648,11 @@ class HomeController
             exit();
         }
     }
-    
+    public function search()
+    {
+        $keyword = $_GET['keyword'] ?? '';
+        $listSanPham = $this->modelSanPham->searchSanPhamByName($keyword);
+        $listDanhMuc = $this->danhMuc->getAllDanhMuc();
+        require_once './views/dssanpham.php';
+    }
 }
