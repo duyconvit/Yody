@@ -4,7 +4,7 @@ include './views/layout/header.php';
 include './views/layout/navbar.php'; 
 include './views/layout/sidebar.php'; 
 
-<<<<<<< HEAD
+?>
 <!-- Main Sidebar Container -->
 
 <?php include './views/layout/sidebar.php'; ?> 
@@ -12,10 +12,9 @@ include './views/layout/sidebar.php';
 
 <?php include './views/layout/sidebar.php'; ?>
 
-=======
-?>
 
->>>>>>> 649f7a18f8022671f56df15d520f092800e4d9b0
+
+
 <!DOCTYPE html>
 <html lang="vi">
 <head>
