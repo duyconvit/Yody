@@ -48,7 +48,7 @@
                                     <ul class="nav justify-content-end">
                                         <li class="header-search-container mr-0">
                                             <button class="search-trigger d-block"><i class="pe-7s-search"></i></button>
-                                                <form class="header-search-box d-none" action="<?= BASE_URL . '?act=list-san-pham' ?>" method="GET">
+                                                <form class="header-search-box d-none" action="<?= BASE_URL ?>" method="GET">
                                                 <input type="text" name="keyword" placeholder="Tìm kiếm sản phẩm..." class="header-search-field">
                                                 <button type="submit" class="header-search-btn"><i class="pe-7s-search"></i></button>
                                             </form>

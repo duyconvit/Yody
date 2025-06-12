@@ -140,12 +140,35 @@ include './views/layout/sidebar.php';
                                 <div class="form-group">
                                   <select id="inputStatus" name="trang_thai_id" class="form-control custom-select">
                                       <?php foreach ($listTrangThaiDonHang as $trangThai) : ?>
+                                          <?php
+                                          $disabled = true;
+                                          // Trạng thái hiện tại
+                                          $current = $donHang['trang_thai_id'];
+                                          // Trạng thái tiếp theo được phép chọn
+                                          if (
+                                              // Cho phép hủy đơn bất cứ lúc nào
+                                              $trangThai['id'] == 9 ||
+                                              // Hoặc là trạng thái hiện tại
+                                              $trangThai['id'] == $current ||
+                                              // Hoặc là trạng thái tiếp theo trong quy trình
+                                              $trangThai['id'] == $current + 1
+                                          ) {
+                                              $disabled = false;
+                                          }
+                                          // Không cho phép chọn các trạng thái đã qua
+                                          if ($trangThai['id'] < $current) {
+                                              $disabled = true;
+                                          }
+                                          // Không cho sửa nếu đơn đã hoàn thành hoặc đã hủy
+                                          if (in_array($current, [9, 10])) {
+                                              $disabled = true;
+                                          }
+                                          ?>
                                           <option
-                                              <?php if ($donHang['trang_thai_id'] > $trangThai['id'] || in_array($donHang['trang_thai_id'], [9, 10, 11])) {
-                                                  echo 'disabled';
-                                              } ?>
-                                              <?= $trangThai['id'] == $donHang['trang_thai_id'] ? 'selected' : '' ?>
-                                              value="<?= $trangThai['id'] ?>">
+                                              value="<?= $trangThai['id'] ?>"
+                                              <?= $disabled ? 'disabled' : '' ?>
+                                              <?= $trangThai['id'] == $current ? 'selected' : '' ?>
+                                          >
                                               <?= $trangThai['ten_trang_thai'] ?>
                                           </option>
                                       <?php endforeach; ?>

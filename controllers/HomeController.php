@@ -275,10 +275,23 @@ class HomeController
     {
         if (isset($_SESSION['user_client'])) {
             $mail = $this->modelTaiKhoan->getTaiKhoanformEmail($_SESSION['user_client']);
+            
+            if (!$mail) {
+                $_SESSION['error'] = 'Không tìm thấy thông tin tài khoản.';
+                header('Location: ' . BASE_URL . '?act=login');
+                exit();
+            }
+
             $gioHang = $this->modelGioHang->getGioHangFromUser($mail['id']);
             
             if (!$gioHang) {
+                // Tạo giỏ hàng mới nếu chưa có
                 $gioHangId = $this->modelGioHang->addGioHang($mail['id']);
+                if (!$gioHangId) {
+                    $_SESSION['error'] = 'Không thể tạo giỏ hàng mới.';
+                    header('Location: ' . BASE_URL);
+                    exit();
+                }
                 $gioHang = ['id' => $gioHangId]; 
                 $chiTietGioHang = $this->modelGioHang->getDeltailGioHang($gioHang['id']);
             } else {
@@ -291,7 +304,7 @@ class HomeController
            
             require_once './views/gioHang.php';
         } else {
-            $_SESSION['message'] = 'Bạn chưa đăng nhâp.';
+            $_SESSION['message'] = 'Bạn chưa đăng nhập.';
             header('Location: ' . BASE_URL . '?act=login');
             exit();
         }
@@ -638,7 +651,7 @@ class HomeController
             $donHang = $this->modelDonHang->getDonHangById($donHangId);
 
             // Hủy đơn hàng
-            $this->modelDonHang->updateTrangThaiDonHang($donHangId,11);
+            $this->modelDonHang->updateTrangThaiDonHang($donHangId, 9);
 
             header("Location: " . BASE_URL . '?act=lich-su-mua-hang');
             exit();
