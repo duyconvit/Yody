@@ -19,7 +19,7 @@ include './views/layout/sidebar.php';
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
-    <title>Quản lý đơn hàng</title>
+    <!-- <title>Quản lý đơn hàng</title> -->
     <!-- Bootstrap 4.6 -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
     <!-- Font Awesome -->
@@ -61,7 +61,7 @@ include './views/layout/sidebar.php';
 <div class="content-wrapper p-3">
     <section class="content-header">
         <div class="container-fluid">
-            <div class="row mb-3">
+            <div class="row mb-2">
                 <div class="col-sm-6">
                     <h1>Quản lý đơn hàng</h1>
                 </div>

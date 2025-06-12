@@ -14,14 +14,6 @@ require_once './models/SanPham.php';
 require_once './models/DanhMuc.php';
 require_once './models/taikhoan.php';
 
-require_once './models/DanhMuc.php'; // Thêm dòng này nếu chưa có
-
-require_once './models/taikhoan.php';  // Model AdminTaiKhoan
-require_once __DIR__ . '/models/DanhMuc.php';
-
-
-
-
 // Route
 $act = $_GET['act'] ?? '/';
 
@@ -35,38 +27,36 @@ match ($act) {
 
     'danh-sach-san-pham' => (new HomeController())->danhSachSanPham(),
     'chi-tiet-san-pham' => (new HomeController())->chiTietSanPham(),
-    
+
+
+    // Giỏ hàng
+    'them-gio-hang' => (new HomeController())->addGioHang(),
+    'gio-hang' => (new HomeController())->gioHang(),
+    'xoa-gio-hang' => (new HomeController())->deleteGioHang(),
 
     
-
-   // Giỏ hàng
-   'them-gio-hang' => (new HomeController())->addGioHang(),
-   'gio-hang' => (new HomeController())->gioHang(),
-   'xoa-gio-hang' => (new HomeController())->deleteGioHang(),
+    // Thanh toán
+    'thanh-toan' => (new HomeController())->thanhToan(),
+    'xu-ly-thanh-toan' => (new HomeController())->postThanhToan(),
+    'lich-su-mua-hang' => (new HomeController())->lichSuMuaHang(),
+    'chi-tiet-mua-hang' => (new HomeController())->chiTietMuaHang(),
+    'huy-don-hang' => (new HomeController())->huyDonHang(),
     
-
-    // // Thanh toán
-     'thanh-toan' => (new HomeController())->thanhToan(),
-     'xu-ly-thanh-toan' => (new HomeController())->postThanhToan(),
-     'lich-su-mua-hang' => (new HomeController())->lichSuMuaHang(),
-     'chi-tiet-mua-hang' => (new HomeController())->chiTietMuaHang(),
-     'huy-don-hang' => (new HomeController())->huyDonHang(),
-
-
-      //đăng kí đăng nhập client
+    //đăng kí đăng nhập client
     'login' => (new HomeController())->formlogin(),
     'check-login' => (new HomeController())->postLogin(),
     'register' => (new HomeController())->formRegister(),
     'check-register' => (new HomeController())->postRegister(),
     'logout-clinet' => (new HomeController())->Logout(),
-
-        // thông tin chi tiết khách hàng
+    
+    // thông tin chi tiết khách hàng
     'chi-tiet-khach-hang' => (new HomeController())->chiTietKhachHang(),
     'sua-khach-hang' => (new HomeController())->suaKhachHang(),
     'doi-mat-khau-khach-hang' => (new HomeController())->doiMatKhauKhachHang(),
-
-
-      // chi tiết sản phẩm
+    
+    // chi tiết sản phẩm
     'chi-tiet-san-pham' => (new HomeController())->chiTietSanPham(),
+    'list-san-pham' => (new HomeController())->dssanpham(),
+    // 'chi-tiet-san-pham' => (new HomeController())->chiTietSanPham($_GET['id'] ?? 0),
 
 };
