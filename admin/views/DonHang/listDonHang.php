@@ -44,6 +44,46 @@ include './views/layout/sidebar.php';
 
         .badge {
             font-size: 0.9rem;
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-weight: 500;
+        }
+
+        /* Trạng thái đơn hàng */
+        .badge-warning {
+            background-color: #e3f2fd;
+            color: #1976d2;
+            border: 1px solid #2196f3;
+        }
+
+        .badge-info {
+            background-color: #e8f5e9;
+            color: #388e3c;
+            border: 1px solid #4caf50;
+        }
+
+        .badge-primary {
+            background-color: #fff3e0;
+            color: #e65100;
+            border: 1px solid #ff9800;
+        }
+
+        .badge-success {
+            background-color: #e8f5e9;
+            color: #388e3c;
+            border: 1px solid #4caf50;
+        }
+
+        .badge-danger {
+            background-color: #ffebee;
+            color: #d32f2f;
+            border: 1px solid #f44336;
+        }
+
+        .badge-secondary {
+            background-color: #f5f5f5;
+            color: #757575;
+            border: 1px solid #bdbdbd;
         }
     </style>
 </head>
@@ -98,6 +138,9 @@ include './views/layout/sidebar.php';
                                                     break;
                                                 case 'Đã hủy':
                                                     $badgeClass = 'badge-danger';
+                                                    break;
+                                                default:
+                                                    $badgeClass = 'badge-secondary';
                                                     break;
                                             }
                                         ?>

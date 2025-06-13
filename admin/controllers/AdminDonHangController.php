@@ -69,12 +69,12 @@ class AdminDonHangController
                 if (in_array($current_status, [9, 10])) {
                     $errors['trang_thai'] = 'Không thể thay đổi trạng thái của đơn hàng đã hoàn thành hoặc đã hủy';
                 }
-                // Cho phép hủy đơn bất cứ lúc nào
-                else if ($trang_thai_id == 9) {
-                    // Cho phép
+                // Cho phép hủy đơn chỉ khi chưa đến trạng thái chuẩn bị hàng
+                else if ($trang_thai_id == 9 && $current_status >= 3) {
+                    $errors['trang_thai'] = 'Không thể hủy đơn hàng khi đã bắt đầu chuẩn bị hàng';
                 }
                 // Kiểm tra xem có đang cập nhật đúng trạng thái tiếp theo không
-                else if ($trang_thai_id != $current_status + 1) {
+                else if ($trang_thai_id != $current_status + 1 && $trang_thai_id != 9) {
                     $errors['trang_thai'] = 'Chỉ có thể cập nhật sang trạng thái tiếp theo trong quy trình';
                 }
             }
