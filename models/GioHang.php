@@ -173,5 +173,30 @@ class GioHang
             echo "CÓ LỖI:" . $e->getMessage();
         }
     }
+
+    public function getChiTietGioHangByProductId($tai_khoan_id, $san_pham_id)
+    {
+        try {
+            $sql = 'SELECT ctg.id, ctg.gio_hang_id, ctg.san_pham_id, ctg.so_luong, sp.ten_san_pham, sp.hinh_anh, sp.gia_san_pham, sp.gia_khuyen_mai
+                    FROM chi_tiet_gio_hangs ctg
+                    INNER JOIN gio_hangs gh ON ctg.gio_hang_id = gh.id
+                    INNER JOIN san_phams sp ON ctg.san_pham_id = sp.id
+                    WHERE gh.tai_khoan_id = :tai_khoan_id AND ctg.san_pham_id = :san_pham_id';
+            
+            $stmt = $this->conn->prepare($sql);
+
+            $stmt->execute([
+                ':tai_khoan_id' => $tai_khoan_id,
+                ':san_pham_id' => $san_pham_id
+            ]);
+            
+            $result = $stmt->fetch();
+
+            return $result;
+        } catch (Exception $e) {
+            echo "Lỗi khi lấy chi tiết giỏ hàng theo sản phẩm ID: " . $e->getMessage();
+            return false;
+        }
+    }
 }
 ?>

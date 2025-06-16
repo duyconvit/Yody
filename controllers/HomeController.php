@@ -152,6 +152,12 @@ class HomeController
     }
     public function chiTietKhachHang()
     {
+        if (!isset($_SESSION['user_client'])) {
+            $_SESSION['message'] = 'Bạn chưa đăng nhập.';
+            header("Location: " . BASE_URL . '?act=login');
+            exit();
+        }
+        
         $email = $_SESSION['user_client'];
         // var_dump($email);die();
         $listTaiKhoan = $this->modelTaiKhoan->getTaiKhoanformEmail($email);
@@ -468,39 +474,72 @@ class HomeController
 
     public function thanhToan()
     {
-        if (isset($_SESSION['user_client'])) {
-            $user = $this->modelTaiKhoan->getTaiKhoanformEmail($_SESSION['user_client']);
-            // Lấy dữ liệu giỏ hàng của người dùng
-            $gioHang = $this->modelGioHang->getGioHangFromUser($user['id']);
 
-            if (!$gioHang) {
-                $gioHangId = $this->modelGioHang->addGioHang($user['id']);
-                $gioHang = ['id' => $gioHangId];
-                $chiTietGioHang = $this->modelGioHang->getDeltailGioHang($gioHang['id']);
-            } else {
-                $chiTietGioHang = $this->modelGioHang->getDeltailGioHang($gioHang['id']);
-            }
+        if (!isset($_SESSION['user_client'])) {
+            $_SESSION['message'] = 'Vui lòng đăng nhập để thanh toán.';
+            header("Location: " . BASE_URL . '?act=login');
 
-            if (empty($chiTietGioHang)) {
-                // Nếu giỏ hàng không có sản phẩm, hiển thị thông báo alert và dừng tiếp tục
-                echo '<script type="text/javascript">
-                    alert("Giỏ hàng của bạn hiện tại không có sản phẩm nào. Vui lòng thêm sản phẩm vào giỏ hàng để thanh toán.");
-                    window.location.href = " ./"; 
-                  </script>';
-                die;
-            }
-
-            require_once './views/thanhToan.php';
-        } else {
-            $_SESSION['message'] = 'Bạn phải đăng nhập';
-            header('Location: ' . BASE_URL . '?act=login');
             exit();
         }
+
+        // Lấy thông tin người dùng
+        $user = $this->modelTaiKhoan->getTaiKhoanformEmail($_SESSION['user_client']);
+
+        // Lấy danh sách sản phẩm đã chọn từ form (nếu có)
+        $selectedProductIds = $_POST['selected_products'] ?? [];
+        
+        $chiTietGioHang = [];
+        $tongGioHang = 0;
+
+        // Lấy thông tin giỏ hàng của người dùng
+        $gioHang = $this->modelGioHang->getGioHangFromUser($user['id']);
+
+        if (!$gioHang) {
+            $_SESSION['cart_notice'] = 'Giỏ hàng của bạn không có sản phẩm nào.';
+            header("Location: " . BASE_URL . '?act=gio-hang');
+            exit();
+        }
+
+        // Lấy tất cả chi tiết giỏ hàng của người dùng
+        $allChiTietGioHang = $this->modelGioHang->getDeltailGioHang($gioHang['id']);
+
+        // Lọc các sản phẩm đã chọn nếu có
+        if (!empty($selectedProductIds)) {
+            foreach ($allChiTietGioHang as $sanPham) {
+                if (in_array($sanPham['id'], $selectedProductIds)) {
+                    $chiTietGioHang[] = $sanPham;
+                    // Tính tổng tiền cho các sản phẩm đã chọn
+                    if ($sanPham['gia_khuyen_mai'] && $sanPham['gia_khuyen_mai'] != $sanPham['gia_san_pham']) {
+                        $tongGioHang += $sanPham['gia_khuyen_mai'] * $sanPham['so_luong'];
+                    } else {
+                        $tongGioHang += $sanPham['gia_san_pham'] * $sanPham['so_luong'];
+                    }
+                }
+            }
+        } else {
+            // Nếu không có sản phẩm nào được chọn nhưng có sản phẩm trong giỏ hàng,
+            // chuyển hướng người dùng về giỏ hàng yêu cầu chọn sản phẩm
+            if (!empty($allChiTietGioHang)) {
+                $_SESSION['cart_notice'] = 'Vui lòng chọn ít nhất một sản phẩm để thanh toán.';
+                header("Location: " . BASE_URL . '?act=gio-hang');
+                exit();
+            } else {
+                // Nếu giỏ hàng rỗng hoàn toàn
+                $_SESSION['cart_notice'] = 'Giỏ hàng của bạn không có sản phẩm nào.';
+                header("Location: " . BASE_URL . '?act=gio-hang');
+                exit();
+            }
+        }
+
+        // Lấy danh sách phương thức thanh toán
+        $listPhuongThucThanhToan = $this->modelDonHang->getAllPhuongThucThanhToan();
+
+        require_once './views/thanhToan.php';
     }
 
     public function postThanhToan()
     {
-        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+        if($_SERVER['REQUEST_METHOD'] == 'POST') {  
             // var_dump($_POST);die();
             $ten_nguoi_nhan = $_POST['ten_nguoi_nhan'];
             $email_nguoi_nhan = $_POST['email_nguoi_nhan'];
@@ -582,6 +621,7 @@ class HomeController
             }
         }
     }
+
     public function lichSuMuaHang()
     {
         if (isset($_SESSION['user_client'])) {
