@@ -166,6 +166,7 @@
     .btn-sqr[href="<?= BASE_URL . '?act=thanh-toan' ?>"]:hover::after {
         left: 100%;
     }
+
 </style>
 
 <?php require_once 'layout/menu.php'; ?>
@@ -200,44 +201,49 @@
                 <div class="row">
                     <div class="col-lg-12">
                         <div class="cart-table table-responsive">
-                            <table class="table table-bordered">
-                                <thead>
-                                    <tr>
-                                        <th class="pro-thumbnail">Ảnh sản phẩm</th>
-                                        <th class="pro-title">Tên sản phẩm</th>
-                                        <th class="pro-price">Giá tiền</th>
-                                        <th class="pro-quantity">Số lượng</th>
-                                        <th class="pro-subtotal">Tổng tiền</th>
-                                        <th class="pro-remove">Thao tác</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <?php                                             
+                            <form action="<?= BASE_URL ?>?act=thanh-toan" method="post">
+                                <table class="table table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th class="pro-select">Chọn</th>
+                                            <th class="pro-thumbnail">Ảnh sản phẩm</th>
+                                            <th class="pro-title">Tên sản phẩm</th>
+                                            <th class="pro-price">Giá tiền</th>
+                                            <th class="pro-quantity">Số lượng</th>
+                                            <th class="pro-subtotal">Tổng tiền</th>
+                                            <th class="pro-remove">Thao tác</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <?php                                             
                                             $tongGioHang = 0;
                                             foreach($chiTietGioHang as $key=>$sanPham): 
                                         ?>
-                                    <tr>
-                                        <td class="pro-thumbnail"><a href="#"><img class="img-fluid"
+                                        <tr>
+                                            <td class="pro-select">
+                                                <input type="checkbox" name="selected_products[]" value="<?= $sanPham['id'] ?>">
+                                            </td>
+                                            <td class="pro-thumbnail"><a href="#"><img class="img-fluid"
                                                     src="<?= BASE_URL . $sanPham['hinh_anh'] ?>" alt="Product" /></a>
-                                        </td>
-                                        <td class="pro-title"><a href="#"><?= $sanPham['ten_san_pham'] ?></a></td>
-                                        <td class="pro-price">
-                                            <span>
-                                                <?php if ($sanPham['gia_khuyen_mai'] && $sanPham['gia_khuyen_mai'] != $sanPham['gia_san_pham']) { ?>
-                                                <?= formatCurrency($sanPham['gia_khuyen_mai']) ?>
-                                                <?php } else { ?>
-                                                <?= formatCurrency($sanPham['gia_san_pham']) ?>
-                                                <?php } ?>
-                                            </span>
-                                        </td>
-                                        <td class="pro-quantity">
+                                            </td>
+                                            <td class="pro-title"><a href="#"><?= $sanPham['ten_san_pham'] ?></a></td>
+                                            <td class="pro-price">
+                                                <span>
+                                                    <?php if ($sanPham['gia_khuyen_mai'] && $sanPham['gia_khuyen_mai'] != $sanPham['gia_san_pham']) { ?>
+                                                    <?= formatCurrency($sanPham['gia_khuyen_mai']) ?>
+                                                    <?php } else { ?>
+                                                    <?= formatCurrency($sanPham['gia_san_pham']) ?>
+                                                    <?php } ?>
+                                                </span>
+                                            </td>
+                                            <td class="pro-quantity">
                                                 <div class="">
                                                     <span><?= $sanPham['so_luong'] ?></span>
                                                 </div>
-                                        </td>
-                                        <td class="pro-subtotal">
-                                            <span>
-                                                <?php
+                                            </td>
+                                            <td class="pro-subtotal">
+                                                <span>
+                                                    <?php
                                                         $tong_tien = 0;
                                                         if ($sanPham['gia_khuyen_mai'] && $sanPham['gia_khuyen_mai'] != $sanPham['gia_san_pham']) {
                                                             $tong_tien = $sanPham['gia_khuyen_mai'] * $sanPham['so_luong'];
@@ -247,45 +253,46 @@
                                                         $tongGioHang += $tong_tien; 
                                                         echo formatCurrency($tong_tien);
                                                     ?>
-                                            </span>
-                                        </td>
-                                        <td class="pro-remove">
-                                            <a href="<?= BASE_URL . '?act=xoa-gio-hang&id=' . $sanPham['id'] ?>">
-                                                <i class="fa fa-trash-o"></i>
-                                            </a>
-                                        </td>
-                                    </tr>
-                                    <?php endforeach; ?>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-lg-5 ml-auto">
-                        <div class="cart-calculator-wrapper">
-                            <div class="cart-calculate-items">
-                                <h6>Tổng hóa đơn</h6>
-                                <div class="table-responsive">
-                                    <table class="table">
-                                        <tr class="total">
-                                            <td>Tổng tiền giỏ hàng</td>
-                                            <td class="total-amount"><?= formatCurrency($tongGioHang) ?></td>
+                                                </span>
+                                            </td>
+                                            <td class="pro-remove">
+                                                <a href="<?= BASE_URL . '?act=xoa-gio-hang&id=' . $sanPham['id'] ?>">
+                                                    <i class="fa fa-trash-o"></i>
+                                                </a>
+                                            </td>
                                         </tr>
-                                    </table>
+                                        <?php endforeach; ?>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-5 ml-auto">
+                                    <div class="cart-calculator-wrapper">
+                                        <div class="cart-calculate-items">
+                                            <h6>Tổng hóa đơn</h6>
+                                            <div class="table-responsive">
+                                                <table class="table">
+                                                    <tr class="total">
+                                                        <td>Tổng tiền giỏ hàng</td>
+                                                        <td class="total-amount"><?= formatCurrency($tongGioHang) ?></td>
+                                                    </tr>
+                                                </table>
+                                            </div>
+                                        </div>
+                                        <div class="d-flex justify-content-between">
+                                            <button type="submit" class="btn btn-sqr" style="width: 48%;">Thanh toán</button>
+                                            <a href="<?= BASE_URL ?>" class="btn btn-sqr" style="width: 48%;">Tiếp tục mua sắm</a>
+                                        </div>
+                                        <div class="mt-3">
+                                            <a href="javascript:history.back()" class="btn btn-sqr w-100" style="background: #6c757d; color: white;">
+                                                <i class="fa fa-arrow-left"></i> Quay lại
+                                            </a>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                            <div class="d-flex justify-content-between">
-                                <a href="<?= BASE_URL . '?act=thanh-toan' ?>" class="btn btn-sqr" style="width: 48%;">Thanh toán</a>
-                                <a href="<?= BASE_URL ?>" class="btn btn-sqr" style="width: 48%;">Tiếp tục mua sắm</a>
-                            </div>
-                            <div class="mt-3">
-                                <a href="javascript:history.back()" class="btn btn-sqr w-100" style="background: #6c757d; color: white;">
-                                    <i class="fa fa-arrow-left"></i> Quay lại
-                                </a>
-                            </div>
                         </div>
-                    </div>
+                    </form>
                 </div>
             </div>
         </div>
