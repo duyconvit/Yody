@@ -85,13 +85,40 @@ class AdminDanhMuc
             echo "Lỗi: " . $e->getMessage();
         }
     }
+
     public function deleteDanhMuc($id)
-  {
-    $sql = "DELETE FROM danh_mucs WHERE id =:id";
-    $stmt = $this->conn->prepare($sql);
-    $stmt->execute([
-      ':id' => $id
-    ]);
-    return true;
-  }
+    {
+        try {
+            $sql = "DELETE FROM danh_mucs WHERE id = :id";
+            $stmt = $this->conn->prepare($sql);
+            $stmt->execute([
+                ':id' => $id
+            ]);
+            return true;
+        } catch (Exception $e) {
+            echo "Lỗi: " . $e->getMessage();
+            return false;
+        }
+    }
+
+    // Method đếm số lượng sản phẩm thuộc danh mục - FIXED
+    public function countSanPhamByDanhMuc($danh_muc_id) 
+    {
+        try {
+            // Sửa lại query cho chắc chắn
+            $sql = "SELECT COUNT(*) as total FROM san_phams WHERE danh_muc_id = :danh_muc_id";
+            $stmt = $this->conn->prepare($sql);
+            $stmt->execute([
+                ':danh_muc_id' => $danh_muc_id
+            ]);
+            
+            $result = $stmt->fetch(PDO::FETCH_ASSOC);
+            return (int)$result['total'];
+            
+        } catch (Exception $e) {
+            // Debug: In lỗi ra để kiểm tra
+            echo "Lỗi đếm sản phẩm: " . $e->getMessage();
+            return 0;
+        }
+    }
 }
