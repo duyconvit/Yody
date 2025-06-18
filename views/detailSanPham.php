@@ -242,7 +242,7 @@
                             <ul class="breadcrumb">
                                 <li class="breadcrumb-item"><a href="<?= BASE_URL ?>"><i class="fa fa-home"></i></a></li>
                                 <li class="breadcrumb-item"><a href="<?= BASE_URL . '?act=list-san-pham' ?>">Sản phẩm</a></li>
-                                <li class="breadcrumb-item active" aria-current="page">Chi tiết sản phẩm</li>
+                                <li class="breadcrumb-item" aria-current="page">Chi tiết sản phẩm</li>
                             </ul>
                         </nav>
                     </div>

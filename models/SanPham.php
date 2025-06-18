@@ -94,4 +94,19 @@ class SanPham
             echo "CÓ LỖI: " . $e->getMessage();
         }
     }
+      public function searchSanPhamByName($keyword)
+    {
+        try {
+            $sql = "SELECT san_phams.*, danh_mucs.ten_danh_muc as ten 
+                    FROM san_phams 
+                    INNER JOIN danh_mucs ON san_phams.danh_muc_id = danh_mucs.id
+                    WHERE san_phams.ten_san_pham LIKE :keyword";
+            $stmt = $this->conn->prepare($sql);
+            $stmt->execute(['keyword' => "%$keyword%"]);
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        } catch (Exception $e) {
+            echo "Lỗi: " . $e->getMessage();
+            return [];
+        }
+    }
 }    
