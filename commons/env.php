@@ -3,7 +3,8 @@
 // Biến môi trường, dùng chung toàn hệ thống
 // Khai báo dưới dạng HẰNG SỐ để không phải dùng $GLOBALS
 
-define('BASE_URL'   , 'http://localhost/du_an_nhom_8/');
+define('BASE_URL'   , 'http://localhost/Yody/');
+define('BASE_URL_ADMIN'   , 'http://localhost/Yody/admin/');
 
 define('DB_HOST'    , 'localhost');
 define('DB_PORT'    , 3306);
