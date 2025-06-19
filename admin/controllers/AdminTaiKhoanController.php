@@ -1,9 +1,5 @@
 <?php
 
-/**
- * Controller quản lý tài khoản cho admin
- * Chứa các phương thức xử lý logic quản lý tài khoản quản trị và khách hàng từ phía admin
- */
 class AdminTaiKhoanController 
 {
     public $modelTaiKhoan;
@@ -15,10 +11,7 @@ class AdminTaiKhoanController
         $this->modelDonHang = new AdminDonHang();
     }
 
-    /**
-     * Hiển thị danh sách tài khoản quản trị
-     * Logic: Lấy danh sách tài khoản có chức vụ quản trị (chuc_vu_id = 1) -> Hiển thị view
-     */
+   
     public function danhSachQuanTri()
     {
         $listQuanTri = $this->modelTaiKhoan->getAllTaiKhoan(1);
@@ -26,10 +19,7 @@ class AdminTaiKhoanController
         require_once './views/taikhoan/quantri/listQuanTri.php';
     }
 
-    /**
-     * Hiển thị form đăng nhập admin
-     * Logic: Hiển thị form đăng nhập và xóa thông báo lỗi cũ
-     */
+    
     public function formLogin()
     {
         require_once './views/auth/formLogin.php';
@@ -37,10 +27,7 @@ class AdminTaiKhoanController
         deleteSessionError();
     }
 
-    /**
-     * Xử lý đăng nhập admin
-     * Logic: Validate thông tin đăng nhập -> Kiểm tra quyền admin -> Tạo session -> Chuyển hướng
-     */
+    
     public function login()
     {
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
@@ -62,10 +49,7 @@ class AdminTaiKhoanController
         }
     }
 
-    /**
-     * Xử lý đăng xuất admin
-     * Logic: Xóa session admin -> Chuyển hướng về trang đăng nhập
-     */
+    
     public function logout()
     {
         if (isset($_SESSION['user_admin'])) {
@@ -75,10 +59,7 @@ class AdminTaiKhoanController
         }
     }
     
-    /**
-     * Hiển thị form thêm tài khoản quản trị
-     * Logic: Hiển thị form thêm quản trị viên mới
-     */
+    
     public function formAddQuanTri(){
         
         require_once './views/taikhoan/quantri/addQuanTri.php';
@@ -86,10 +67,7 @@ class AdminTaiKhoanController
        
     }
 
-    /**
-     * Xử lý thêm tài khoản quản trị
-     * Logic: Validate dữ liệu -> Tạo mật khẩu mặc định -> Thêm vào database -> Chuyển hướng
-     */
+   
     public function postAddQuanTri(){
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
@@ -132,10 +110,7 @@ class AdminTaiKhoanController
         }
     }
 
-    /**
-     * Hiển thị form chỉnh sửa tài khoản quản trị
-     * Logic: Lấy thông tin quản trị viên -> Hiển thị form edit
-     */
+    
     public function formEditQuanTri(){
         $id_quan_tri= $_GET['id_quan_tri'];
         $quanTri = $this->modelTaiKhoan->getDetailTaiKhoan($id_quan_tri);
@@ -145,10 +120,7 @@ class AdminTaiKhoanController
         deleteSessionError();
     }
 
-    /**
-     * Xử lý cập nhật tài khoản quản trị
-     * Logic: Validate dữ liệu -> Cập nhật thông tin quản trị viên -> Chuyển hướng
-     */
+    
      public function postEditQuanTri()
     {
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
@@ -184,16 +156,13 @@ class AdminTaiKhoanController
         }
     }
 
-    /**
-     * Reset mật khẩu tài khoản
-     * Logic: Lấy thông tin tài khoản -> Tạo mật khẩu mặc định -> Cập nhật database -> Chuyển hướng theo loại tài khoản
-     */
+    
     public function resetPassword(){
         $tai_khoan_id = $_GET['id_quan_tri'] ?? $_GET['id_khach_hang'] ?? null;
         $tai_khoan = $this->modelTaiKhoan->getDetailTaiKhoan($tai_khoan_id);
 
-        //đặt password mặc định - 123@123ab
-        $password = password_hash('123@123ab', PASSWORD_BCRYPT);
+        //đặt password mặc định - 123abc
+        $password = password_hash('123abc', PASSWORD_BCRYPT);
 
         $status = $this->modelTaiKhoan->resetPassword($tai_khoan_id, $password);
         // var_dump($status);die;
@@ -208,10 +177,7 @@ class AdminTaiKhoanController
         }
     }
 
-    /**
-     * Hiển thị danh sách tài khoản khách hàng
-     * Logic: Lấy danh sách tài khoản có chức vụ khách hàng (chuc_vu_id = 2) -> Hiển thị view
-     */
+    
     public function danhSachKhachHang()
     {
         $listKhachHang = $this->modelTaiKhoan->getAllTaiKhoan(2);
@@ -219,10 +185,7 @@ class AdminTaiKhoanController
         require_once './views/taikhoan/khachhang/listKhachHang.php';
     }
 
-    /**
-     * Hiển thị form chỉnh sửa tài khoản khách hàng
-     * Logic: Lấy thông tin khách hàng -> Hiển thị form edit
-     */
+    
     public function formEditKhachHang(){
         $id_khach_hang= $_GET['id_khach_hang'];
         $khachhang = $this->modelTaiKhoan->getDetailTaiKhoan($id_khach_hang);
@@ -232,10 +195,7 @@ class AdminTaiKhoanController
         deleteSessionError();
     }
 
-    /**
-     * Xử lý cập nhật tài khoản khách hàng
-     * Logic: Validate dữ liệu -> Cập nhật thông tin khách hàng -> Chuyển hướng
-     */
+    
     public function postEditKhachHang()
     {
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
@@ -291,10 +251,7 @@ class AdminTaiKhoanController
         }
     }
 
-    /**
-     * Hiển thị chi tiết tài khoản khách hàng
-     * Logic: Lấy thông tin khách hàng -> Lấy danh sách đơn hàng -> Hiển thị view chi tiết
-     */
+    
     public function detailKhachHang(){
         $id_khach_hang = $_GET['id_khach_hang'];
         $khachhang = $this->modelTaiKhoan->getDetailTaiKhoan($id_khach_hang);
