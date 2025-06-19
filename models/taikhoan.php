@@ -9,35 +9,40 @@ class TaiKhoan
     }
 
     public function checkLogin($email, $mat_khau)
-{
-    try {
-        $sql = 'SELECT * FROM tai_khoans WHERE email = :email';
-        $stmt = $this->conn->prepare($sql);
-        $stmt->execute(['email' => $email]);
-        $user = $stmt->fetch(PDO::FETCH_ASSOC);
+    {
+        try {
+            // Tìm user theo email
+            $sql = 'SELECT * FROM tai_khoans WHERE email = :email';
+            $stmt = $this->conn->prepare($sql);
+            $stmt->execute(['email' => $email]);
+            $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
-        if ($user && password_verify($mat_khau, $user['mat_khau'])) {
-            if ($user['trang_thai'] == 1) {
-                if ($user['chuc_vu_id'] == 2) {
-                    return $user; // Trả về mảng $user nếu thành công
+            // Kiểm tra user tồn tại và mật khẩu đúng
+            if ($user && password_verify($mat_khau, $user['mat_khau'])) {
+                // Kiểm tra trạng thái tài khoản (1 = kích hoạt, 0 = khóa)
+                if ($user['trang_thai'] == 1) {
+                    // Kiểm tra quyền truy cập (2 = Client, 1 = Admin)
+                    if ($user['chuc_vu_id'] == 2) {
+                        return $user; // Trả về mảng $user nếu thành công
+                    } else {
+                        return "Bạn không có quyền truy cập vào trang Client!";
+                    }
                 } else {
-                    return "Bạn không có quyền truy cập vào trang Clinet!";
+                    return "Tài khoản của bạn đã bị khóa! Vui lòng liên hệ quản trị viên.";
                 }
             } else {
-                return "Tài khoản của bạn đã bị khóa! Vui lòng liên hệ quản trị viên.";
+                return "Sai email hoặc mật khẩu!";
             }
-        } else {
-            return "Sai email hoặc mật khẩu!";
+        } catch (Exception $e) {
+            return "Lỗi hệ thống: " . $e->getMessage();
         }
-    } catch (Exception $e) {
-        return "Lỗi hệ thống: " . $e->getMessage();
     }
-}
-    // Đăng ký người dùng mới
+
+    //   Đăng ký người dùng mới
     public function registerUser($ho_ten, $ngay_sinh, $so_dien_thoai, $gioi_tinh, $dia_chi, $email, $password)
     {
         try {
-            // Kiểm tra số điện thoại đã tồn tại
+            // VALIDATION: Kiểm tra số điện thoại đã tồn tại
             $sqlPhone = 'SELECT COUNT(*) FROM tai_khoans WHERE so_dien_thoai = :so_dien_thoai';
             $stmtPhone = $this->conn->prepare($sqlPhone);
             $stmtPhone->execute(['so_dien_thoai' => $so_dien_thoai]);
@@ -45,7 +50,7 @@ class TaiKhoan
                 return 'Số điện thoại đã được sử dụng. Vui lòng chọn số khác.';
             }
 
-            // Kiểm tra email đã tồn tại
+            // VALIDATION: Kiểm tra email đã tồn tại
             $sqlEmail = 'SELECT COUNT(*) FROM tai_khoans WHERE email = :email';
             $stmtEmail = $this->conn->prepare($sqlEmail);
             $stmtEmail->execute(['email' => $email]);
@@ -80,11 +85,17 @@ class TaiKhoan
             return "Lỗi hệ thống: " . $e->getMessage();
         }
     }
-    // Thay Đổi thông tin cá nhân
+
+    /**
+     * Lấy thông tin tài khoản theo email
+     * 
+     * @param string $email Email cần tìm
+     * @return array|false Trả về mảng thông tin user hoặc false nếu không tìm thấy
+     */
     public function getTaiKhoanformEmail($email)
     {
         try {
-            // Sử dụng prepared statement với dấu :email
+            // Sử dụng prepared statement với dấu :email để tránh SQL injection
             $sql = 'SELECT * FROM tai_khoans WHERE email = :email';
             $stmt = $this->conn->prepare($sql);
             // Thực thi câu lệnh và truyền tham số
@@ -95,6 +106,7 @@ class TaiKhoan
             echo "Lỗi Truy Vấn: " . $e->getMessage();
         }
     }
+
     public function updateUserInfo($ho_ten, $ngay_sinh, $so_dien_thoai, $gioi_tinh, $dia_chi, $email)
     {
         try {
@@ -130,49 +142,28 @@ class TaiKhoan
             return false;
         }
     }
-    // Xử lý đổi mật khẩu
-    public function changePassword($email, $oldPassword, $newPassword)
-    {
-        try {
-            $sql = 'SELECT mat_khau FROM tai_khoans WHERE email = :email';
-            $stmt = $this->conn->prepare($sql);
-            $stmt->execute(['email' => $email]);
-            $user = $stmt->fetch();
 
-            if (!$user || !password_verify($oldPassword, $user['mat_khau'])) {
-                return 'Mật khẩu cũ không chính xác!';
-            }
-
-            $hashedPassword = password_hash($newPassword, PASSWORD_BCRYPT);
-
-            $sql = 'UPDATE tai_khoans SET mat_khau = :newPassword WHERE email = :email';
-            $stmt = $this->conn->prepare($sql);
-            $stmt->execute(['newPassword' => $hashedPassword, 'email' => $email]);
-
-            return true;
-        } catch (Exception $e) {
-            return 'Lỗi hệ thống: ' . $e->getMessage();
-        }
-    }
-
-
+    /**
+     * Lấy thông tin tài khoản theo ID
+     * 
+     * @param int $id ID tài khoản
+     * @return array|false Trả về mảng thông tin user hoặc false nếu không tìm thấy
+     */
     public function getIdTaiKhoan($id)
     {
         try {
             $sql = "SELECT * FROM tai_khoans WHERE id = :id";
-
             $stmt = $this->conn->prepare($sql);
-
-            $stmt->execute([
-                ':id' => $id
-            ]);
-
+            $stmt->execute([':id' => $id]);
             return $stmt->fetch();
         } catch (Exception $e) {
             echo "CÓ LỖI: " . $e->getMessage();
         }
     }
 
+    
+    //   Cập nhật thông tin khách hàng (bao gồm ảnh đại diện)
+   
     public function updatekhachHang($id, $ho_ten, $email, $so_dien_thoai, $gioi_tinh, $ngay_sinh, $anh_dai_dien)
     {
         try {
@@ -198,38 +189,10 @@ class TaiKhoan
                 ':id' => $id,
             ]);
 
-            // Kiểm tra nếu có dòng nào bị ảnh hưởng
-            if ($stmt->rowCount() > 0) {
-                return true; // Thành công
-            } else {
-                // Nếu không có dòng nào bị thay đổi (có thể dữ liệu không thay đổi)
-                return false;
-            }
+            return $stmt->rowCount() > 0;
         } catch (Exception $e) {
-            // Nếu có lỗi, in ra thông báo lỗi chi tiết
-            error_log("Lỗi Cập Nhật: " . $e->getMessage());  // Ghi vào log để kiểm tra
+            echo "CÓ LỖI: " . $e->getMessage();
             return false;
-        }
-    }
-
-    public function updateMatKhau($id, $mat_khau_moi)
-    {
-        try {
-            $sql = "UPDATE tai_khoans 
-                    SET mat_khau = :mat_khau_moi
-                    WHERE id = :id";
-
-            $stmt = $this->conn->prepare($sql);
-
-            // Truyền tham số
-            $stmt->execute([
-                ':mat_khau_moi' => password_hash($mat_khau_moi, PASSWORD_DEFAULT),   // Hash mật khẩu trước khi lưu
-                ':id' => $id,
-            ]);
-
-            return true;
-        } catch (Exception $e) {
-            echo "CÓ LỖI:".$e->getMessage();
         }
     }
 }

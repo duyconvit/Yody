@@ -1,5 +1,6 @@
 <?php require_once('views/layout/header.php'); ?>
 <?php require_once('views/layout/menu.php'); ?>
+
 <main>
     <!-- breadcrumb area start -->
     <div class="breadcrumb-area">
@@ -23,7 +24,6 @@
     <!-- login register wrapper start -->
     <div class="login-register-wrapper section-padding">
         <div class="container" style="max-width: 500px;">
-            <!-- Thông báo hiển thị -->
             <?php 
                 if (isset($_SESSION['message'])) {
                     echo "<script>alert('" . $_SESSION['message'] . "');</script>";
@@ -73,13 +73,12 @@
                         </div>
                     </div>
                     <!-- Login Content End -->
-
-
                 </div>
             </div>
         </div>
     </div>
     <!-- login register wrapper end -->
 </main>
+
 <?php require_once('views/layout/footer.php'); ?>
 <?php require_once('views/layout/miniCart.php'); ?>

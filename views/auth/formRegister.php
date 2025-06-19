@@ -1,5 +1,6 @@
 <?php require_once('views/layout/header.php'); ?>
 <?php require_once('views/layout/menu.php'); ?>
+
 <main>
     <!-- breadcrumb area start -->
     <div class="breadcrumb-area">
@@ -72,4 +73,5 @@
     </div>
     <!-- login register wrapper end -->
 </main>
+
 <?php require_once('views/layout/footer.php'); ?>

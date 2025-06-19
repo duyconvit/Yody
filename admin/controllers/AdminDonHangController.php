@@ -1,5 +1,9 @@
 <?php
 
+/**
+ * Controller quản lý đơn hàng cho admin
+ * Chứa các phương thức xử lý logic quản lý đơn hàng từ phía admin
+ */
 class AdminDonHangController
 {
     public $modelDonHang;
@@ -9,6 +13,10 @@ class AdminDonHangController
         $this->modelDonHang = new AdminDonHang();
     }
 
+    /**
+     * Hiển thị danh sách tất cả đơn hàng
+     * Logic: Lấy danh sách đơn hàng từ model -> Hiển thị view danh sách
+     */
     public function danhSachDonHang()
     {
         $listDonHang = $this->modelDonHang->getAllDonHang();
@@ -16,7 +24,11 @@ class AdminDonHangController
         require_once './views/DonHang/listDonHang.php';
     }
 
-        public function detailDonHang() 
+    /**
+     * Hiển thị chi tiết đơn hàng
+     * Logic: Lấy thông tin đơn hàng -> Lấy danh sách sản phẩm -> Lấy trạng thái -> Hiển thị view chi tiết
+     */
+    public function detailDonHang() 
     {
         $don_hang_id = $_GET['id_don_hang'];
         
@@ -31,7 +43,12 @@ class AdminDonHangController
 
         require_once './views/DonHang/detailDonHang.php';
     }
-        public function formEditDonHang()
+
+    /**
+     * Hiển thị form chỉnh sửa đơn hàng
+     * Logic: Lấy thông tin đơn hàng -> Lấy danh sách trạng thái -> Lấy sản phẩm -> Hiển thị form edit
+     */
+    public function formEditDonHang()
     {
         $id = $_GET['id_don_hang'] ?? null;
 
@@ -50,6 +67,10 @@ class AdminDonHangController
         }
     }
 
+    /**
+     * Xử lý cập nhật trạng thái đơn hàng
+     * Logic: Validate dữ liệu -> Kiểm tra quy tắc cập nhật trạng thái -> Cập nhật database -> Chuyển hướng
+     */
     public function postEditDonHang()
     {
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
@@ -98,9 +119,4 @@ class AdminDonHangController
     }
 }
 
-
-
-
-
-
-    ?>
+?>

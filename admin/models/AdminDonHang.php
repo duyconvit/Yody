@@ -1,5 +1,9 @@
 <?php 
 
+/**
+ * Model quản lý đơn hàng cho admin
+ * Chứa các phương thức thao tác với database liên quan đến quản lý đơn hàng từ phía admin
+ */
 class AdminDonHang {
     public $conn;
 
@@ -8,6 +12,10 @@ class AdminDonHang {
         $this->conn = connectDB();
     }
 
+    /**
+     * Lấy tất cả đơn hàng với thông tin trạng thái
+     * Logic: JOIN bảng don_hangs với trang_thai_don_hangs để lấy tên trạng thái, sắp xếp theo thứ tự mới nhất
+     */
     public function getAllDonHang(){
         try {
             $sql = 'SELECT don_hangs.*, trang_thai_don_hangs.ten_trang_thai
@@ -25,7 +33,11 @@ class AdminDonHang {
         }
     }
 
-        public function getAllTrangThaiDonHang(){
+    /**
+     * Lấy tất cả trạng thái đơn hàng
+     * Logic: Truy vấn bảng trang_thai_don_hangs để lấy danh sách các trạng thái có thể có
+     */
+    public function getAllTrangThaiDonHang(){
         try {
             $sql = 'SELECT * FROM trang_thai_don_hangs';
 
@@ -39,7 +51,11 @@ class AdminDonHang {
         }
     }
 
-        public function getDetailDonHang($id){
+    /**
+     * Lấy chi tiết đơn hàng với thông tin đầy đủ
+     * Logic: JOIN 4 bảng để lấy thông tin đơn hàng, trạng thái, khách hàng và phương thức thanh toán
+     */
+    public function getDetailDonHang($id){
         try {
             $sql = 'SELECT don_hangs.*, 
                 trang_thai_don_hangs.ten_trang_thai, 
@@ -62,7 +78,12 @@ class AdminDonHang {
             echo "lỗi" . $e->getMessage();
         }
     }
-        public function getListSpDonHang($id){
+
+    /**
+     * Lấy danh sách sản phẩm trong đơn hàng
+     * Logic: JOIN bảng chi_tiet_don_hangs với san_phams để lấy thông tin sản phẩm trong đơn hàng
+     */
+    public function getListSpDonHang($id){
         try {
             $sql = 'SELECT chi_tiet_don_hangs.*, san_phams.ten_san_pham
             FROM chi_tiet_don_hangs
@@ -79,6 +100,10 @@ class AdminDonHang {
         }
     }
 
+    /**
+     * Cập nhật trạng thái đơn hàng
+     * Logic: Cập nhật trạng thái của đơn hàng theo ID và trạng thái mới
+     */
     public function updateDonHang($id, $trang_thai_id)
     {
         try {
@@ -95,6 +120,10 @@ class AdminDonHang {
         }
     }
 
+    /**
+     * Lấy danh sách đơn hàng của một khách hàng cụ thể
+     * Logic: JOIN bảng don_hangs với trang_thai_don_hangs để lấy đơn hàng và trạng thái của khách hàng
+     */
     public function getDonHangFromKhachHang($id){
         try {
             $sql = 'SELECT don_hangs.*, trang_thai_don_hangs.ten_trang_thai
@@ -113,6 +142,10 @@ class AdminDonHang {
         }
     }
 
+    /**
+     * Tính tổng thu nhập từ các đơn hàng đã hoàn thành
+     * Logic: Tính tổng tong_tien từ các đơn hàng có trạng thái đã hoàn thành (trang_thai_id = 9)
+     */
     public function tongThuNhap(){
         try {
             $sql = 'SELECT SUM(tong_tien) as tong_thu_nhap
@@ -130,6 +163,10 @@ class AdminDonHang {
         }
     }
 
+    /**
+     * Lấy thống kê sản phẩm bán chạy
+     * Logic: GROUP BY theo san_pham_id để tính tổng số lượng bán và số đơn hàng, sắp xếp theo số lượng giảm dần
+     */
     public function getAllDetailDonHangSanPhamBanChay()
     {
         try {

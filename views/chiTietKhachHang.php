@@ -35,10 +35,6 @@
                             class="list-group-item list-group-item-action">
                             Thông tin cá nhân
                         </a>
-                        <a href="<?= BASE_URL . '?act=doi-mat-khau-khach-hang' ?>"
-                            class="list-group-item list-group-item-action">
-                            Đổi mật khẩu
-                        </a>
                     </div>
                 </div>
             </div>

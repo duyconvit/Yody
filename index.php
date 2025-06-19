@@ -54,7 +54,6 @@ match ($act) {
     // thông tin chi tiết khách hàng
     'chi-tiet-khach-hang' => (new HomeController())->chiTietKhachHang(),
     'sua-khach-hang' => (new HomeController())->suaKhachHang(),
-    'doi-mat-khau-khach-hang' => (new HomeController())->doiMatKhauKhachHang(),
     
     // chi tiết sản phẩm
     'chi-tiet-san-pham' => (new HomeController())->chiTietSanPham(),

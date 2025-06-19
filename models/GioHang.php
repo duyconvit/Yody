@@ -1,4 +1,8 @@
 <?php
+/**
+ * Model quản lý giỏ hàng
+ * Chứa các phương thức thao tác với bảng gio_hangs và chi_tiet_gio_hangs
+ */
 class GioHang
 {
     public $conn;
@@ -8,6 +12,10 @@ class GioHang
         $this->conn = connectDB();
     }
 
+    /**
+     * Lấy thông tin giỏ hàng của người dùng theo ID tài khoản
+     * Logic: Truy vấn bảng gio_hangs để tìm giỏ hàng thuộc về tài khoản
+     */
     public function getGioHangFromUser($id) 
     {
         try {
@@ -23,6 +31,10 @@ class GioHang
         }
     }
 
+    /**
+     * Lấy chi tiết sản phẩm trong giỏ hàng theo ID giỏ hàng
+     * Logic: JOIN bảng chi_tiet_gio_hangs với san_phams để lấy thông tin đầy đủ sản phẩm
+     */
     public function getDeltailGioHang($id) 
     {
         try {
@@ -43,6 +55,10 @@ class GioHang
         }
     }
 
+    /**
+     * Tạo giỏ hàng mới cho người dùng
+     * Logic: Thêm bản ghi mới vào bảng gio_hangs và trả về ID của giỏ hàng vừa tạo
+     */
     public function addGioHang($id)
     {
         try {
@@ -58,6 +74,10 @@ class GioHang
         }
     }
 
+    /**
+     * Cập nhật số lượng sản phẩm trong giỏ hàng
+     * Logic: Cập nhật số lượng sản phẩm theo gio_hang_id và san_pham_id
+     */
     public function updateSoLuong($gio_hang_id, $san_pham_id, $so_luong) 
     {
         try {
@@ -85,6 +105,10 @@ class GioHang
         }
     }
 
+    /**
+     * Thêm sản phẩm vào giỏ hàng
+     * Logic: Thêm bản ghi mới vào bảng chi_tiet_gio_hangs với thông tin sản phẩm và số lượng
+     */
     public function addDetailGioHang($gio_hang_id, $san_pham_id, $so_luong)
     {
         try {
@@ -110,6 +134,10 @@ class GioHang
         }
     }
 
+    /**
+     * Xóa tất cả sản phẩm trong giỏ hàng
+     * Logic: Xóa tất cả bản ghi trong chi_tiet_gio_hangs theo gio_hang_id
+     */
     public function deleteDetailGioHang($gio_hang_id)
     {
         try {
@@ -127,6 +155,10 @@ class GioHang
         }
     }
 
+    /**
+     * Xóa giỏ hàng của người dùng
+     * Logic: Xóa bản ghi trong bảng gio_hangs theo tai_khoan_id
+     */
     public function deleteGioHang($tai_khoan_id)
     {
         try {
@@ -141,6 +173,10 @@ class GioHang
         }
     }
 
+    /**
+     * Lấy thông tin sản phẩm trong giỏ hàng theo ID chi tiết
+     * Logic: Truy vấn bảng chi_tiet_gio_hangs để lấy thông tin sản phẩm cụ thể
+     */
     public function getProductGioHang($id)
     {
         try {
@@ -158,6 +194,10 @@ class GioHang
         }
     }
 
+    /**
+     * Xóa sản phẩm khỏi giỏ hàng theo ID chi tiết
+     * Logic: Xóa bản ghi trong chi_tiet_gio_hangs theo ID
+     */
     public function deleteProductGioHang($id)
     {
         try {
@@ -174,6 +214,10 @@ class GioHang
         }
     }
 
+    /**
+     * Lấy chi tiết sản phẩm trong giỏ hàng theo tài khoản và sản phẩm
+     * Logic: JOIN 3 bảng để lấy thông tin đầy đủ sản phẩm trong giỏ hàng của người dùng cụ thể
+     */
     public function getChiTietGioHangByProductId($tai_khoan_id, $san_pham_id)
     {
         try {

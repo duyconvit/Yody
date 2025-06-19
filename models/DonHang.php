@@ -1,4 +1,8 @@
 <?php
+/**
+ * Model quản lý đơn hàng
+ * Chứa các phương thức thao tác với bảng don_hangs, chi_tiet_don_hangs và các bảng liên quan
+ */
 class DonHang
 {
     public $conn;
@@ -8,6 +12,10 @@ class DonHang
         $this->conn = connectDB();
     }
 
+    /**
+     * Tạo đơn hàng mới
+     * Logic: Thêm bản ghi mới vào bảng don_hangs với đầy đủ thông tin người nhận, thanh toán và trả về ID đơn hàng
+     */
     public function addDonHang($tai_khoan_id, $ten_nguoi_nhan, $email_nguoi_nhan, $sdt_nguoi_nhan, $dia_chi_nguoi_nhan, $ghi_chu, $tong_tien, $phuong_thuc_thanh_toan_id, $ngay_dat, $ma_don_hang, $trang_thai_id)
     {
         try {
@@ -36,6 +44,10 @@ class DonHang
         }
     }
 
+    /**
+     * Thêm chi tiết sản phẩm vào đơn hàng
+     * Logic: Thêm bản ghi mới vào bảng chi_tiet_don_hangs với thông tin sản phẩm, đơn giá và thành tiền
+     */
     public function addChiTietDonHang($don_hang_id, $san_pham_id, $don_gia, $so_luong, $thanh_tien)
     {
         try {
@@ -58,6 +70,10 @@ class DonHang
         }
     }
 
+    /**
+     * Lấy danh sách đơn hàng của người dùng
+     * Logic: Truy vấn bảng don_hangs để lấy tất cả đơn hàng thuộc về tài khoản, sắp xếp theo thứ tự mới nhất
+     */
     public function getDonHangFromUser($tai_khoan_id)
     {
         try {
@@ -77,6 +93,10 @@ class DonHang
         }
     }
 
+    /**
+     * Lấy tất cả trạng thái đơn hàng
+     * Logic: Truy vấn bảng trang_thai_don_hangs để lấy danh sách các trạng thái có thể có
+     */
     public function getAllTrangThaiDonHang()
     {
         try {
@@ -92,6 +112,10 @@ class DonHang
         }
     }
 
+    /**
+     * Lấy tất cả phương thức thanh toán
+     * Logic: Truy vấn bảng phuong_thuc_thanh_toans để lấy danh sách các phương thức thanh toán có sẵn
+     */
     public function getAllPhuongThucThanhToan()
     {
         try {
@@ -107,6 +131,10 @@ class DonHang
         }
     }
 
+    /**
+     * Lấy thông tin đơn hàng theo ID
+     * Logic: Truy vấn bảng don_hangs để lấy thông tin chi tiết của một đơn hàng cụ thể
+     */
     public function getDonHangById($don_hang_id)
     {
         try {
@@ -124,6 +152,10 @@ class DonHang
         }
     }
 
+    /**
+     * Cập nhật trạng thái đơn hàng
+     * Logic: Cập nhật trạng thái của đơn hàng theo ID và trạng thái mới
+     */
     public function updateTrangThaiDonHang($don_hang_id, $trang_thai_id)
     {
         try {
@@ -142,6 +174,10 @@ class DonHang
         }
     }
 
+    /**
+     * Lấy chi tiết sản phẩm trong đơn hàng
+     * Logic: JOIN bảng chi_tiet_don_hangs với san_phams để lấy thông tin đầy đủ sản phẩm trong đơn hàng
+     */
     public function getChiTietDonHangByDonHangId($don_hang_id)
     {
         try {

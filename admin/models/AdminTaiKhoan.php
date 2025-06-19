@@ -1,5 +1,9 @@
 <?php
 
+/**
+ * Model quản lý tài khoản cho admin
+ * Chứa các phương thức thao tác với database liên quan đến quản lý tài khoản từ phía admin
+ */
 class AdminTaiKhoan{
     public $conn;
 
@@ -8,6 +12,10 @@ class AdminTaiKhoan{
         $this->conn = connectDB();
     }
 
+    /**
+     * Lấy danh sách tài khoản theo chức vụ
+     * Logic: Truy vấn bảng tai_khoans để lấy tất cả tài khoản có chức vụ cụ thể (1=quản trị, 2=khách hàng)
+     */
     public function getAllTaiKhoan($chuc_vu_id){
         try {
             $sql = 'SELECT * FROM tai_khoans WHERE chuc_vu_id = :chuc_vu_id';
@@ -21,7 +29,10 @@ class AdminTaiKhoan{
         }
     }
 
-
+    /**
+     * Thêm tài khoản mới
+     * Logic: Thêm bản ghi mới vào bảng tai_khoans với thông tin tài khoản và mật khẩu đã hash
+     */
     public function insertTaiKhoan($ho_ten, $email, $password, $chuc_vu_id)
     {
         try {
@@ -45,6 +56,10 @@ class AdminTaiKhoan{
         }
     }
 
+    /**
+     * Lấy chi tiết tài khoản theo ID
+     * Logic: Truy vấn bảng tai_khoans để lấy thông tin chi tiết của một tài khoản cụ thể
+     */
      public function getDetailTaiKhoan($id)
     {
         try {
@@ -64,6 +79,10 @@ class AdminTaiKhoan{
         }
     }
 
+    /**
+     * Cập nhật thông tin tài khoản quản trị
+     * Logic: Cập nhật thông tin cơ bản của tài khoản quản trị (tên, email, số điện thoại, trạng thái)
+     */
     public function updateTaiKhoan($id, $ho_ten, $email, $so_dien_thoai, $trang_thai)
     {
         try {
@@ -90,6 +109,10 @@ class AdminTaiKhoan{
         }
     }
 
+    /**
+     * Reset mật khẩu tài khoản
+     * Logic: Cập nhật mật khẩu mới đã hash cho tài khoản theo ID
+     */
     public function resetPassword($id, $mat_khau)
     {
         try {
@@ -109,6 +132,10 @@ class AdminTaiKhoan{
         }
     }
 
+    /**
+     * Cập nhật thông tin tài khoản khách hàng
+     * Logic: Cập nhật thông tin đầy đủ của tài khoản khách hàng bao gồm thông tin cá nhân
+     */
     public function updateKhachHang($id, $ho_ten, $email,$so_dien_thoai, $ngay_sinh, $gioi_tinh, $dia_chi, $trang_thai)
     {
         try {
@@ -140,6 +167,11 @@ class AdminTaiKhoan{
             echo "CÓ LỖI: " . $e->getMessage();
         }
     }
+
+    /**
+     * Kiểm tra đăng nhập admin
+     * Logic: Kiểm tra email -> Kiểm tra trạng thái tài khoản -> Kiểm tra quyền admin -> Kiểm tra mật khẩu
+     */
     public function checkLogin($email, $mat_khau)
     {
         try {

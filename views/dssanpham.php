@@ -50,6 +50,80 @@ main {
     background: #ddd;
 }
 
+/* Form search */
+.search-container {
+    margin-bottom: 20px;
+    padding: 15px;
+    background: #f8f8f8;
+    border-radius: 5px;
+}
+
+.search-form {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.search-input {
+    flex: 1;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+.search-btn {
+    padding: 10px 20px;
+    background: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.search-btn:hover {
+    background: #0056b3;
+}
+
+/* Kết quả search */
+.search-results {
+    margin-bottom: 20px;
+    padding: 15px;
+    background: #e7f3ff;
+    border-radius: 5px;
+    border-left: 4px solid #007bff;
+}
+
+.search-results h3 {
+    margin: 0 0 10px 0;
+    color: #007bff;
+    font-size: 18px;
+}
+
+.search-results p {
+    margin: 0;
+    color: #666;
+}
+
+/* Thông báo không tìm thấy */
+.no-results {
+    text-align: center;
+    padding: 40px 20px;
+    background: #f8f8f8;
+    border-radius: 5px;
+    margin: 20px 0;
+}
+
+.no-results h3 {
+    color: #666;
+    margin-bottom: 10px;
+}
+
+.no-results p {
+    color: #999;
+}
+
 /* Danh sách sản phẩm */
 .product-list {
     flex: 1;
@@ -144,6 +218,10 @@ main {
     .product-list {
         grid-template-columns: repeat(2, 1fr);
     }
+
+    .search-form {
+        flex-direction: column;
+    }
 }
 
 @media (max-width: 480px) {
@@ -190,43 +268,69 @@ main {
         </ul>
     </aside>
 
-    <!-- Danh sách sản phẩm -->
-    <div class="product-list">
-        <?php if (empty($listSanPham)): ?>
-            <?php if (isset($_GET['keyword'])): ?>
-                <div class="col-12 text-center">
-                    <h3>Không tìm thấy sản phẩm nào cho từ khóa "<?= htmlspecialchars($_GET['keyword']) ?>"</h3>
-                    <p>Vui lòng thử lại với từ khóa khác</p>
-                </div>
+    <!-- Phần nội dung chính -->
+    <div class="main-content">
+        <!-- Form search -->
+        <div class="search-container">
+            <form class="search-form" action="<?= BASE_URL ?>" method="GET">
+                <input type="hidden" name="act" value="search">
+                <input type="text" name="keyword" class="search-input" 
+                       placeholder="Tìm kiếm sản phẩm..." 
+                       value="<?= htmlspecialchars($_GET['keyword'] ?? '') ?>">
+                <button type="submit" class="search-btn">
+                    <i class="fa fa-search"></i> Tìm kiếm
+                </button>
+            </form>
+        </div>
+
+        <!-- Hiển thị kết quả search -->
+        <?php if (isset($_GET['keyword']) && !empty($_GET['keyword'])): ?>
+            <div class="search-results">
+                <h3>Kết quả tìm kiếm cho: "<?= htmlspecialchars($_GET['keyword']) ?>"</h3>
+                <p>Tìm thấy <?= count($listSanPham) ?> sản phẩm</p>
+            </div>
+        <?php endif; ?>
+
+        <!-- Danh sách sản phẩm -->
+        <div class="product-list">
+            <?php if (empty($listSanPham)): ?>
+                <?php if (isset($_GET['keyword']) && !empty($_GET['keyword'])): ?>
+                    <div class="no-results">
+                        <h3>Không tìm thấy sản phẩm nào</h3>
+                        <p>Không có sản phẩm nào phù hợp với từ khóa "<?= htmlspecialchars($_GET['keyword']) ?>"</p>
+                        <p>Vui lòng thử lại với từ khóa khác hoặc <a href="<?= BASE_URL . '?act=list-san-pham' ?>">xem tất cả sản phẩm</a></p>
+                    </div>
+                <?php else: ?>
+                    <div class="no-results">
+                        <h3>Không có sản phẩm nào!</h3>
+                        <p>Hiện tại không có sản phẩm nào trong danh mục này.</p>
+                    </div>
+                <?php endif; ?>
             <?php else: ?>
-                <div class="col-12 text-center">
-                    <p>Không có sản phẩm nào!</p>
-                </div>
-            <?php endif; ?>
-        <?php else: ?>
-            <?php foreach ($listSanPham as $sanPham): ?>
-                <div class="product-item">
-                    <a href="<?= BASE_URL . '?act=chi-tiet-san-pham&id_san_pham=' . $sanPham['id'] ?>">
-                        <img src="<?= BASE_URL . $sanPham['hinh_anh'] ?>" alt="<?= $sanPham['ten_san_pham'] ?>">
-                        <h3><?= $sanPham['ten_san_pham'] ?></h3>
-                    </a>
-                    <div class="price-box">
+                <?php foreach ($listSanPham as $sanPham): ?>
+                    <div class="product-item">
+                        <a href="<?= BASE_URL . '?act=chi-tiet-san-pham&id_san_pham=' . $sanPham['id'] ?>">
+                            <img src="<?= BASE_URL . $sanPham['hinh_anh'] ?>" alt="<?= $sanPham['ten_san_pham'] ?>">
+                            <h3><?= $sanPham['ten_san_pham'] ?></h3>
+                        </a>
+                        <div class="price-box">
+                            <?php if ($sanPham['gia_khuyen_mai'] && $sanPham['gia_khuyen_mai'] != $sanPham['gia_san_pham']): ?>
+                                <span class="price-regular"><?= formatCurrency($sanPham['gia_khuyen_mai']) ?></span>
+                                <span class="price-old"><del><?= formatCurrency($sanPham['gia_san_pham']) ?></del></span>
+                            <?php else: ?>
+                                <span class="price-regular"><?= formatCurrency($sanPham['gia_san_pham']) ?></span>
+                            <?php endif; ?>
+                        </div>
+
                         <?php if ($sanPham['gia_khuyen_mai'] && $sanPham['gia_khuyen_mai'] != $sanPham['gia_san_pham']): ?>
-                            <span class="price-regular"><?= formatCurrency($sanPham['gia_khuyen_mai']) ?></span>
-                            <span class="price-old"><del><?= formatCurrency($sanPham['gia_san_pham']) ?></del></span>
-                        <?php else: ?>
-                            <span class="price-regular"><?= formatCurrency($sanPham['gia_san_pham']) ?></span>
+                            <div class="product-label discount">
+                                <span>Giảm giá</span>
+                            </div>
                         <?php endif; ?>
                     </div>
-
-                    <?php if ($sanPham['gia_khuyen_mai'] && $sanPham['gia_khuyen_mai'] != $sanPham['gia_san_pham']): ?>
-                        <div class="product-label discount">
-                            <span>Giảm giá</span>
-                        </div>
-                    <?php endif; ?>
-                </div>
-            <?php endforeach; ?>
-        <?php endif; ?>
+                <?php endforeach; ?>
+            <?php endif; ?>
+        </div>
     </div>
 </main>
 
